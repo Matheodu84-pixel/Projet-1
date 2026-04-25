@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude Code · Vitrine de capacités</title>
+  <meta name="description" content="Une vitrine interactive construite par Claude Code : jeux, simulations, outils et démos en pur HTML/CSS/JS." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%A8%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <header class="topbar">
+    <a href="#home" class="brand" data-route="home">
+      <span class="brand-mark">◆</span>
+      <span>Claude<span class="brand-accent">Code</span></span>
+    </a>
+    <nav class="nav">
+      <a href="#home" data-route="home">Accueil</a>
+      <a href="#snake" data-route="snake">Snake</a>
+      <a href="#particles" data-route="particles">Particules</a>
+      <a href="#paint" data-route="paint">Dessin</a>
+      <a href="#todo" data-route="todo">Tâches</a>
+      <a href="#markdown" data-route="markdown">Markdown</a>
+      <a href="#palette" data-route="palette">Palette</a>
+      <a href="#calc" data-route="calc">Calc</a>
+      <a href="#quiz" data-route="quiz">Quiz</a>
+    </nav>
+    <button id="menu-btn" aria-label="Menu" class="menu-btn">☰</button>
+  </header>
+
+  <main id="app">
+    <!-- Accueil -->
+    <section class="view" id="view-home">
+      <div class="hero">
+        <p class="eyebrow">Vitrine interactive</p>
+        <h1 class="hero-title">
+          Voici ce que <span class="grad">Claude Code</span><br />peut construire pour toi.
+        </h1>
+        <p class="hero-sub">
+          Tout ce site — UI, animations, jeux, outils — a été écrit par Claude Code en pur HTML, CSS et JavaScript. Aucune librairie externe.
+          Clique sur une démo pour la lancer.
+        </p>
+        <div class="cta-row">
+          <a class="btn primary" href="#snake" data-route="snake">▶ Jouer à Snake</a>
+          <a class="btn ghost" href="#quiz" data-route="quiz">Tester mes connaissances</a>
+        </div>
+        <div class="cards">
+          <a class="card" href="#particles" data-route="particles">
+            <div class="card-icon">✦</div>
+            <h3>Simulation physique</h3>
+            <p>Particules interactives qui réagissent à ta souris.</p>
+          </a>
+          <a class="card" href="#paint" data-route="paint">
+            <div class="card-icon">✎</div>
+            <h3>Application de dessin</h3>
+            <p>Pinceaux, couleurs, gomme, export PNG.</p>
+          </a>
+          <a class="card" href="#todo" data-route="todo">
+            <div class="card-icon">✓</div>
+            <h3>Gestionnaire de tâches</h3>
+            <p>Persistant via localStorage avec filtres.</p>
+          </a>
+          <a class="card" href="#markdown" data-route="markdown">
+            <div class="card-icon">M↓</div>
+            <h3>Éditeur Markdown</h3>
+            <p>Aperçu temps réel + parser maison.</p>
+          </a>
+          <a class="card" href="#palette" data-route="palette">
+            <div class="card-icon">🎨</div>
+            <h3>Générateur de palette</h3>
+            <p>Harmonies de couleurs avec un clic.</p>
+          </a>
+          <a class="card" href="#calc" data-route="calc">
+            <div class="card-icon">≡</div>
+            <h3>Calculatrice</h3>
+            <p>Évaluation d'expressions au clavier.</p>
+          </a>
+          <a class="card" href="#quiz" data-route="quiz">
+            <div class="card-icon">?</div>
+            <h3>Quiz Claude Code</h3>
+            <p>Découvre les capacités en t'amusant.</p>
+          </a>
+          <a class="card" href="#snake" data-route="snake">
+            <div class="card-icon">▶</div>
+            <h3>Snake rétro</h3>
+            <p>Jeu classique avec scoring et accélération.</p>
+          </a>
+        </div>
+
+        <div class="stats">
+          <div><b id="stat-files">9</b><span>fichiers</span></div>
+          <div><b id="stat-lines">…</b><span>lignes de code</span></div>
+          <div><b>0</b><span>dépendances</span></div>
+          <div><b>100%</b><span>fait par Claude</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Snake -->
+    <section class="view" id="view-snake" hidden>
+      <header class="view-head">
+        <h2>🐍 Snake</h2>
+        <p>Flèches ou ZQSD pour bouger. Espace pour pause. La vitesse augmente avec le score.</p>
+      </header>
+      <div class="snake-wrap">
+        <div class="snake-hud">
+          <div>Score : <b id="snake-score">0</b></div>
+          <div>Record : <b id="snake-best">0</b></div>
+          <button class="btn small" id="snake-restart">Recommencer</button>
+        </div>
+        <canvas id="snake-canvas" width="480" height="480"></canvas>
+        <div class="snake-touch" aria-hidden="true">
+          <button data-dir="up">▲</button>
+          <div>
+            <button data-dir="left">◀</button>
+            <button data-dir="down">▼</button>
+            <button data-dir="right">▶</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Particles -->
+    <section class="view" id="view-particles" hidden>
+      <header class="view-head">
+        <h2>✦ Simulation de particules</h2>
+        <p>Bouge la souris (ou le doigt). Clique pour exploser.</p>
+      </header>
+      <canvas id="particles-canvas"></canvas>
+      <div class="control-bar">
+        <label>Particules <input type="range" id="part-count" min="50" max="600" value="220" /></label>
+        <label>Liaisons <input type="range" id="part-link" min="40" max="200" value="110" /></label>
+        <button class="btn small" id="part-reset">Réinitialiser</button>
+      </div>
+    </section>
+
+    <!-- Paint -->
+    <section class="view" id="view-paint" hidden>
+      <header class="view-head">
+        <h2>✎ Atelier de dessin</h2>
+        <p>Dessine librement, change la couleur et l'épaisseur, exporte en PNG.</p>
+      </header>
+      <div class="paint-wrap">
+        <div class="paint-tools">
+          <input type="color" id="paint-color" value="#7c5cff" />
+          <label>Taille <input type="range" id="paint-size" min="1" max="40" value="6" /></label>
+          <button class="btn small" data-tool="brush">Pinceau</button>
+          <button class="btn small" data-tool="eraser">Gomme</button>
+          <button class="btn small" id="paint-clear">Effacer</button>
+          <button class="btn small primary" id="paint-save">Télécharger</button>
+        </div>
+        <canvas id="paint-canvas" width="900" height="540"></canvas>
+      </div>
+    </section>
+
+    <!-- Todo -->
+    <section class="view" id="view-todo" hidden>
+      <header class="view-head">
+        <h2>✓ Gestionnaire de tâches</h2>
+        <p>Sauvegardé automatiquement dans ton navigateur.</p>
+      </header>
+      <div class="todo-wrap">
+        <form id="todo-form" class="todo-form">
+          <input type="text" id="todo-input" placeholder="Que dois-tu faire ?" autocomplete="off" required />
+          <button type="submit" class="btn primary">Ajouter</button>
+        </form>
+        <div class="todo-filters">
+          <button data-filter="all" class="active">Toutes</button>
+          <button data-filter="active">Actives</button>
+          <button data-filter="done">Terminées</button>
+          <span class="spacer"></span>
+          <button id="todo-clear" class="ghost">Vider terminées</button>
+        </div>
+        <ul id="todo-list" class="todo-list"></ul>
+        <p id="todo-count" class="todo-count"></p>
+      </div>
+    </section>
+
+    <!-- Markdown -->
+    <section class="view" id="view-markdown" hidden>
+      <header class="view-head">
+        <h2>M↓ Éditeur Markdown</h2>
+        <p>Tape à gauche, l'aperçu se met à jour en direct.</p>
+      </header>
+      <div class="md-wrap">
+        <textarea id="md-input" spellcheck="false"></textarea>
+        <article id="md-output" class="md-output"></article>
+      </div>
+    </section>
+
+    <!-- Palette -->
+    <section class="view" id="view-palette" hidden>
+      <header class="view-head">
+        <h2>🎨 Générateur de palette</h2>
+        <p>Espace = nouvelle palette. Clique sur une couleur pour la copier.</p>
+      </header>
+      <div id="palette" class="palette"></div>
+      <div class="control-bar">
+        <label>Harmonie
+          <select id="palette-mode">
+            <option value="analog">Analogique</option>
+            <option value="comp">Complémentaire</option>
+            <option value="triad">Triadique</option>
+            <option value="mono">Monochrome</option>
+            <option value="random">Aléatoire</option>
+          </select>
+        </label>
+        <button class="btn primary" id="palette-new">Nouvelle palette (Espace)</button>
+      </div>
+    </section>
+
+    <!-- Calculator -->
+    <section class="view" id="view-calc" hidden>
+      <header class="view-head">
+        <h2>≡ Calculatrice</h2>
+        <p>Tape ton expression, ou utilise le clavier numérique.</p>
+      </header>
+      <div class="calc">
+        <div class="calc-display">
+          <div id="calc-expr" class="expr"></div>
+          <div id="calc-result" class="result">0</div>
+        </div>
+        <div class="calc-keys">
+          <button data-key="C" class="op">C</button>
+          <button data-key="(">(</button>
+          <button data-key=")">)</button>
+          <button data-key="/" class="op">÷</button>
+
+          <button data-key="7">7</button>
+          <button data-key="8">8</button>
+          <button data-key="9">9</button>
+          <button data-key="*" class="op">×</button>
+
+          <button data-key="4">4</button>
+          <button data-key="5">5</button>
+          <button data-key="6">6</button>
+          <button data-key="-" class="op">−</button>
+
+          <button data-key="1">1</button>
+          <button data-key="2">2</button>
+          <button data-key="3">3</button>
+          <button data-key="+" class="op">+</button>
+
+          <button data-key="0" class="wide">0</button>
+          <button data-key=".">.</button>
+          <button data-key="=" class="eq">=</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quiz -->
+    <section class="view" id="view-quiz" hidden>
+      <header class="view-head">
+        <h2>? Quiz Claude Code</h2>
+        <p>5 questions pour découvrir mes capacités.</p>
+      </header>
+      <div id="quiz" class="quiz"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Construit avec ❤ par Claude Code · Branche <code>claude/claude-capabilities-showcase-LIgo7</code></p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
