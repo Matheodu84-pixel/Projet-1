@@ -1,0 +1,20 @@
+{
+  "name": "veille-concurrentielle",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CLI de veille concurrentielle hebdomadaire pour commerces locaux",
+  "scripts": {
+    "brief": "ts-node index.ts",
+    "install:browser": "playwright install chromium"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "dotenv": "^16.4.5",
+    "playwright": "^1.48.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}

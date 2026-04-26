@@ -1,0 +1,22 @@
+{
+  "nom": "Le Petit Bouchon",
+  "secteur": "Restaurant traditionnel lyonnais",
+  "ville": "Lyon",
+  "ticket_moyen_midi": 23,
+  "ticket_moyen_soir": 38,
+  "positionnement": "Bouchon authentique, cuisine maison, clientèle locale + touristes",
+  "concurrents": [
+    {
+      "nom": "Daniel et Denise Saint-Jean",
+      "url": "https://www.google.com/maps/place/Daniel+et+Denise+Saint-Jean/@45.7641,4.8278,17z"
+    },
+    {
+      "nom": "Le Bouchon des Filles",
+      "url": "https://www.google.com/maps/place/Le+Bouchon+des+Filles/@45.7672,4.8336,17z"
+    },
+    {
+      "nom": "Café Comptoir Abel",
+      "url": "https://www.google.com/maps/place/Caf%C3%A9+Comptoir+Abel/@45.7578,4.8318,17z"
+    }
+  ]
+}
