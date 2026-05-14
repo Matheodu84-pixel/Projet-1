@@ -3,1422 +3,1009 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<meta name="theme-color" content="#0b0f1a" />
-<title>Techno • Séquence 23 — Design & Prototypage</title>
+<meta name="theme-color" content="#faf7f2" />
+<title>Séquence 23 · Révisions</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --bg:#0b0f1a; --bg-2:#0f1424; --panel:#121831; --panel-2:#161d3a;
-    --line:#23284a; --line-2:#2d335f;
-    --text:#e8ecff; --muted:#9aa3c7; --soft:#c3c9eb;
-    --p1:#7c5cff; --p2:#22d3ee; --p3:#f472b6; --p4:#facc15; --p5:#34d399;
-    --grad: linear-gradient(135deg,#7c5cff 0%,#22d3ee 50%,#34d399 100%);
-    --grad-2: linear-gradient(135deg,#f472b6,#facc15);
-    --shadow: 0 10px 40px -20px rgba(124,92,255,.55), 0 4px 18px -12px rgba(34,211,238,.35);
+    --bg:#faf7f2; --paper:#ffffff; --ink:#1a1a1a; --muted:#7a7670; --soft:#3a3633;
+    --line:#e9e3d8; --line-2:#d9d2c4;
+    --accent:#d6492f; --accent-soft:#fbe9e2; --accent-ink:#fff;
+    --ok:#2d6a4f; --ok-soft:#dff1e6;
+    --warn:#a3621a; --warn-soft:#fbeed1;
+    --bad:#a02929; --bad-soft:#f7d9d6;
   }
-  [data-theme="light"]{
-    --bg:#f6f7fb; --bg-2:#eef0f8; --panel:#ffffff; --panel-2:#f3f5fc;
-    --line:#e2e5f1; --line-2:#cfd4ea;
-    --text:#0b1020; --muted:#5b6280; --soft:#3a4068;
+  [data-theme="dark"]{
+    --bg:#111110; --paper:#1a1917; --ink:#ededed; --muted:#8c877f; --soft:#cfc9be;
+    --line:#2a2824; --line-2:#3a3732;
+    --accent:#ff7a4d; --accent-soft:#3a201a; --accent-ink:#111;
+    --ok:#5cc28e; --ok-soft:#1f2e26;
+    --warn:#e3b04a; --warn-soft:#2e2719;
+    --bad:#e57368; --bad-soft:#2e1d1c;
   }
   *{ -webkit-tap-highlight-color: transparent; }
-  html,body{ background:var(--bg); color:var(--text); font-family:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif; }
-  .mono{ font-family:'JetBrains Mono',ui-monospace,monospace; }
-  .glass{ background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); backdrop-filter: blur(8px); }
-  [data-theme="light"] .glass{ background:linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.65)); }
-  .panel{ background:var(--panel); border:1px solid var(--line); border-radius:18px; }
-  .panel-2{ background:var(--panel-2); border:1px solid var(--line); border-radius:14px; }
-  .grad-text{ background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  .grad-bg{ background:var(--grad); }
-  .ring-grad{ position:relative; }
-  .ring-grad::before{ content:""; position:absolute; inset:-1px; border-radius:inherit; padding:1px; background:var(--grad); -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events:none; }
-  .btn{ min-height:44px; padding:0 16px; border-radius:12px; display:inline-flex; align-items:center; justify-content:center; gap:8px; font-weight:600; border:1px solid var(--line-2); background:var(--panel-2); color:var(--text); transition:transform .15s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease; }
-  .btn:hover{ transform:translateY(-1px); border-color:#3a4180; }
-  .btn:active{ transform:translateY(0); }
-  .btn-primary{ background:var(--grad); border:none; color:#0b0f1a; box-shadow:var(--shadow); }
-  [data-theme="light"] .btn-primary{ color:#0b1020; }
+  html,body{ background:var(--bg); color:var(--ink); font-family:"Inter", ui-sans-serif, system-ui, -apple-system, sans-serif; font-feature-settings: "ss01","cv11"; }
+  body{ min-height:100vh; }
+  .serif{ font-family:"Fraunces", ui-serif, Georgia, serif; font-feature-settings: "ss01"; letter-spacing:-.01em; }
+  .ink{ color:var(--ink); }
+  .muted{ color:var(--muted); }
+  .soft{ color:var(--soft); }
+  .paper{ background:var(--paper); border:1px solid var(--line); }
+  .line{ border-color:var(--line); }
+  .btn{ min-height:44px; padding:10px 18px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; gap:8px; font-weight:600; border:1px solid var(--line-2); background:var(--paper); color:var(--ink); transition: border-color .15s, transform .1s; cursor:pointer; font-size:14px; }
+  .btn:hover{ border-color:var(--ink); }
+  .btn:active{ transform: scale(.985); }
+  .btn-primary{ background:var(--ink); color:var(--bg); border-color:var(--ink); }
+  .btn-primary:hover{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+  .btn-accent{ background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
   .btn-ghost{ background:transparent; }
-  .chip{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; font-size:12px; border:1px solid var(--line-2); background:var(--panel-2); color:var(--soft); }
-  .chip.on{ background:var(--grad); color:#0b0f1a; border:none; }
-  .card-hover{ transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
-  .card-hover:hover{ transform:translateY(-3px); border-color:var(--line-2); box-shadow:var(--shadow); }
-  .progress-track{ background:linear-gradient(90deg,#1a2042,#1a2042); border-radius:999px; overflow:hidden; }
-  [data-theme="light"] .progress-track{ background:#e6e9f6; }
-  .progress-fill{ height:100%; background:var(--grad); transition:width .5s cubic-bezier(.2,.8,.2,1); }
+  .chip{ display:inline-flex; align-items:center; gap:6px; padding:5px 10px; border-radius:999px; font-size:12px; border:1px solid var(--line-2); background:var(--paper); color:var(--soft); font-weight:500; }
+  .chip-accent{ background:var(--accent-soft); border-color:var(--accent-soft); color:var(--accent); }
+  .chip-ok{ background:var(--ok-soft); border-color:var(--ok-soft); color:var(--ok); }
+  .chip-warn{ background:var(--warn-soft); border-color:var(--warn-soft); color:var(--warn); }
+  .chip-bad{ background:var(--bad-soft); border-color:var(--bad-soft); color:var(--bad); }
+  .kbd{ font-family: ui-monospace, monospace; font-size:11px; padding:2px 6px; border:1px solid var(--line-2); border-bottom-width:2px; border-radius:5px; color:var(--soft); background:var(--paper); }
+  .h-divider{ height:1px; background:var(--line); }
+  .focus-ring:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .progress{ height:6px; background:var(--line); border-radius:999px; overflow:hidden; }
+  .progress > div{ height:100%; background:var(--ink); transition: width .35s cubic-bezier(.2,.7,.2,1); }
+  .progress.accent > div{ background:var(--accent); }
+  .card-tap{ cursor:pointer; transition: transform .12s ease, border-color .15s ease; }
+  .card-tap:hover{ border-color:var(--ink); }
+  .card-tap:active{ transform: scale(.99); }
   .flash{ perspective:1200px; }
-  .flash-inner{ transition: transform .6s cubic-bezier(.2,.8,.2,1); transform-style:preserve-3d; position:relative; }
+  .flash-inner{ transition: transform .55s cubic-bezier(.2,.8,.2,1); transform-style:preserve-3d; position:relative; height:100%; }
   .flash.flipped .flash-inner{ transform: rotateY(180deg); }
   .flash-face{ backface-visibility:hidden; -webkit-backface-visibility:hidden; }
   .flash-back{ transform: rotateY(180deg); position:absolute; inset:0; }
-  .swipe-hint{ opacity:.0; transition:opacity .2s ease; }
-  .flash.dragging .swipe-hint{ opacity:1; }
-  .scroll-snap{ scroll-snap-type:x mandatory; }
-  .snap-item{ scroll-snap-align:center; }
   details>summary{ list-style:none; cursor:pointer; }
   details>summary::-webkit-details-marker{ display:none; }
-  .node{ cursor:pointer; transition: transform .2s ease, filter .2s ease; }
-  .node:hover{ transform: scale(1.05); filter: brightness(1.15); }
-  .pulse{ animation:pulse 2.4s ease-in-out infinite; }
-  @keyframes pulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(124,92,255,.5); } 50%{ box-shadow:0 0 0 12px rgba(124,92,255,0); } }
-  .shake{ animation:shake .35s linear; }
-  @keyframes shake{ 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
-  .pop{ animation: pop .35s cubic-bezier(.2,.8,.2,1); }
-  @keyframes pop{ 0%{ transform:scale(.92); opacity:0 } 100%{ transform:scale(1); opacity:1 } }
-  .fade{ animation: fade .35s ease; }
-  @keyframes fade{ from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
-  .confetti{ position:fixed; width:8px; height:14px; top:-20px; pointer-events:none; border-radius:2px; }
-  /* scrollbar */
-  ::-webkit-scrollbar{ width:10px; height:10px; }
-  ::-webkit-scrollbar-thumb{ background:#2a3160; border-radius:999px; }
-  ::-webkit-scrollbar-track{ background:transparent; }
-  [data-theme="light"] ::-webkit-scrollbar-thumb{ background:#c3c8e0; }
-  /* Mind map */
-  .mm-svg text{ fill:var(--text); font-weight:600; }
-  .mm-svg .edge{ stroke:url(#mmgrad); stroke-width:2; opacity:.7; }
-  .mm-svg .node-circle{ filter: drop-shadow(0 6px 18px rgba(124,92,255,.35)); }
-  /* Sticky nav */
-  .navbar{ position:sticky; top:0; z-index:30; backdrop-filter: blur(14px); background: color-mix(in oklab, var(--bg) 75%, transparent); border-bottom:1px solid var(--line); }
-  .tab{ flex:1; display:flex; align-items:center; justify-content:center; gap:6px; padding:10px 8px; border-radius:12px; min-height:48px; color:var(--muted); font-weight:600; font-size:12px; text-align:center; }
-  .tab.active{ color:var(--text); background:var(--panel-2); }
-  .tab.active svg{ color:#7c5cff; }
-  @media (min-width: 768px){ .tab{ font-size:13px; padding:12px 10px; } }
-  /* QCM option */
-  .opt{ width:100%; text-align:left; padding:14px 16px; border-radius:14px; border:1px solid var(--line); background:var(--panel-2); display:flex; align-items:center; gap:12px; min-height:56px; transition:all .2s ease; }
-  .opt:hover{ border-color:var(--line-2); transform:translateY(-1px); }
-  .opt .dot{ width:22px; height:22px; border-radius:50%; border:2px solid var(--line-2); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--muted); }
-  .opt.correct{ border-color:#34d399; background:rgba(52,211,153,.08); }
-  .opt.correct .dot{ background:#34d399; border-color:#34d399; color:#0b1020; }
-  .opt.wrong{ border-color:#f87171; background:rgba(248,113,113,.08); }
-  .opt.wrong .dot{ background:#f87171; border-color:#f87171; color:#0b1020; }
-  .opt:disabled{ cursor:default; }
-  /* Tooltip */
-  .kw{ background:linear-gradient(180deg, rgba(124,92,255,.15), rgba(34,211,238,.12)); border-bottom:1px dashed #7c5cff; padding:1px 4px; border-radius:6px; cursor:help; font-weight:600; }
-  .kw:hover{ background:linear-gradient(180deg, rgba(124,92,255,.28), rgba(34,211,238,.22)); }
-  /* Modal */
-  .modal-bg{ position:fixed; inset:0; background:rgba(5,7,18,.7); backdrop-filter: blur(6px); z-index:50; display:none; align-items:center; justify-content:center; padding:16px; }
+  .kw{ border-bottom:1px dashed var(--accent); cursor:help; font-weight:500; }
+  .kw:hover{ background:var(--accent-soft); }
+  .modal-bg{ position:fixed; inset:0; background: color-mix(in oklab, var(--ink) 35%, transparent); z-index:60; display:none; align-items:center; justify-content:center; padding:16px; backdrop-filter: blur(4px); }
   .modal-bg.open{ display:flex; }
-  .modal{ max-width:520px; width:100%; max-height:80vh; overflow:auto; }
-  /* Range / timer ring */
-  .ring{ transform: rotate(-90deg); transform-origin:center; }
-  /* Light-mode contrast fixes for buttons */
-  [data-theme="light"] .btn-primary{ color:#fff !important; }
-  [data-theme="light"] .chip.on{ color:#fff; }
-  [data-theme="light"] .opt.correct{ background:rgba(52,211,153,.15); }
-  [data-theme="light"] .opt.wrong{ background:rgba(248,113,113,.15); }
-  /* Hidden but accessible */
-  .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+  .fade-in{ animation: fadeIn .35s ease; }
+  @keyframes fadeIn{ from{ opacity:0; transform: translateY(6px);} to{ opacity:1; transform:none;}}
+  .pulse-soft{ animation: ps 2.2s ease-in-out infinite; }
+  @keyframes ps{ 0%,100%{ box-shadow: 0 0 0 0 var(--accent-soft);} 50%{ box-shadow: 0 0 0 8px transparent;}}
+  .opt{ width:100%; text-align:left; padding:14px 16px; border-radius:10px; border:1px solid var(--line); background:var(--paper); display:flex; align-items:center; gap:12px; min-height:56px; transition: border-color .15s; font-size:15px; color:var(--ink); }
+  .opt:hover:not(:disabled){ border-color:var(--ink); }
+  .opt .key{ font-family: ui-monospace, monospace; font-size:12px; padding:3px 8px; border:1px solid var(--line-2); border-radius:5px; color:var(--muted); }
+  .opt.correct{ border-color: var(--ok); background: var(--ok-soft); }
+  .opt.correct .key{ background: var(--ok); color:#fff; border-color: var(--ok); }
+  .opt.wrong{ border-color: var(--bad); background: var(--bad-soft); }
+  .opt.wrong .key{ background: var(--bad); color:#fff; border-color: var(--bad); }
+  .timer-bar{ position:sticky; top:0; z-index:30; background:var(--bg); }
+  .session-card{ min-height: 60vh; }
+  ::-webkit-scrollbar{ width:8px; height:8px; }
+  ::-webkit-scrollbar-thumb{ background: var(--line-2); border-radius:999px; }
+  ::-webkit-scrollbar-track{ background: transparent; }
+  @media (min-width: 768px){ .session-card{ min-height: 55vh; } }
+  .swipe-hint{ opacity:0; transition: opacity .15s; }
+  .flash.dragging .swipe-hint{ opacity:1; }
+  .topbar{ position:sticky; top:0; z-index:40; backdrop-filter: blur(10px); background: color-mix(in oklab, var(--bg) 80%, transparent); border-bottom:1px solid var(--line); }
 </style>
 </head>
-<body class="min-h-screen">
-<!-- =================== TOP NAVBAR =================== -->
-<header class="navbar">
-  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
-    <div class="flex items-center gap-2">
-      <div class="w-9 h-9 rounded-xl grad-bg flex items-center justify-center" aria-hidden="true">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0b0f1a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>
-      </div>
+<body>
+<header class="topbar">
+  <div class="max-w-3xl mx-auto px-5 py-3 flex items-center gap-3">
+    <a href="#" id="brandLink" class="flex items-center gap-2 group focus-ring rounded">
+      <div class="w-7 h-7 rounded-md flex items-center justify-center" style="background:var(--ink);color:var(--bg);font-weight:700;font-family:'Fraunces',serif;">S</div>
       <div class="leading-tight">
-        <div class="text-[11px] uppercase tracking-widest text-[color:var(--muted)]">Cycle 4 · Techno</div>
-        <div class="font-extrabold text-sm md:text-base">Séq. 23 — Design & Prototypage</div>
+        <div class="text-[10px] uppercase tracking-[0.18em] muted">Cycle 4 · Techno</div>
+        <div class="font-semibold text-[13px]">Séquence 23</div>
       </div>
-    </div>
+    </a>
     <div class="ml-auto flex items-center gap-2">
-      <div class="hidden sm:flex items-center gap-2 chip" id="streakChip" title="Jours d'affilée">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2s2 4 2 7-2 5-5 5-5-2-5-5c0-1 .5-2 1-3 0 2 1 3 2 3 0-3 2-5 5-7Z"/><path d="M9 14.5C7.5 16 6 17.5 6 19.5 6 21 7.5 22 9 22s3-1 3-2.5c0-1.2-.6-2.2-1.5-3Z"/></svg>
-        <span><span id="streakNum">0</span> j</span>
+      <div id="streakChip" class="chip" title="Jours d'affilée">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2s2 4 2 7-2 5-5 5-5-2-5-5c0-1 .5-2 1-3 0 2 1 3 2 3 0-3 2-5 5-7Z"/><path d="M9 14.5C7.5 16 6 17.5 6 19.5 6 21 7.5 22 9 22s3-1 3-2.5c0-1.2-.6-2.2-1.5-3Z"/></svg>
+        <span><b id="streakNum">0</b> j</span>
       </div>
-      <button id="themeToggle" class="btn btn-ghost" aria-label="Basculer thème">
-        <svg id="iconMoon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
-        <svg id="iconSun" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-      </button>
-      <button id="resetBtn" class="btn btn-ghost" title="Réinitialiser progression" aria-label="Réinitialiser">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+      <button id="themeToggle" class="btn btn-ghost !min-h-0 !p-2 focus-ring" aria-label="Thème">
+        <svg id="iconSun" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg id="iconMoon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
       </button>
     </div>
   </div>
-  <nav class="max-w-6xl mx-auto px-2 pb-2">
-    <div class="flex gap-1 overflow-x-auto scroll-snap" id="tabs" role="tablist">
-      <!-- tabs injected -->
-    </div>
-  </nav>
 </header>
 
-<main class="max-w-6xl mx-auto px-4 pb-24 pt-4" id="main">
-  <!-- Sections injected by JS -->
-</main>
+<main id="app" class="max-w-3xl mx-auto px-5 pb-24"></main>
 
-<!-- =================== MODAL =================== -->
 <div class="modal-bg" id="modal" role="dialog" aria-modal="true">
-  <div class="panel modal p-6 pop">
+  <div class="paper rounded-xl p-5 max-w-md w-full">
     <div class="flex items-start gap-3">
-      <div class="w-10 h-10 rounded-xl grad-bg flex-shrink-0 flex items-center justify-center">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0b0f1a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v-4M12 8h.01"/><circle cx="12" cy="12" r="10"/></svg>
-      </div>
       <div class="flex-1">
-        <h3 class="font-bold text-lg" id="modalTitle">Définition</h3>
-        <p class="text-[color:var(--muted)] text-sm mt-1" id="modalBody">…</p>
+        <div class="text-[10px] uppercase tracking-[0.2em] muted mb-1" id="modalKind">Définition</div>
+        <h3 class="serif text-xl font-semibold" id="modalTitle">—</h3>
+        <p class="text-[14px] mt-2 soft leading-relaxed" id="modalBody">—</p>
       </div>
       <button id="modalClose" class="btn btn-ghost !min-h-0 !p-2" aria-label="Fermer">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
     </div>
   </div>
 </div>
 
 <script>
-/* =====================================================================
-   DATA — Cours Séquence 23 : Intégrer une dimension design à l'objet
-   (CT 2.5 / CT 2.6) — Cycle 4
-===================================================================== */
 const COURSE = {
-  title: "Intégrer une dimension design à l'objet",
-  meta: "Séquence n°23 · Cycle 4 · Technologie",
-  competences: ["CT 2.5 — Imaginer des solutions en réponse au besoin", "CT 2.6 — Réaliser, de manière collaborative, le prototype de tout ou partie d'un objet pour valider une solution."],
-  durations: { lecture: 25, flashcards: 12, qcm: 15, libre: 10, examen: 15 },
-  objectifs: [
-    "Distinguer travail coopératif et travail collaboratif.",
-    "Identifier les 4 rôles types d'un groupe de projet.",
-    "Définir précisément une maquette (réelle / numérique) et son rôle.",
-    "Comprendre le prototypage rapide (imprimante 3D, fraiseuse numérique).",
-    "Différencier fabrication par addition et par enlèvement de matière.",
-    "Expliquer ce qu'est un Fablab et la chaîne CAO → fichier de fabrication."
-  ],
+  title: "Séquence 23",
+  subtitle: "Design, maquette & prototypage rapide",
+  meta: "Cycle 4 · CT 2.5 · CT 2.6",
 
-  /* ---------- KEYWORDS (pop-up définitions) ---------- */
   keywords: {
-    "objectif commun":"But partagé par tous les membres d'un groupe de projet ; il oriente l'organisation et la communication.",
-    "implication":"Engagement de tous les participants : sans cela, le projet échoue malgré une bonne idée.",
-    "organisation":"Répartition des tâches, des rôles et du temps pour atteindre l'objectif dans les délais.",
-    "communication":"Échange d'informations entre les participants (oral, écrit, schémas) ; conditionne la réussite.",
-    "coopératif":"Mode de travail où chacun s'occupe d'une tâche indépendante des autres ; on additionne les contributions.",
-    "collaboratif":"Mode de travail où tous travaillent en même temps sur la même tâche ; on co-construit ensemble.",
-    "coordonnateur":"Rôle : veille au bon fonctionnement du groupe et anime les débats (aussi appelé animateur).",
-    "secrétaire":"Rôle : note les idées, rédige le compte-rendu écrit et gère le dossier du groupe.",
-    "rapporteur":"Rôle : présente à l'oral le travail du groupe (synthèse classe entière) ; interlocuteur privilégié du prof.",
-    "gestionnaire":"Rôle : gère le matériel, les ordinateurs et le temps du groupe.",
-    "groupe de projet":"Plusieurs personnes organisées avec différents rôles pour réussir un projet commun.",
-    "maquette":"Représentation en 3D, à échelle réduite mais fidèle dans ses proportions et son aspect. Réelle ou numérique.",
-    "maquette numérique":"Maquette créée grâce à une application de C.A.O. — permet des simulations (efforts, séismes, aérodynamisme…).",
-    "maquette réelle":"Maquette physique, manipulable (ex. : pont de Rouen en modèle réduit).",
-    "maquette structurelle":"Maquette qui montre la structure, l'organisation, l'agencement d'un ouvrage ou bâtiment.",
-    "C.A.O.":"Conception Assistée par Ordinateur : logiciel permettant de modéliser un objet en 3D.",
-    "garde-fou":"Rôle de la maquette : prévenir un mauvais fonctionnement ou une inadéquation entre théorie et réalité.",
-    "validation":"Rôle de la maquette : confirmer que la solution retenue est valable avant fabrication finale.",
-    "prototype":"Premier exemplaire d'un objet (complet ou partiel) servant à tester et valider des solutions.",
-    "prototypage rapide":"Fabrication rapide, à faible coût, d'une pièce (maquette, prototype, outillage) avec un minimum d'étapes.",
-    "imprimante 3D":"Machine qui fabrique par addition de matière : une buse dépose un filament fondu, couche par couche, de bas en haut.",
-    "fraiseuse numérique":"Machine-outil à commande numérique qui fabrique par enlèvement de matière à partir d'un bloc.",
-    "addition de matière":"Procédé qui ajoute de la matière (ex. : impression 3D) — construction de bas en haut.",
-    "enlèvement de matière":"Procédé qui retire de la matière d'un bloc brut (ex. : fraisage, usinage).",
-    "MOCN":"Machine-Outil à Commande Numérique : pilotée par ordinateur, comme la fraiseuse numérique.",
-    "Fablab":"Contraction de « fabrication laboratory » : lieu ouvert au public avec outils, machines à commande numérique, électronique, pour concevoir et fabriquer.",
-    "fichier de fabrication":"Fichier final exporté de la CAO, paramétré, lu par la machine pour produire la pièce.",
-    "paramétrage":"Réglages (matériau, épaisseur, vitesse…) faits avant la conversion en fichier de fabrication.",
-    "filament":"Fil de plastique fondu par la buse de l'imprimante 3D pour construire la pièce.",
-    "buse":"Embout de la tête d'impression qui dépose le filament fondu.",
-    "outil de coupe":"Outil rotatif de la fraiseuse qui usine la matière (taille dans la masse).",
-    "cahier des charges":"Document qui formalise le besoin et les contraintes auxquels la solution doit répondre.",
-    "croquis":"Schéma rapide à main levée traduisant une idée ou une solution technique.",
-    "schéma":"Représentation simplifiée, normée, expliquant le fonctionnement ou l'organisation d'un objet."
+    "coopératif":"Mode de travail où chacun s'occupe d'une tâche **indépendante** des autres.",
+    "collaboratif":"Mode de travail où tous travaillent **en même temps sur la même tâche**.",
+    "coordonnateur":"Rôle : veille au bon fonctionnement du groupe et anime les débats.",
+    "secrétaire":"Rôle : note les idées, rédige le compte-rendu, gère le dossier.",
+    "rapporteur":"Rôle : présente à l'oral le travail du groupe (synthèse classe).",
+    "gestionnaire":"Rôle : gère le matériel, les ordinateurs et le temps.",
+    "maquette":"Représentation en 3D, à échelle réduite, **fidèle** dans ses proportions et son aspect.",
+    "C.A.O.":"Conception Assistée par Ordinateur — logiciel de modélisation 3D.",
+    "prototypage rapide":"Fabrication rapide, à faible coût, d'un premier exemplaire — peu d'outillages et d'étapes.",
+    "imprimante 3D":"Fabrication par **addition** : une buse dépose un filament fondu, couche par couche.",
+    "fraiseuse numérique":"Fabrication par **enlèvement** : taille dans la masse, pilotée par ordinateur.",
+    "addition de matière":"On **ajoute** la matière couche par couche (impression 3D).",
+    "enlèvement de matière":"On **retire** la matière d'un bloc brut (fraisage).",
+    "Fablab":"« Fabrication laboratory » — lieu **ouvert au public** avec machines à commande numérique.",
+    "garde-fou":"Rôle de la maquette : détecter à temps une erreur entre théorie et réalité.",
+    "fichier de fabrication":"Fichier final lu par la machine ; vient après le paramétrage."
   },
 
-  /* ---------- SYNTHÈSE 3 NIVEAUX ---------- */
-  synthese: {
-    tldr: [
-      "Un projet réussit avec un **objectif commun**, une bonne **organisation** et une **communication** entre tous.",
-      "On distingue **coopération** (tâches séparées) et **collaboration** (même tâche, ensemble).",
-      "4 rôles types : **coordonnateur**, **secrétaire**, **rapporteur**, **gestionnaire**.",
-      "Une **maquette** = représentation 3D à échelle réduite, fidèle, **réelle** ou **numérique (C.A.O.)**.",
-      "Le **prototypage rapide** (imprimante 3D ou fraiseuse numérique) valide rapidement une solution.",
-      "Imprimante 3D = **addition** de matière. Fraiseuse = **enlèvement** de matière.",
-      "Un **Fablab** est un lieu public d'outils et de machines pour concevoir et fabriquer."
-    ],
-    resume: `
-      <p>Pour réussir un projet, on constitue un **groupe de projet** : plusieurs personnes qui partagent un **objectif commun**. Trois conditions sont indispensables : l'**implication de tous**, une bonne **organisation** et une **communication** efficace entre les participants.</p>
-      <p>Deux modes de travail coexistent. En **coopération**, chacun s'occupe d'une tâche **indépendante**. En **collaboration**, tous travaillent **en même temps sur la même tâche**. Le groupe se répartit ensuite 4 rôles clés : le **coordonnateur** (anime), le **secrétaire** (écrit), le **rapporteur** (présente) et le **gestionnaire** (matériel + temps).</p>
-      <p>La **maquette** est une représentation en **3 dimensions** à échelle réduite, **fidèle** dans ses proportions et son aspect. Elle peut être **réelle** (manipulable) ou **numérique** (faite en **C.A.O.**, Conception Assistée par Ordinateur). Elle joue trois rôles : **garde-fou** (détecter une erreur de conception), **validation** des solutions, et support de **simulations** (efforts, séismes, usure, aérodynamisme).</p>
-      <p>Le **prototypage rapide** consiste à fabriquer rapidement, à faible coût, un premier exemplaire de la pièce. Deux principes : l'**imprimante 3D** ajoute la matière couche par couche (**addition**), la **fraiseuse numérique** retire la matière d'un bloc (**enlèvement**). Dans les deux cas : on part d'un **modèle CAO**, on l'**exporte**, on le **paramètre**, on le **convertit en fichier de fabrication**.</p>
-      <p>Le **Fablab** — *fabrication laboratory* — est un lieu **ouvert au public** mettant à disposition logiciels 3D, MOCN, petit outillage et électronique pour concevoir et fabriquer.</p>
-    `,
-    complet: `
-      <h4 class="font-bold text-base mt-2">I — Organisation d'un groupe de projet</h4>
-      <p>Pour réussir un projet, on met en place un **groupe de projet** constitué d'un ensemble de personnes qui ont un **objectif commun**. Cela nécessite **une implication de tous**, **une bonne organisation** et **une bonne communication** entre tous les participants.</p>
-      <p>Pour respecter les délais, on travaille selon <strong>2 organisations possibles</strong> :</p>
-      <ul class="list-disc pl-5 space-y-1">
-        <li><strong>Le travail coopératif</strong> : chacun s'occupe d'une tâche **indépendante** des autres.</li>
-        <li><strong>Le travail collaboratif</strong> : chacun travaille en **même temps sur une même tâche**.</li>
-      </ul>
-      <p>L'organisation retenue implique que dans chaque groupe (îlot), chaque participant a un rôle précis. Exemple de **4 rôles possibles** :</p>
-      <ul class="list-disc pl-5 space-y-1">
-        <li><strong>Le coordonnateur (ou animateur)</strong> : veille au bon fonctionnement du groupe et anime les débats.</li>
-        <li><strong>Le secrétaire</strong> : note les idées, fait le compte-rendu à l'écrit, gère le dossier du groupe.</li>
-        <li><strong>Le rapporteur</strong> : présente à l'oral le travail du groupe (synthèse classe entière) ; interlocuteur privilégié du professeur.</li>
-        <li><strong>Le gestionnaire</strong> : gère le matériel, les ordinateurs et la durée du travail.</li>
-      </ul>
-      <p class="panel-2 p-3 mt-2"><em>À retenir :</em> on appelle <strong>groupe de projet</strong> plusieurs personnes qui s'organisent avec différents rôles pour travailler ensemble dans le but de réussir un projet commun. Les participants peuvent soit **coopérer** (partage des tâches) soit **collaborer** (même tâche pour tous).</p>
+  essentials: [
+    { id:"e1", t:"Maquette", d:"Représentation 3D, à échelle réduite, fidèle en proportions et aspect. Réelle ou numérique (C.A.O.). Joue un rôle de garde-fou, valide les solutions, permet la simulation.", tag:"définition pivot" },
+    { id:"e2", t:"Coopératif vs Collaboratif", d:"Coopératif = tâches indépendantes. Collaboratif = même tâche, ensemble, en même temps. Piège récurrent au contrôle.", tag:"piège fréquent" },
+    { id:"e3", t:"Les 4 rôles", d:"Coordonnateur (anime), Secrétaire (écrit), Rapporteur (oral), Gestionnaire (matériel + temps). Mémo : « CO·SE·RA·GE ».", tag:"à connaître par cœur" },
+    { id:"e4", t:"Imprimante 3D = addition", d:"Une buse dépose un filament fondu sur un plateau, couche par couche, de bas en haut. Pilotée par ordinateur.", tag:"principe" },
+    { id:"e5", t:"Fraiseuse = enlèvement", d:"Machine-outil à commande numérique. L'usinage taille dans la masse selon un fichier. On retire de la matière.", tag:"principe" },
+    { id:"e6", t:"Chaîne CAO", d:"Modèle CAO → exportation → paramétrage → fichier de fabrication → fabrication. Mémo : « CEPaF ».", tag:"ordre exact" },
+    { id:"e7", t:"C.A.O.", d:"Conception Assistée par Ordinateur. C'est un logiciel, jamais une machine.", tag:"définition" },
+    { id:"e8", t:"Fablab", d:"« Fabrication laboratory » : lieu ouvert au public avec machines à commande numérique, outils, électronique. Pour concevoir et fabriquer.", tag:"définition" }
+  ],
 
-      <h4 class="font-bold text-base mt-4">II — La maquette</h4>
-      <p><strong>Maquette</strong> : représentation en **trois dimensions**, à **échelle réduite** mais **fidèle** dans ses proportions et son aspect. Elle peut être **numérique** (grâce à une application **C.A.O.**) ou **réelle**.</p>
-      <p><strong>C.A.O.</strong> = **Conception Assistée par Ordinateur**.</p>
-      <ul class="list-disc pl-5 space-y-1">
-        <li>Elle joue un rôle de **garde-fou** contre un éventuel **mauvais fonctionnement** ou une **inadéquation** entre le modèle théorique et sa réalisation physique.</li>
-        <li>Elle a un rôle de **validation des solutions retenues**.</li>
-        <li>Les versions informatiques permettent de **simuler** : forces, tremblements de terre, passage de véhicules, usure, environnement…</li>
-      </ul>
-      <p>Lorsqu'elle permet de montrer la structure, l'organisation, l'agencement d'un ouvrage ou bâtiment, on l'appelle **maquette structurelle**.</p>
-      <p><em>Exemples : maquette réelle du pont de Rouen ; maquette numérique d'une voiture avec étude aérodynamique.</em></p>
-
-      <h4 class="font-bold text-base mt-4">III — Prototypage rapide de structures</h4>
-      <p>Pour réaliser rapidement un prototype, on utilise une **imprimante 3D** ou une **fraiseuse numérique**. C'est une **phase déterminante** pour valider ou rectifier le projet.</p>
-      <p>La fabrication d'une pièce (maquette, prototype, outillage), manipulable, dans un **délai très court**, à **faible coût**, s'appelle le **prototypage rapide de structures**. La rapidité est due à un **minimum d'outillages et d'étapes**.</p>
-      <p><strong>Imprimante 3D — fabrication par addition de matière :</strong> une tête d'impression comprenant une ou plusieurs **buses** se déplace au-dessus d'un plateau. Les buses entraînent un **filament** **fondu** déposé sur le plateau. La pièce se construit **de bas en haut**, sous **contrôle ordinateur**.</p>
-      <p><strong>Fraiseuse numérique — fabrication par enlèvement de matière :</strong> machine-outil à commande numérique, **automatisée et contrôlée par ordinateur**. L'**usinage** consiste à enlever de la matière pour **tailler dans la masse** selon les fichiers enregistrés, jusqu'à obtenir la pièce finie.</p>
-      <p class="panel-2 p-3 mt-2"><em>Chaîne numérique commune :</em> <strong>modèle CAO → export</strong> dans un format accepté → <strong>paramétrage</strong> → <strong>conversion en fichier de fabrication</strong> → fabrication.</p>
-
-      <h4 class="font-bold text-base mt-4">IV — Le Fablab</h4>
-      <p>Contraction de l'anglais <em>fabrication laboratory</em>, le **Fablab** est un lieu **ouvert au public** où l'on met à disposition **toutes sortes d'outils**, notamment des **machines-outils pilotées par ordinateur**, pour la **conception** et la **réalisation** d'objets. Il inclut : logiciels de modélisation 3D, machines à commande numérique, machines-outils, petit outillage, matériel électronique, et favorise **partage & collaboration**.</p>
-    `
-  },
-
-  /* ---------- FLASHCARDS ---------- */
   flashcards: [
-    { q:"Que faut-il pour réussir un projet en groupe ?", a:"Un <b>objectif commun</b>, l'<b>implication</b> de tous, une bonne <b>organisation</b> et une bonne <b>communication</b>." },
-    { q:"Différence entre coopératif et collaboratif ?", a:"<b>Coopératif</b> : chacun fait une tâche <b>indépendante</b>.<br><b>Collaboratif</b> : tous travaillent en <b>même temps sur la même tâche</b>." },
-    { q:"Cite les 4 rôles d'un groupe de projet.", a:"<b>Coordonnateur</b> (anime), <b>Secrétaire</b> (écrit), <b>Rapporteur</b> (oral), <b>Gestionnaire</b> (matériel + temps)." },
-    { q:"Rôle du coordonnateur ?", a:"Veille au <b>bon fonctionnement</b> du groupe et <b>anime les débats</b>." },
-    { q:"Rôle du secrétaire ?", a:"<b>Note les idées</b>, rédige le <b>compte-rendu à l'écrit</b> et <b>gère le dossier</b> du groupe." },
-    { q:"Rôle du rapporteur ?", a:"Présente <b>à l'oral</b> le travail du groupe lors de la synthèse classe entière ; interlocuteur privilégié du professeur." },
-    { q:"Rôle du gestionnaire ?", a:"Gère le <b>matériel</b>, les <b>ordinateurs</b> et la <b>durée</b> du travail." },
-    { q:"Définition d'une maquette.", a:"<b>Représentation en 3D, à échelle réduite, fidèle</b> dans ses proportions et son aspect. Peut être <b>réelle</b> ou <b>numérique</b>." },
-    { q:"Que signifie C.A.O. ?", a:"<b>Conception Assistée par Ordinateur</b>." },
-    { q:"Quels sont les rôles de la maquette ?", a:"<b>Garde-fou</b> (détecter mauvais fonctionnement ou inadéquation), <b>validation</b> des solutions, support de <b>simulations</b> (forces, séismes, usure…)." },
-    { q:"Qu'est-ce qu'une maquette structurelle ?", a:"Une maquette qui montre la <b>structure</b>, l'<b>organisation</b> et l'<b>agencement</b> d'un ouvrage ou bâtiment." },
-    { q:"Définition du prototypage rapide.", a:"Fabrication rapide, à <b>faible coût</b> et <b>délai très court</b>, d'un <b>premier exemplaire</b> grâce à un <b>minimum d'outillages et d'étapes</b>." },
-    { q:"Principe de l'imprimante 3D ?", a:"<b>Addition de matière</b> : une <b>buse</b> dépose un <b>filament fondu</b> sur un plateau, couche par couche, <b>de bas en haut</b>." },
-    { q:"Principe de la fraiseuse numérique ?", a:"<b>Enlèvement de matière</b> : un outil de coupe <b>taille dans la masse</b> selon un fichier numérique." },
-    { q:"Chaîne numérique du prototypage rapide ?", a:"<b>Modèle CAO → exportation → paramétrage → conversion en fichier de fabrication</b> → fabrication." },
-    { q:"Qu'est-ce qu'un Fablab ?", a:"<em>Fabrication laboratory</em> : lieu <b>ouvert au public</b> avec outils, machines-outils pilotées par ordinateur, électronique, pour <b>concevoir</b> et <b>réaliser</b> des objets." },
-    { q:"Différence croquis / schéma ?", a:"<b>Croquis</b> : dessin rapide à main levée d'une idée.<br><b>Schéma</b> : représentation simplifiée et <b>normée</b> du fonctionnement ou de l'organisation." },
-    { q:"Ordre des étapes de création d'un objet.", a:"<b>Besoin → cahier des charges → croquis/schéma → modèle CAO → maquette → prototypage rapide → tests/validation → objet final.</b>" }
+    { q:"Différence entre coopératif et collaboratif ?", a:"<b>Coopératif</b> : tâches <b>indépendantes</b>.<br><b>Collaboratif</b> : <b>même tâche</b>, <b>en même temps</b>.", core:true },
+    { q:"Cite les 4 rôles d'un groupe de projet.", a:"<b>Coordonnateur</b> (anime), <b>Secrétaire</b> (écrit), <b>Rapporteur</b> (oral), <b>Gestionnaire</b> (matériel + temps).", core:true },
+    { q:"Définition d'une maquette ?", a:"Représentation en <b>3D</b>, à <b>échelle réduite</b>, <b>fidèle</b> dans ses proportions et son aspect. Réelle ou numérique.", core:true },
+    { q:"Que signifie C.A.O. ?", a:"<b>Conception Assistée par Ordinateur</b>. C'est un logiciel.", core:true },
+    { q:"Principe de l'imprimante 3D ?", a:"<b>Addition de matière</b> : une <b>buse</b> dépose un <b>filament fondu</b>, couche par couche, de bas en haut.", core:true },
+    { q:"Principe de la fraiseuse numérique ?", a:"<b>Enlèvement de matière</b> : taille dans la masse selon un fichier, pilotée par ordinateur.", core:true },
+    { q:"Chaîne numérique du prototypage ?", a:"<b>CAO → Export → Paramétrage → Fichier de fabrication</b> → fabrication. (« CEPaF »)", core:true },
+    { q:"Qu'est-ce qu'un Fablab ?", a:"<i>Fabrication laboratory</i> : lieu <b>ouvert au public</b> avec machines numériques, outils, électronique.", core:true },
+    { q:"Définition du prototypage rapide ?", a:"Fabrication rapide, à <b>faible coût</b>, d'un premier exemplaire — avec un <b>minimum</b> d'outillages et d'étapes.", core:false },
+    { q:"Rôles de la maquette ?", a:"<b>Garde-fou</b> (détecter une erreur), <b>validation</b> des solutions, <b>simulation</b> (efforts, séismes, usure…).", core:false },
+    { q:"Maquette structurelle ?", a:"Maquette qui montre la <b>structure</b>, l'<b>organisation</b> et l'<b>agencement</b> d'un ouvrage ou bâtiment.", core:false },
+    { q:"Rôle du coordonnateur ?", a:"Veille au <b>bon fonctionnement</b> du groupe, <b>anime les débats</b>.", core:false },
+    { q:"Rôle du secrétaire ?", a:"Note les idées, rédige le <b>compte-rendu écrit</b>, gère le dossier.", core:false },
+    { q:"Rôle du rapporteur ?", a:"Présente <b>à l'oral</b> le travail (synthèse classe), interlocuteur du prof.", core:false },
+    { q:"Rôle du gestionnaire ?", a:"Gère le <b>matériel</b>, les <b>ordinateurs</b> et le <b>temps</b>.", core:false },
+    { q:"Conditions de réussite d'un projet ?", a:"<b>Objectif commun</b>, <b>implication</b> de tous, bonne <b>organisation</b>, bonne <b>communication</b>.", core:false },
+    { q:"Croquis vs schéma ?", a:"<b>Croquis</b> : à main levée, rapide. <b>Schéma</b> : simplifié et <b>normé</b>.", core:false }
   ],
 
-  /* ---------- QCM ---------- */
   qcm: [
-    { q:"Que signifie C.A.O. ?", o:["Création Assistée par Ordinateur","Conception Assistée par Ordinateur","Calcul Avancé d'Objets","Conception Approchée d'Objets"], c:1, e:"C.A.O. = <b>Conception</b> Assistée par Ordinateur. C'est l'outil qui permet de modéliser une maquette numérique." , lvl:1},
-    { q:"Quelle est la différence entre travail coopératif et collaboratif ?", o:["Le coopératif se fait en classe, le collaboratif à la maison","En coopératif, chacun fait une tâche différente ; en collaboratif, tous font la même tâche en même temps","En collaboratif on est noté individuellement","Aucune différence"], c:1, e:"<b>Coopératif</b> : tâches indépendantes. <b>Collaboratif</b> : même tâche, en même temps." , lvl:1},
-    { q:"Quel rôle présente le travail à l'oral devant la classe ?", o:["Le secrétaire","Le coordonnateur","Le rapporteur","Le gestionnaire"], c:2, e:"Le <b>rapporteur</b> présente à l'oral la synthèse ; il est l'interlocuteur privilégié du professeur." , lvl:1},
-    { q:"Qui gère le matériel et le temps du groupe ?", o:["Le gestionnaire","Le secrétaire","Le rapporteur","Le coordonnateur"], c:0, e:"Le <b>gestionnaire</b> s'occupe du matériel, des ordinateurs et de la durée du travail." , lvl:1},
-    { q:"Qui anime les débats et veille au bon fonctionnement du groupe ?", o:["Le rapporteur","Le coordonnateur (animateur)","Le gestionnaire","Le secrétaire"], c:1, e:"C'est le <b>coordonnateur</b>, aussi appelé animateur." , lvl:1},
-    { q:"Qu'est-ce qu'une maquette ?", o:["Un dessin en 2D d'un objet","Une représentation 3D à échelle réduite et fidèle","Une photographie de l'objet final","Un plan technique normé"], c:1, e:"Une maquette = <b>représentation 3D à échelle réduite</b>, fidèle dans ses proportions et son aspect." , lvl:1},
-    { q:"L'imprimante 3D fonctionne par…", o:["Enlèvement de matière","Addition de matière","Moulage","Découpe laser"], c:1, e:"L'imprimante 3D = <b>addition</b> de matière (filament fondu déposé couche par couche)." , lvl:2},
-    { q:"La fraiseuse numérique fonctionne par…", o:["Addition de matière","Enlèvement de matière","Fusion","Compression"], c:1, e:"La fraiseuse = <b>enlèvement</b> de matière, elle taille dans la masse." , lvl:2},
-    { q:"Que veut dire « Fablab » ?", o:["Fabulous Laboratory","Fabrication laboratory","Famille bricolage","Fabrique de labos"], c:1, e:"Fablab = <em>fabrication laboratory</em>, lieu ouvert au public avec outils et machines numériques." , lvl:2},
-    { q:"Avant de fabriquer une pièce avec une MOCN, on doit d'abord…", o:["Acheter la matière","Réaliser un modèle CAO","Tester la pièce","Faire un croquis à main levée"], c:1, e:"La chaîne est : <b>CAO → export → paramétrage → fichier de fabrication</b>. Tout part du modèle CAO." , lvl:2},
-    { q:"Quel est le rôle principal de la maquette ?", o:["Décorer la classe","Servir de garde-fou et valider les solutions","Remplacer le prototype","Fabriquer en série"], c:1, e:"La maquette joue un rôle de <b>garde-fou</b> (détecter erreurs) et de <b>validation</b> des solutions." , lvl:2},
-    { q:"Qu'est-ce que le prototypage rapide permet ?", o:["De vendre l'objet","De fabriquer un premier exemplaire vite et à faible coût pour tester","De remplacer la CAO","De supprimer la phase de tests"], c:1, e:"Le prototypage rapide = <b>premier exemplaire</b>, vite, peu cher, pour <b>valider par des tests</b>." , lvl:2},
-    { q:"Sur une imprimante 3D, qu'est-ce qui sort de la buse ?", o:["De la résine liquide","Un filament fondu","De la poudre","De la vapeur"], c:1, e:"La buse dépose un <b>filament fondu</b> sur le plateau, couche par couche." , lvl:2},
-    { q:"Une maquette numérique permet de simuler…", o:["Uniquement la couleur","Les efforts, séismes, usure, aérodynamisme","Le prix de vente","La météo"], c:1, e:"Grâce à la CAO, on simule efforts, séismes, passage de véhicules, usure, aérodynamisme…" , lvl:3},
-    { q:"Pourquoi dit-on que la maquette est un « garde-fou » ?", o:["Parce qu'elle fait peur","Parce qu'elle prévient une inadéquation entre modèle théorique et réalisation effective","Parce qu'elle protège le matériel","Parce qu'elle remplace le prof"], c:1, e:"Elle agit comme un garde-fou : elle <b>détecte tôt</b> un mauvais fonctionnement ou un écart entre la théorie et la réalité." , lvl:3},
-    { q:"Quelle proposition est <b>fausse</b> ?", o:["Le prototypage rapide réduit les outillages et les étapes","La fraiseuse numérique est pilotée par ordinateur","L'imprimante 3D construit de bas en haut","La fraiseuse ajoute de la matière couche par couche"], c:3, e:"La <b>fraiseuse enlève</b> de la matière (usinage). C'est l'imprimante 3D qui ajoute." , lvl:3},
-    { q:"Dans quel ordre se déroule la chaîne numérique ?", o:["Fichier de fabrication → CAO → paramétrage → export","CAO → exportation → paramétrage → fichier de fabrication","Maquette réelle → CAO → fabrication","Paramétrage → CAO → export → fabrication"], c:1, e:"L'ordre correct : <b>CAO → exportation → paramétrage → fichier de fabrication</b>." , lvl:3},
-    { q:"En quoi un Fablab est-il différent d'un atelier classique ?", o:["Il est réservé aux ingénieurs","Il est ouvert au public et propose machines numériques + partage","Il ne fait que des prototypes en bois","Il n'a pas d'ordinateurs"], c:1, e:"Le Fablab est <b>ouvert au public</b>, met à disposition machines à commande numérique, électronique et favorise <b>partage & collaboration</b>." , lvl:3}
+    { q:"Que signifie C.A.O. ?", o:["Création Assistée par Ordinateur","Conception Assistée par Ordinateur","Calcul Avancé d'Objets","Conception Approchée d'Objets"], c:1, e:"C.A.O. = <b>Conception</b> Assistée par Ordinateur.", lvl:1, core:true },
+    { q:"Coopération vs collaboration ?", o:["Aucune différence","Coop = tâches indépendantes / Collab = même tâche en même temps","Coop = en groupe / Collab = seul","Coop = à la maison / Collab = en classe"], c:1, e:"<b>Coop</b> : tâches indépendantes. <b>Collab</b> : même tâche, en même temps.", lvl:1, core:true },
+    { q:"Qui présente le travail à l'oral devant la classe ?", o:["Le secrétaire","Le coordonnateur","Le rapporteur","Le gestionnaire"], c:2, e:"Le <b>rapporteur</b> présente la synthèse à l'oral.", lvl:1, core:true },
+    { q:"L'imprimante 3D fonctionne par…", o:["Enlèvement","Addition","Moulage","Compression"], c:1, e:"<b>Addition</b> : filament fondu déposé couche par couche.", lvl:2, core:true },
+    { q:"La fraiseuse numérique fonctionne par…", o:["Addition","Enlèvement","Fusion","Soudure"], c:1, e:"<b>Enlèvement</b> : taille dans la masse.", lvl:2, core:true },
+    { q:"Qu'est-ce qu'une maquette ?", o:["Dessin 2D","Représentation 3D à échelle réduite et fidèle","Photo de l'objet final","Plan normé"], c:1, e:"Maquette = <b>3D, échelle réduite, fidèle</b>.", lvl:1, core:true },
+    { q:"Que veut dire « Fablab » ?", o:["Famille bricolage","Fabrication laboratory","Fabulous lab","Fabrique de labos"], c:1, e:"« <b>Fabrication laboratory</b> », lieu public.", lvl:2, core:true },
+    { q:"Quel est l'ordre correct de la chaîne CAO ?", o:["Fichier → CAO → paramétrage → export","CAO → exportation → paramétrage → fichier de fabrication","Maquette → CAO → fabrication","Paramétrage → CAO → export"], c:1, e:"<b>CAO → Export → Paramétrage → Fichier de fabrication</b>.", lvl:2, core:true },
+    { q:"Qui anime les débats ?", o:["Le rapporteur","Le coordonnateur","Le gestionnaire","Le secrétaire"], c:1, e:"Le <b>coordonnateur</b> (aussi appelé animateur).", lvl:1, core:false },
+    { q:"Qui gère le matériel et le temps ?", o:["Le gestionnaire","Le secrétaire","Le rapporteur","Le coordonnateur"], c:0, e:"Le <b>gestionnaire</b>.", lvl:1, core:false },
+    { q:"Pourquoi la maquette est-elle un « garde-fou » ?", o:["Elle protège le matériel","Elle prévient une inadéquation entre théorie et réalité","Elle remplace le prof","Elle effraie les erreurs"], c:1, e:"Détecte tôt un écart théorie/réalité.", lvl:3, core:false },
+    { q:"Une maquette numérique permet de simuler…", o:["Le prix","Les forces, séismes, usure, aérodynamisme","La météo","Uniquement la couleur"], c:1, e:"Simulations physiques via la C.A.O.", lvl:2, core:false },
+    { q:"Quelle proposition est <b>fausse</b> ?", o:["L'imprimante 3D construit de bas en haut","La fraiseuse est pilotée par ordinateur","Le prototypage rapide réduit les étapes","La fraiseuse ajoute de la matière couche par couche"], c:3, e:"La fraiseuse <b>enlève</b> la matière.", lvl:3, core:true },
+    { q:"Avant la fabrication par MOCN, on doit d'abord…", o:["Acheter la matière","Créer un modèle CAO","Tester la pièce","Faire un croquis"], c:1, e:"La chaîne part toujours du <b>modèle CAO</b>.", lvl:2, core:true },
+    { q:"En quoi un Fablab diffère-t-il d'un atelier classique ?", o:["Il est réservé aux pros","Ouvert au public + machines numériques + partage","Pas d'ordinateurs","Que du bois"], c:1, e:"Fablab = public + numérique + partage.", lvl:3, core:false }
   ],
 
-  /* ---------- QUIZ RÉPONSE LIBRE ---------- */
   libre: [
-    { q:"Définis avec tes propres mots ce qu'est une maquette.", kw:["représentation","3 dimensions","3d","échelle","réduite","fidèle","proportions","réelle","numérique","cao"], min:3, ideal:"Représentation en 3D, à échelle réduite mais fidèle dans ses proportions et son aspect, réelle ou numérique (C.A.O.)." },
-    { q:"Cite les 2 grandes méthodes d'organisation du travail.", kw:["coopératif","collaboratif"], min:2, ideal:"Le travail coopératif (tâches indépendantes) et le travail collaboratif (même tâche en même temps)." },
-    { q:"Donne les 4 rôles possibles dans un groupe de projet.", kw:["coordonnateur","animateur","secrétaire","rapporteur","gestionnaire"], min:4, ideal:"Coordonnateur (animateur), secrétaire, rapporteur, gestionnaire." },
-    { q:"Quelle est la différence entre coopération et collaboration ?", kw:["indépendante","indépendant","même temps","même tâche","différente"], min:2, ideal:"Coopération : chacun fait une tâche indépendante. Collaboration : tous travaillent en même temps sur la même tâche." },
-    { q:"Donne la définition du prototypage rapide.", kw:["fabrication","rapide","faible coût","délai","court","minimum","outillages","étapes","prototype"], min:3, ideal:"Fabrication rapide, à faible coût et délai très court, d'un premier exemplaire grâce à un minimum d'outillages et d'étapes." },
-    { q:"Explique le principe de l'imprimante 3D.", kw:["addition","matière","buse","filament","fondu","bas","haut","couche","plateau"], min:3, ideal:"Fabrication par addition : une buse dépose un filament fondu sur un plateau, couche par couche, de bas en haut." },
-    { q:"Explique le principe de la fraiseuse numérique.", kw:["enlèvement","matière","tailler","masse","usinage","commande numérique","ordinateur","fichier"], min:3, ideal:"Fabrication par enlèvement de matière : la fraiseuse taille dans la masse selon un fichier numérique piloté par ordinateur." },
-    { q:"Cite les étapes (dans l'ordre) entre l'idée et la pièce fabriquée par une MOCN.", kw:["cao","modèle","exportation","export","paramétrage","fichier","fabrication"], min:3, ideal:"Modèle CAO → exportation → paramétrage → conversion en fichier de fabrication → fabrication." },
-    { q:"Qu'est-ce qu'un Fablab ? Donne 3 caractéristiques.", kw:["fabrication","laboratory","public","ouvert","machine","commande numérique","outils","électronique","modélisation"], min:3, ideal:"Fablab (fabrication laboratory) : lieu ouvert au public, équipé de machines-outils à commande numérique, d'outillage et de matériel électronique pour concevoir et fabriquer." },
-    { q:"En quoi la maquette joue-t-elle un rôle de garde-fou ?", kw:["mauvais fonctionnement","inadéquation","théorique","réalisation","modèle","détecter","prévenir","valider","tester"], min:2, ideal:"Elle permet de détecter un mauvais fonctionnement ou une inadéquation entre le modèle théorique et la réalisation physique effective avant fabrication finale." }
+    { q:"Définis la maquette avec tes mots.", kw:["représentation","3d","trois dimensions","échelle","réduite","fidèle","proportions"], min:3, ideal:"Représentation 3D à échelle réduite, fidèle dans ses proportions et son aspect, réelle ou numérique (C.A.O.)." },
+    { q:"Quelles sont les 2 méthodes d'organisation du travail ?", kw:["coopératif","collaboratif"], min:2, ideal:"Le coopératif (tâches indépendantes) et le collaboratif (même tâche, en même temps)." },
+    { q:"Cite les 4 rôles dans un groupe de projet.", kw:["coordonnateur","animateur","secrétaire","rapporteur","gestionnaire"], min:4, ideal:"Coordonnateur (animateur), Secrétaire, Rapporteur, Gestionnaire." },
+    { q:"Explique le principe de l'imprimante 3D.", kw:["addition","buse","filament","fondu","couche","bas","haut","plateau"], min:3, ideal:"Addition de matière : une buse dépose un filament fondu sur un plateau, couche par couche, de bas en haut." },
+    { q:"Explique le principe de la fraiseuse numérique.", kw:["enlèvement","tailler","masse","commande","numérique","ordinateur","fichier"], min:3, ideal:"Enlèvement de matière : on taille dans la masse selon un fichier, machine pilotée par ordinateur." },
+    { q:"Donne l'ordre des étapes entre l'idée et la pièce finie (MOCN).", kw:["cao","export","exportation","paramétrage","fichier","fabrication"], min:3, ideal:"Modèle CAO → Exportation → Paramétrage → Fichier de fabrication → Fabrication." },
+    { q:"Qu'est-ce qu'un Fablab ?", kw:["fabrication","laboratory","public","ouvert","machines","commande","numérique","outils"], min:3, ideal:"Fabrication laboratory : lieu ouvert au public, machines à commande numérique, outils, pour concevoir et fabriquer." }
   ],
 
-  /* ---------- MIND MAP ---------- */
-  mindmap: {
-    center: { id:"c", label:"Séquence 23", desc:"Intégrer une dimension design à l'objet : groupe projet, maquette, prototypage rapide, Fablab." },
-    nodes: [
-      { id:"g", label:"Groupe de projet", color:"#7c5cff", desc:"Plusieurs personnes, objectif commun, organisation et communication. Coopération vs collaboration." },
-      { id:"r", label:"Les 4 rôles", color:"#22d3ee", desc:"Coordonnateur (anime), Secrétaire (écrit), Rapporteur (oral), Gestionnaire (matériel + temps)." },
-      { id:"m", label:"Maquette", color:"#f472b6", desc:"Représentation 3D à échelle réduite, fidèle. Réelle ou numérique (C.A.O.). Garde-fou, validation, simulation." },
-      { id:"p", label:"Prototypage rapide", color:"#facc15", desc:"Fabrication rapide & peu coûteuse. Imprimante 3D (addition) ou fraiseuse numérique (enlèvement)." },
-      { id:"f", label:"Fablab", color:"#34d399", desc:"Fabrication Laboratory : lieu public avec machines à commande numérique, partage et collaboration." },
-      { id:"n", label:"Chaîne CAO", color:"#60a5fa", desc:"CAO → exportation → paramétrage → fichier de fabrication → fabrication." }
-    ]
-  },
-
-  /* ---------- ANTI-PIÈGES & MNÉMO ---------- */
   pieges: [
-    { t:"Coopératif ≠ Collaboratif", d:"Piège classique : on confond les deux. <b>Coopératif = tâches indépendantes</b> (on additionne). <b>Collaboratif = même tâche, en même temps</b> (on co-construit)." },
-    { t:"Imprimante 3D ≠ Fraiseuse", d:"Imprimante 3D = <b>ajoute</b> de la matière (filament fondu). Fraiseuse = <b>enlève</b> de la matière (taille dans la masse)." },
-    { t:"Maquette ≠ Prototype", d:"<b>Maquette</b> = représentation 3D fidèle à échelle réduite (pas forcément fonctionnelle). <b>Prototype</b> = premier exemplaire, souvent fonctionnel, à tester." },
-    { t:"C.A.O. n'est pas une machine", d:"C.A.O. = Conception Assistée par Ordinateur : c'est un <b>logiciel</b>, pas une machine. La machine, c'est l'imprimante 3D ou la fraiseuse." },
-    { t:"Fablab n'est pas réservé aux pros", d:"Le Fablab est <b>ouvert au public</b>. Important pour les questions « pourquoi » et « en quoi »." },
-    { t:"Croquis ≠ Schéma", d:"<b>Croquis</b> = dessin rapide à main levée. <b>Schéma</b> = représentation simplifiée et <b>normée</b>." }
+    { t:"Coopératif ≠ Collaboratif", d:"Le piège #1. <b>Coop</b> = tâches séparées. <b>Collab</b> = même tâche, ensemble." },
+    { t:"Addition ≠ Enlèvement", d:"<b>Imprimante 3D</b> ajoute (filament). <b>Fraiseuse</b> retire (usinage)." },
+    { t:"Maquette ≠ Prototype", d:"<b>Maquette</b> = représentation 3D fidèle. <b>Prototype</b> = premier exemplaire à tester." },
+    { t:"C.A.O. n'est pas une machine", d:"C.A.O. = logiciel. La machine, c'est la 3D ou la fraiseuse." }
   ],
   mnemos: [
-    { t:"« CO·SE·RA·GE » — les 4 rôles", d:"<b>CO</b>ordonnateur · <b>SE</b>crétaire · <b>RA</b>pporteur · <b>GE</b>stionnaire. Récite-le comme un grade militaire : « cosé-rajé ! »" },
-    { t:"« A.J.O.U.T.E » pour la 3D", d:"L'imprimante 3<b>D</b> <b>A</b>joute. La frai<b>SEUSE</b> reti<b>RE</b>. Mémo absurde : « la 3D dépose la <b>D</b>înette, la <b>SEUSE</b> la <b>RE</b>tire »." },
-    { t:"« CEPaF » — la chaîne numérique", d:"<b>C</b>AO → <b>E</b>xport → <b>P</b>aramétrage → <b>F</b>ichier de fabrication. Image mentale : un café (« C-E-P-a-F ») avant d'imprimer !" },
-    { t:"« 3R de la maquette »", d:"<b>R</b>éduite (échelle), <b>R</b>éaliste (fidèle), <b>R</b>ôle de garde-fou. Trois R = ton triangle de la maquette parfaite." },
-    { t:"« FAB = Fabrication Accessible & Branchée »", d:"Fablab = <b>F</b>abrication, <b>A</b>ccessible au public, <b>B</b>ranchée sur machines numériques. Trois B comme « bricoler à pleins tubes »." },
-    { t:"« COopératif = COté à COté »", d:"En <b>CO</b>opération, on est COté à COté, chacun dans son couloir (tâche indépendante). En <b>COL</b>laboration, on COLle ensemble sur la même tâche." }
-  ]
+    { t:"CO·SE·RA·GE — les 4 rôles", d:"<b>CO</b>ordonnateur · <b>SE</b>crétaire · <b>RA</b>pporteur · <b>GE</b>stionnaire. Récite-le comme un grade." },
+    { t:"CEPaF — la chaîne CAO", d:"<b>C</b>AO → <b>E</b>xport → <b>P</b>aramétrage → <b>F</b>ichier. Image : un « café » avant d'imprimer." },
+    { t:"3D = aDDition", d:"Les deux <b>D</b> de 3<b>D</b> rappellent l'a<b>D</b><b>D</b>ition. Fraiseuse = retire (« RE-tire »)." }
+  ],
+
+  synth: {
+    tldr: [
+      "Un projet réussit avec un **objectif commun**, une bonne **organisation** et une **communication** entre tous.",
+      "**Coopération** = tâches séparées · **Collaboration** = même tâche, ensemble.",
+      "4 rôles : **CO·SE·RA·GE** — coordonnateur, secrétaire, rapporteur, gestionnaire.",
+      "**Maquette** = 3D, échelle réduite, fidèle. Réelle ou numérique (**C.A.O.**).",
+      "**Imprimante 3D** = **addition** · **Fraiseuse** = **enlèvement**.",
+      "Chaîne : **CAO → Export → Paramétrage → Fichier de fabrication** (« CEPaF »).",
+      "**Fablab** = lieu public + machines numériques + partage."
+    ],
+    long: `
+      <h4 class="serif text-lg font-semibold mt-2">Groupe de projet</h4>
+      <p>Pour réussir, il faut un <b>objectif commun</b>, l'<b>implication</b> de tous, une bonne <b>organisation</b> et une bonne <b>communication</b>. Deux modes : <b>coopératif</b> (tâches indépendantes) et <b>collaboratif</b> (même tâche, en même temps).</p>
+      <p>4 rôles types : <b>coordonnateur</b> (anime), <b>secrétaire</b> (écrit), <b>rapporteur</b> (oral), <b>gestionnaire</b> (matériel + temps).</p>
+      <h4 class="serif text-lg font-semibold mt-3">Maquette</h4>
+      <p>Représentation en <b>3D</b>, à <b>échelle réduite</b>, <b>fidèle</b>. Réelle ou numérique (<b>C.A.O.</b> = Conception Assistée par Ordinateur). Rôles : <b>garde-fou</b>, <b>validation</b>, <b>simulation</b> (efforts, séismes, usure, aérodynamisme). On parle de <b>maquette structurelle</b> quand elle montre la structure d'un ouvrage.</p>
+      <h4 class="serif text-lg font-semibold mt-3">Prototypage rapide</h4>
+      <p>Fabriquer un <b>premier exemplaire</b>, vite et à <b>faible coût</b>. Deux principes : <b>imprimante 3D</b> = <b>addition</b> (filament fondu, bas vers haut) · <b>fraiseuse numérique</b> = <b>enlèvement</b> (tailler dans la masse). Chaîne commune : <b>CAO → Export → Paramétrage → Fichier de fabrication</b>.</p>
+      <h4 class="serif text-lg font-semibold mt-3">Fablab</h4>
+      <p><i>Fabrication laboratory</i> : lieu <b>ouvert au public</b> avec machines à commande numérique, outillage et électronique, pour <b>concevoir</b> et <b>fabriquer</b> des objets.</p>
+    `
+  }
 };
 
-/* =====================================================================
-   STATE & STORAGE
-===================================================================== */
-const STORAGE_KEY = "seq23-v1";
-const defaultState = {
-  theme:"dark",
-  tab:"home",
-  progress:{ synth:false, flash:0, qcm:0, libre:0, mind:false, mnemo:false, exam:0 },
-  flash:{ known:[], review:[], idx:0 },
-  qcm:{ done:[], correct:[], wrong:[], onlyWrong:false },
-  libre:{ done:[], scores:{} },
-  exam:{ best:0, last:0, history:[] },
-  streak:{ count:0, lastDay:null }
-};
+const KEY = "seq23-v2";
+const def = ()=>({
+  theme:"light",
+  view:"home",
+  toolsTab:"synth",
+  session:null,
+  streak:{ count:0, lastDay:null },
+  best:{ flash:0, express:0, deep:0, exam:0 },
+  history:[],
+  stats:{ totalMin:0, runs:0 }
+});
 let S = load();
-
-function load(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return structuredClone(defaultState);
-    const obj = JSON.parse(raw);
-    return Object.assign(structuredClone(defaultState), obj);
-  }catch(e){ return structuredClone(defaultState); }
-}
-function save(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(S)); }catch(e){} updateGlobalProgress(); }
+function load(){ try{ const r=localStorage.getItem(KEY); if(!r) return def(); return Object.assign(def(), JSON.parse(r)); }catch{ return def(); } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch{} }
 
 function bumpStreak(){
   const today = new Date().toISOString().slice(0,10);
   if(S.streak.lastDay === today) return;
   if(S.streak.lastDay){
-    const last = new Date(S.streak.lastDay), now = new Date(today);
-    const diff = Math.round((now - last) / 86400000);
-    S.streak.count = diff === 1 ? S.streak.count + 1 : 1;
+    const diff = Math.round((new Date(today) - new Date(S.streak.lastDay)) / 86400000);
+    S.streak.count = diff===1 ? S.streak.count+1 : 1;
   } else S.streak.count = 1;
   S.streak.lastDay = today;
-  save();
-  $("#streakNum").textContent = S.streak.count;
+  save(); $("#streakNum").textContent = S.streak.count;
 }
 
-/* =====================================================================
-   UTILS / DOM
-===================================================================== */
-const $ = (s, root=document)=>root.querySelector(s);
-const $$ = (s, root=document)=>Array.from(root.querySelectorAll(s));
+const $ = (s, r=document)=> r.querySelector(s);
+const $$ = (s, r=document)=> [...r.querySelectorAll(s)];
 const html = (s)=>{ const t=document.createElement("template"); t.innerHTML=s.trim(); return t.content.firstElementChild; };
-const normalize = (s)=> (s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim();
-
-function ic(name, size=18){
-  const I = {
-    home:'<path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10"/>',
-    book:'<path d="M2 4a2 2 0 0 1 2-2h14v18H4a2 2 0 0 0-2 2"/><path d="M22 2v18"/>',
-    cards:'<rect x="3" y="3" width="14" height="14" rx="3"/><path d="M7 7h6M7 11h4"/>',
-    quiz:'<circle cx="12" cy="12" r="10"/><path d="M9 9a3 3 0 0 1 6 0c0 2-3 2-3 5"/><path d="M12 17h.01"/>',
-    type:'<path d="M4 7h16M9 7v13M9 11h11M5 15h2"/>',
-    map:'<path d="m9 4-6 2v14l6-2 6 2 6-2V4l-6 2Z"/><path d="M9 4v14M15 6v14"/>',
-    bulb:'<path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2v.3h6V17c0-.8.4-1.5 1-2A7 7 0 0 0 12 2Z"/>',
-    timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6M12 5V2"/>'
-  };
-  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${I[name]||""}</svg>`;
-}
+const normalize = s => (s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim();
+const md = s => s.replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\*(.+?)\*/g,"<i>$1</i>");
+const shuffle = a => a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+const fmt = s => { const m=Math.floor(s/60), x=s%60; return `${m}:${String(x).padStart(2,'0')}`; };
 
 function injectKw(text){
-  // Replace keywords on word boundaries
   const keys = Object.keys(COURSE.keywords).sort((a,b)=>b.length-a.length);
   let out = text;
   keys.forEach(k=>{
     const esc = k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const re = new RegExp(`(^|[^a-zA-ZàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ_-])(${esc})(?![a-zA-ZàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ_-])`, "i");
+    const re = new RegExp(`(^|[^a-zA-Zàâäéèêëîïôöùûüç_-])(${esc})(?![a-zA-ZàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ_-])`, "i");
     out = out.replace(re, (m,p1,p2)=> `${p1}<span class="kw" data-kw="${k.toLowerCase()}">${p2}</span>`);
   });
   return out;
 }
-function mdLite(s){
-  return s.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
-          .replace(/__(.+?)__/g,"<em>$1</em>");
-}
-
-/* =====================================================================
-   TABS
-===================================================================== */
-const TABS = [
-  { id:"home",    label:"Accueil",      icon:"home" },
-  { id:"synth",   label:"Synthèse",     icon:"book" },
-  { id:"flash",   label:"Flashcards",   icon:"cards" },
-  { id:"qcm",     label:"QCM",          icon:"quiz" },
-  { id:"libre",   label:"Réponse libre",icon:"type" },
-  { id:"mind",    label:"Carte mentale",icon:"map" },
-  { id:"mnemo",   label:"Mnémo",        icon:"bulb" },
-  { id:"exam",    label:"Examen",       icon:"timer" }
-];
-
-function renderTabs(){
-  const wrap = $("#tabs");
-  wrap.innerHTML = TABS.map(t=>`
-    <button class="tab snap-item ${S.tab===t.id?'active':''}" data-tab="${t.id}" role="tab" aria-selected="${S.tab===t.id}">
-      ${ic(t.icon,18)}
-      <span>${t.label}</span>
-    </button>`).join("");
-  $$("#tabs .tab").forEach(b=>{
-    b.addEventListener("click", ()=>{ S.tab = b.dataset.tab; save(); renderTabs(); renderMain(); window.scrollTo({top:0,behavior:"smooth"}); });
-  });
-}
-
-/* =====================================================================
-   GLOBAL PROGRESS
-===================================================================== */
-function updateGlobalProgress(){
-  // synth done if user viewed any
-  const p = S.progress;
-  const synth = p.synth ? 1 : 0;
-  const flash = COURSE.flashcards.length ? Math.min(S.flash.known.length / COURSE.flashcards.length, 1) : 0;
-  const qcm   = COURSE.qcm.length ? Math.min(S.qcm.done.length / COURSE.qcm.length, 1) : 0;
-  const libre = COURSE.libre.length ? Math.min(S.libre.done.length / COURSE.libre.length, 1) : 0;
-  const mind  = p.mind ? 1 : 0;
-  const mnemo = p.mnemo ? 1 : 0;
-  const exam  = Math.min((S.exam.best||0)/20, 1);
-  const total = (synth+flash+qcm+libre+mind+mnemo+exam)/7;
-  const pct = Math.round(total*100);
-  $$(".global-pct").forEach(el=> el.textContent = pct + "%");
-  $$(".global-fill").forEach(el=> el.style.width = pct + "%");
-  return { pct, parts:{synth,flash,qcm,libre,mind,mnemo,exam} };
-}
-
-/* =====================================================================
-   RENDER MAIN
-===================================================================== */
-function renderMain(){
-  const main = $("#main");
-  main.innerHTML = "";
-  const view = ({
-    home: viewHome,
-    synth: viewSynth,
-    flash: viewFlash,
-    qcm: viewQcm,
-    libre: viewLibre,
-    mind: viewMind,
-    mnemo: viewMnemo,
-    exam: viewExam
-  })[S.tab] || viewHome;
-  const el = view();
-  el.classList.add("fade");
-  main.appendChild(el);
-  attachKeywords(el);
-  updateGlobalProgress();
-}
-
-/* ===================== VIEW: HOME ===================== */
-function viewHome(){
-  const total = COURSE.flashcards.length + COURSE.qcm.length + COURSE.libre.length;
-  const dur = Object.values(COURSE.durations).reduce((a,b)=>a+b,0);
-  const el = html(`<section class="space-y-6"></section>`);
-
-  el.appendChild(html(`
-    <div class="panel p-6 md:p-8 relative overflow-hidden ring-grad">
-      <div class="flex items-start justify-between gap-4 flex-wrap">
-        <div>
-          <div class="text-[11px] uppercase tracking-widest text-[color:var(--muted)]">${COURSE.meta}</div>
-          <h1 class="text-2xl md:text-4xl font-extrabold mt-1">${COURSE.title.replace("design","<span class='grad-text'>design</span>")}</h1>
-          <p class="text-[color:var(--soft)] mt-2 max-w-2xl text-sm md:text-base">Maîtrise le travail de groupe, la maquette, le prototypage rapide et le Fablab — avec 7 modes d'apprentissage pour viser le <b>20/20</b>.</p>
-          <div class="flex flex-wrap gap-2 mt-4">
-            ${COURSE.competences.map(c=>`<span class="chip">${c}</span>`).join("")}
-          </div>
-        </div>
-        <div class="flex flex-col items-end gap-2">
-          <div class="text-right">
-            <div class="text-xs text-[color:var(--muted)]">Progression globale</div>
-            <div class="text-3xl font-extrabold grad-text global-pct">0%</div>
-          </div>
-          <div class="w-40 h-2 progress-track"><div class="global-fill progress-fill" style="width:0%"></div></div>
-        </div>
-      </div>
-    </div>
-  `));
-
-  // Objectifs + KPI
-  const grid = html(`<div class="grid md:grid-cols-3 gap-4"></div>`);
-  grid.appendChild(html(`
-    <div class="panel p-5 md:col-span-2">
-      <div class="flex items-center gap-2 mb-3"><div class="w-8 h-8 rounded-lg grad-bg flex items-center justify-center">${ic("book",16).replace("currentColor","#0b0f1a")}</div><h3 class="font-bold">Objectifs d'apprentissage</h3></div>
-      <ul class="space-y-2 text-sm text-[color:var(--soft)]">
-        ${COURSE.objectifs.map(o=>`<li class="flex gap-2"><span class="text-[color:#7c5cff]">▸</span><span>${o}</span></li>`).join("")}
-      </ul>
-    </div>
-  `));
-  grid.appendChild(html(`
-    <div class="panel p-5">
-      <div class="flex items-center gap-2 mb-3"><div class="w-8 h-8 rounded-lg grad-bg flex items-center justify-center">${ic("timer",16).replace("currentColor","#0b0f1a")}</div><h3 class="font-bold">En chiffres</h3></div>
-      <div class="grid grid-cols-2 gap-3">
-        <div class="panel-2 p-3"><div class="text-xs text-[color:var(--muted)]">Durée</div><div class="font-extrabold text-xl">~${dur} min</div></div>
-        <div class="panel-2 p-3"><div class="text-xs text-[color:var(--muted)]">Items</div><div class="font-extrabold text-xl">${total}</div></div>
-        <div class="panel-2 p-3"><div class="text-xs text-[color:var(--muted)]">Streak</div><div class="font-extrabold text-xl">${S.streak.count} j</div></div>
-        <div class="panel-2 p-3"><div class="text-xs text-[color:var(--muted)]">Meilleure note</div><div class="font-extrabold text-xl">${(S.exam.best||0).toFixed(1)}/20</div></div>
-      </div>
-    </div>
-  `));
-  el.appendChild(grid);
-
-  // Modules cards
-  const mods = html(`<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>`);
-  const modules = [
-    { id:"synth", t:"Synthèse 3 niveaux", d:"TL;DR, résumé, version complète. Mots-clés cliquables.", icon:"book" },
-    { id:"flash", t:"Flashcards", d:"Cartes recto/verso avec swipe et répétition espacée.", icon:"cards" },
-    { id:"qcm",   t:"QCM adaptatif",  d:"18 questions, difficulté croissante, mode « refaire erreurs ».", icon:"quiz" },
-    { id:"libre", t:"Réponse libre", d:"Reformule avec tes mots, correction par mots-clés.", icon:"type" },
-    { id:"mind",  t:"Carte mentale", d:"Vue d'ensemble interactive des concepts.", icon:"map" },
-    { id:"mnemo", t:"Anti-pièges & mnémo", d:"6 pièges + 6 moyens mnémotechniques décalés.", icon:"bulb" },
-    { id:"exam",  t:"Mode examen",  d:"Chrono, mix de questions, note sur 20, axes d'amélioration.", icon:"timer" }
-  ];
-  modules.forEach(m=>{
-    mods.appendChild(html(`
-      <button class="panel card-hover text-left p-5 flex flex-col gap-3" data-go="${m.id}">
-        <div class="flex items-center justify-between">
-          <div class="w-10 h-10 rounded-xl grad-bg flex items-center justify-center">${ic(m.icon,20).replace("currentColor","#0b0f1a")}</div>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[color:var(--muted)]"><path d="m9 6 6 6-6 6"/></svg>
-        </div>
-        <div>
-          <h3 class="font-bold">${m.t}</h3>
-          <p class="text-sm text-[color:var(--soft)] mt-1">${m.d}</p>
-        </div>
-      </button>
-    `));
-  });
-  el.appendChild(mods);
-
-  // CTA last mode
-  el.appendChild(html(`
-    <div class="panel p-5 flex items-center justify-between gap-4 flex-wrap">
-      <div>
-        <div class="text-xs text-[color:var(--muted)] uppercase tracking-widest">Démarrer</div>
-        <h3 class="font-bold text-lg">Commencer par la synthèse</h3>
-        <p class="text-[color:var(--soft)] text-sm">Pose les bases en 2 min, puis enchaîne avec les flashcards.</p>
-      </div>
-      <button class="btn btn-primary" data-go="synth">Lire la synthèse ${ic("book",16)}</button>
-    </div>
-  `));
-
-  el.addEventListener("click", e=>{
-    const b = e.target.closest("[data-go]");
-    if(b){ S.tab = b.dataset.go; save(); renderTabs(); renderMain(); window.scrollTo({top:0,behavior:"smooth"}); }
-  });
-
-  return el;
-}
-
-/* ===================== VIEW: SYNTHÈSE ===================== */
-function viewSynth(){
-  S.progress.synth = true; save();
-  const el = html(`<section class="space-y-5"></section>`);
-  el.appendChild(html(`
-    <div class="flex items-center justify-between gap-3 flex-wrap">
-      <div>
-        <h2 class="text-2xl font-extrabold">Synthèse</h2>
-        <p class="text-[color:var(--muted)] text-sm">3 niveaux de profondeur · Clique sur les <span class="kw">mots-clés</span> pour une définition.</p>
-      </div>
-      <div class="flex gap-2" id="synthTabs">
-        <button class="chip on" data-lvl="tldr">TL;DR · 30s</button>
-        <button class="chip" data-lvl="resume">Résumé · 2min</button>
-        <button class="chip" data-lvl="complet">Complet</button>
-      </div>
-    </div>
-  `));
-  const box = html(`<div class="panel p-5 md:p-6 space-y-3 text-[color:var(--soft)] leading-relaxed" id="synthBox"></div>`);
-  el.appendChild(box);
-
-  function render(lvl){
-    if(lvl==="tldr"){
-      box.innerHTML = `<ul class="space-y-2 text-base">${COURSE.synthese.tldr.map(s=>`<li class="flex gap-3"><span class="text-[color:#22d3ee] font-bold">●</span><span>${injectKw(mdLite(s))}</span></li>`).join("")}</ul>`;
-    } else if(lvl==="resume"){
-      box.innerHTML = injectKw(mdLite(COURSE.synthese.resume));
-    } else {
-      box.innerHTML = injectKw(COURSE.synthese.complet);
-    }
-    attachKeywords(box);
-  }
-  render("tldr");
-
-  el.querySelector("#synthTabs").addEventListener("click", e=>{
-    const b = e.target.closest("button[data-lvl]"); if(!b) return;
-    $$("#synthTabs button").forEach(x=>x.classList.remove("on"));
-    b.classList.add("on");
-    render(b.dataset.lvl);
-  });
-
-  return el;
-}
-
-/* ===================== VIEW: FLASHCARDS ===================== */
-function viewFlash(){
-  const el = html(`<section class="space-y-4"></section>`);
-  const total = COURSE.flashcards.length;
-
-  el.appendChild(html(`
-    <div class="flex items-center justify-between flex-wrap gap-3">
-      <div>
-        <h2 class="text-2xl font-extrabold">Flashcards</h2>
-        <p class="text-[color:var(--muted)] text-sm">Tap/clic pour retourner · « À revoir » remonte en priorité.</p>
-      </div>
-      <div class="flex items-center gap-2 text-sm">
-        <span class="chip">Mémorisées · <b id="fStatK">${S.flash.known.length}</b></span>
-        <span class="chip">À revoir · <b id="fStatR">${S.flash.review.length}</b></span>
-        <button class="btn btn-ghost" id="fReset">Reset</button>
-      </div>
-    </div>
-  `));
-
-  el.appendChild(html(`
-    <div class="panel p-3">
-      <div class="flex items-center justify-between text-xs text-[color:var(--muted)] mb-1.5">
-        <span>Carte <b id="fIdx">1</b> / ${total}</span>
-        <span><b id="fPct">0%</b> du paquet</span>
-      </div>
-      <div class="h-2 progress-track"><div id="fFill" class="progress-fill" style="width:0%"></div></div>
-    </div>
-  `));
-
-  const card = html(`
-    <div class="panel p-1">
-      <div id="flashCard" class="flash relative h-72 md:h-80 select-none" tabindex="0">
-        <div class="flash-inner w-full h-full">
-          <div class="flash-face panel-2 w-full h-full p-6 md:p-8 flex flex-col items-center justify-center text-center rounded-2xl border border-[color:var(--line-2)]">
-            <div class="text-xs uppercase tracking-widest text-[color:var(--muted)] mb-2">Question</div>
-            <div id="flashQ" class="text-xl md:text-2xl font-bold leading-snug max-w-2xl"></div>
-            <div class="absolute bottom-3 text-[11px] text-[color:var(--muted)]">Tap pour retourner</div>
-            <div class="swipe-hint absolute left-3 top-3 chip" style="background:rgba(248,113,113,.15);color:#fca5a5;border-color:#7f1d1d">← à revoir</div>
-            <div class="swipe-hint absolute right-3 top-3 chip" style="background:rgba(52,211,153,.15);color:#86efac;border-color:#065f46">je sais →</div>
-          </div>
-          <div class="flash-face flash-back panel-2 w-full h-full p-6 md:p-8 flex flex-col items-center justify-center text-center rounded-2xl border border-[color:var(--line-2)] ring-grad">
-            <div class="text-xs uppercase tracking-widest text-[color:var(--muted)] mb-2">Réponse</div>
-            <div id="flashA" class="text-base md:text-xl leading-relaxed max-w-2xl"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `);
-  el.appendChild(card);
-
-  el.appendChild(html(`
-    <div class="grid grid-cols-3 gap-2">
-      <button class="btn" id="fRevoir" style="border-color:#7f1d1d;color:#fca5a5;">${ic("cards",16)} À revoir</button>
-      <button class="btn" id="fFlip">Retourner</button>
-      <button class="btn" id="fSais" style="border-color:#065f46;color:#86efac;">Je sais ${ic("cards",16)}</button>
-    </div>
-  `));
-
-  function deckOrder(){
-    const all = COURSE.flashcards.map((_,i)=>i);
-    const review = all.filter(i => S.flash.review.includes(i));
-    const fresh  = all.filter(i => !S.flash.known.includes(i) && !S.flash.review.includes(i));
-    const known  = all.filter(i => S.flash.known.includes(i));
-    return [...review, ...fresh, ...known];
-  }
-  function currentIdx(){
-    const order = deckOrder();
-    if(!order.length) return 0;
-    return order[Math.min(S.flash.idx, order.length-1)];
-  }
-  function render(){
-    const order = deckOrder();
-    const pos = Math.min(S.flash.idx, order.length-1);
-    const idx = order[pos] ?? 0;
-    const c = COURSE.flashcards[idx];
-    const f = $("#flashCard", el);
-    f.classList.remove("flipped");
-    $("#flashQ", el).textContent = c.q;
-    $("#flashA", el).innerHTML = c.a;
-    $("#fIdx", el).textContent = (pos+1);
-    const pct = Math.round((S.flash.known.length/total)*100);
-    $("#fPct", el).textContent = pct + "%";
-    $("#fFill", el).style.width = pct + "%";
-    $("#fStatK", el).textContent = S.flash.known.length;
-    $("#fStatR", el).textContent = S.flash.review.length;
-  }
-  function mark(known){
-    const order = deckOrder();
-    const idx = order[Math.min(S.flash.idx, order.length-1)];
-    if(known){
-      if(!S.flash.known.includes(idx)) S.flash.known.push(idx);
-      S.flash.review = S.flash.review.filter(i=>i!==idx);
-    } else {
-      if(!S.flash.review.includes(idx)) S.flash.review.push(idx);
-      S.flash.known = S.flash.known.filter(i=>i!==idx);
-    }
-    S.flash.idx = (S.flash.idx + 1);
-    if(S.flash.idx >= order.length) S.flash.idx = 0;
-    save();
-    bumpStreak();
-    render();
-    if(S.flash.known.length === total) celebrate();
-  }
-
-  render();
-
-  // Interactions
-  const f = $("#flashCard", el);
-  f.addEventListener("click", e=>{ if(e.target.closest("button")) return; f.classList.toggle("flipped"); });
-  $("#fFlip", el).addEventListener("click", ()=> f.classList.toggle("flipped"));
-  $("#fSais", el).addEventListener("click", ()=> mark(true));
-  $("#fRevoir", el).addEventListener("click", ()=> mark(false));
-  $("#fReset", el).addEventListener("click", ()=>{ S.flash = {known:[],review:[],idx:0}; save(); render(); });
-
-  // Swipe
-  let startX=0, dx=0, dragging=false;
-  function down(x){ startX=x; dx=0; dragging=true; f.classList.add("dragging"); f.style.transition="none"; }
-  function move(x){ if(!dragging) return; dx = x - startX; f.style.transform = `translateX(${dx}px) rotate(${dx/20}deg)`; }
-  function up(){
-    if(!dragging) return;
-    dragging=false; f.classList.remove("dragging"); f.style.transition="";
-    if(Math.abs(dx)>90){
-      const dir = dx>0;
-      f.style.transform = `translateX(${dir?500:-500}px) rotate(${dir?30:-30}deg)`;
-      setTimeout(()=>{ f.style.transform=""; mark(dir); }, 200);
-    } else { f.style.transform=""; }
-  }
-  f.addEventListener("touchstart", e=>down(e.touches[0].clientX), {passive:true});
-  f.addEventListener("touchmove",  e=>move(e.touches[0].clientX),  {passive:true});
-  f.addEventListener("touchend",   up);
-  f.addEventListener("mousedown",  e=>down(e.clientX));
-  window.addEventListener("mousemove", e=>move(e.clientX));
-  window.addEventListener("mouseup", up);
-
-  // Keyboard
-  f.addEventListener("keydown", e=>{
-    if(e.key===" "||e.key==="Enter"){ e.preventDefault(); f.classList.toggle("flipped"); }
-    if(e.key==="ArrowRight") mark(true);
-    if(e.key==="ArrowLeft") mark(false);
-  });
-
-  return el;
-}
-
-/* ===================== VIEW: QCM ===================== */
-function viewQcm(){
-  const el = html(`<section class="space-y-4"></section>`);
-  el.appendChild(html(`
-    <div class="flex items-center justify-between flex-wrap gap-3">
-      <div>
-        <h2 class="text-2xl font-extrabold">QCM adaptatif</h2>
-        <p class="text-[color:var(--muted)] text-sm">${COURSE.qcm.length} questions · difficulté progressive · explication après chaque réponse.</p>
-      </div>
-      <div class="flex flex-wrap gap-2">
-        <button class="btn btn-ghost" id="qReset">Recommencer</button>
-        <button class="btn ${S.qcm.onlyWrong?'btn-primary':''}" id="qOnlyWrong">${S.qcm.onlyWrong?"Tout":"Erreurs uniquement"}</button>
-      </div>
-    </div>
-  `));
-
-  const stats = html(`
-    <div class="panel p-3">
-      <div class="flex items-center justify-between text-xs text-[color:var(--muted)] mb-1.5">
-        <span>Question <b id="qPos">1</b> / <b id="qTot">${COURSE.qcm.length}</b></span>
-        <span>Score : <b id="qScore">${S.qcm.correct.length}</b>/<b id="qDone">${S.qcm.done.length}</b></span>
-      </div>
-      <div class="h-2 progress-track"><div id="qFill" class="progress-fill" style="width:0%"></div></div>
-    </div>
-  `);
-  el.appendChild(stats);
-
-  const qBox = html(`<div id="qBox" class="panel p-5 md:p-6 space-y-4"></div>`);
-  el.appendChild(qBox);
-
-  function deck(){
-    const list = COURSE.qcm.map((q,i)=>({...q,i})).sort((a,b)=>a.lvl-b.lvl);
-    if(S.qcm.onlyWrong) return list.filter(x=>S.qcm.wrong.includes(x.i));
-    return list;
-  }
-  let pos = 0;
-
-  function renderQ(){
-    const d = deck();
-    if(d.length===0){
-      qBox.innerHTML = `<div class="text-center py-10"><div class="text-5xl mb-3">🎯</div><h3 class="font-bold text-xl">Plus d'erreurs à corriger !</h3><p class="text-[color:var(--muted)] mt-1">Bascule sur « Tout » pour reprendre l'ensemble.</p></div>`;
-      return;
-    }
-    if(pos>=d.length) pos = d.length-1;
-    const it = d[pos];
-    $("#qPos",el).textContent = pos+1;
-    $("#qTot",el).textContent = d.length;
-    $("#qScore",el).textContent = S.qcm.correct.length;
-    $("#qDone",el).textContent = S.qcm.done.length;
-    $("#qFill",el).style.width = Math.round((S.qcm.done.length/COURSE.qcm.length)*100) + "%";
-    const lvlTxt = ["Facile","Moyen","Difficile"][it.lvl-1] || "—";
-    qBox.innerHTML = `
-      <div class="flex items-center gap-2 text-xs"><span class="chip">${lvlTxt}</span>${S.qcm.wrong.includes(it.i)?'<span class="chip" style="background:rgba(248,113,113,.12);color:#fca5a5">déjà raté</span>':''}</div>
-      <h3 class="font-bold text-lg md:text-xl">${it.q}</h3>
-      <div class="grid gap-2" id="qOpts">
-        ${it.o.map((opt,k)=>`<button class="opt" data-k="${k}"><span class="dot">${String.fromCharCode(65+k)}</span><span class="flex-1">${opt}</span></button>`).join("")}
-      </div>
-      <div id="qExp" class="hidden panel-2 p-4 text-sm leading-relaxed"></div>
-      <div class="flex justify-between gap-2">
-        <button class="btn" id="qPrev">${ic("home",14)} Précédent</button>
-        <button class="btn btn-primary" id="qNext" disabled>Suivant ${ic("cards",14)}</button>
-      </div>
-    `;
-    $$("#qOpts .opt", qBox).forEach(b=>{
-      b.addEventListener("click", ()=> answer(it, +b.dataset.k));
-    });
-    $("#qNext", qBox).addEventListener("click", ()=>{ pos=Math.min(pos+1, deck().length-1); renderQ(); });
-    $("#qPrev", qBox).addEventListener("click", ()=>{ pos=Math.max(0,pos-1); renderQ(); });
-  }
-
-  function answer(it, k){
-    const opts = $$("#qOpts .opt", qBox);
-    opts.forEach(o=>o.disabled=true);
-    const correct = it.c;
-    opts[k].classList.add(k===correct?"correct":"wrong");
-    if(k!==correct){ opts[correct].classList.add("correct"); $("#qBox", el).classList.add("shake"); setTimeout(()=>$("#qBox", el).classList.remove("shake"),350); }
-    // update state
-    if(!S.qcm.done.includes(it.i)) S.qcm.done.push(it.i);
-    if(k===correct){
-      if(!S.qcm.correct.includes(it.i)) S.qcm.correct.push(it.i);
-      S.qcm.wrong = S.qcm.wrong.filter(x=>x!==it.i);
-    } else {
-      if(!S.qcm.wrong.includes(it.i)) S.qcm.wrong.push(it.i);
-      S.qcm.correct = S.qcm.correct.filter(x=>x!==it.i);
-    }
-    save();
-    bumpStreak();
-    const exp = $("#qExp", qBox);
-    exp.classList.remove("hidden");
-    exp.innerHTML = `<div class="font-bold mb-1 ${k===correct?'text-[#34d399]':'text-[#f87171]'}">${k===correct?"✓ Bonne réponse":"✗ Mauvaise réponse"}</div><div>${it.e}</div>`;
-    $("#qNext", qBox).disabled = false;
-    $("#qScore",el).textContent = S.qcm.correct.length;
-    $("#qDone",el).textContent = S.qcm.done.length;
-    $("#qFill",el).style.width = Math.round((S.qcm.done.length/COURSE.qcm.length)*100) + "%";
-    if(S.qcm.correct.length === COURSE.qcm.length) celebrate();
-  }
-
-  $("#qReset", el).addEventListener("click", ()=>{ S.qcm.done=[];S.qcm.correct=[];S.qcm.wrong=[];pos=0;save();renderQ(); });
-  $("#qOnlyWrong", el).addEventListener("click", ()=>{ S.qcm.onlyWrong = !S.qcm.onlyWrong; save(); pos=0; renderMain(); });
-  renderQ();
-  return el;
-}
-
-/* ===================== VIEW: LIBRE ===================== */
-function viewLibre(){
-  const el = html(`<section class="space-y-4"></section>`);
-  el.appendChild(html(`
-    <div class="flex items-center justify-between flex-wrap gap-3">
-      <div>
-        <h2 class="text-2xl font-extrabold">Quiz réponse libre</h2>
-        <p class="text-[color:var(--muted)] text-sm">${COURSE.libre.length} questions ouvertes · correction par mots-clés.</p>
-      </div>
-      <button class="btn btn-ghost" id="lReset">Recommencer</button>
-    </div>
-  `));
-
-  const stats = html(`
-    <div class="panel p-3">
-      <div class="flex items-center justify-between text-xs text-[color:var(--muted)] mb-1.5">
-        <span>Question <b id="lPos">1</b> / ${COURSE.libre.length}</span>
-        <span>Validés <b id="lOk">0</b> · Partiels <b id="lPart">0</b></span>
-      </div>
-      <div class="h-2 progress-track"><div id="lFill" class="progress-fill" style="width:0%"></div></div>
-    </div>
-  `);
-  el.appendChild(stats);
-
-  let pos = 0;
-  const box = html(`<div id="lBox" class="panel p-5 md:p-6 space-y-4"></div>`);
-  el.appendChild(box);
-
-  function counters(){
-    let ok=0,part=0;
-    Object.values(S.libre.scores).forEach(s=>{ if(s==="ok") ok++; else if(s==="part") part++; });
-    $("#lOk",el).textContent = ok;
-    $("#lPart",el).textContent = part;
-    $("#lFill",el).style.width = Math.round((S.libre.done.length/COURSE.libre.length)*100) + "%";
-  }
-
-  function renderQ(){
-    const it = COURSE.libre[pos];
-    $("#lPos",el).textContent = pos+1;
-    counters();
-    box.innerHTML = `
-      <h3 class="font-bold text-lg md:text-xl">${it.q}</h3>
-      <textarea id="lInput" rows="4" placeholder="Réponds avec tes propres mots…" class="w-full panel-2 p-4 rounded-xl outline-none focus:ring-2 ring-[color:#7c5cff] text-base"></textarea>
-      <div class="flex flex-wrap gap-2">
-        <button class="btn btn-primary" id="lCheck">Vérifier</button>
-        <button class="btn" id="lSkip">Voir la réponse</button>
-        <button class="btn" id="lPrev">Précédent</button>
-        <button class="btn" id="lNext">Suivant ${ic("cards",14)}</button>
-      </div>
-      <div id="lFb" class="hidden panel-2 p-4 text-sm leading-relaxed"></div>
-    `;
-    $("#lCheck", box).addEventListener("click", ()=>{
-      const val = normalize($("#lInput",box).value);
-      if(!val){ shake(box); return; }
-      const found = it.kw.filter(k=> val.includes(normalize(k))).length;
-      let status = "wrong", title = "✗ À retravailler", color="text-[#f87171]";
-      if(found >= it.min){ status="ok"; title="✓ Validé"; color="text-[#34d399]"; }
-      else if(found >= Math.max(1, it.min-1)){ status="part"; title="≈ Partiel — bon début"; color="text-[#facc15]"; }
-      if(!S.libre.done.includes(pos)) S.libre.done.push(pos);
-      S.libre.scores[pos] = status;
-      save(); bumpStreak();
-      const fb = $("#lFb", box);
-      fb.classList.remove("hidden");
-      fb.innerHTML = `
-        <div class="font-bold mb-1 ${color}">${title} · mots-clés trouvés ${found}/${it.kw.length} (min ${it.min})</div>
-        <div class="text-[color:var(--soft)]"><b>Réponse modèle :</b> ${it.ideal}</div>
-        <div class="text-[color:var(--muted)] text-xs mt-1">Mots-clés attendus : ${it.kw.map(k=>`<code class="mono px-1.5 py-0.5 rounded bg-[color:var(--panel)]">${k}</code>`).join(" ")}</div>`;
-      counters();
-    });
-    $("#lSkip", box).addEventListener("click", ()=>{
-      const fb = $("#lFb", box);
-      fb.classList.remove("hidden");
-      fb.innerHTML = `<div class="font-bold mb-1 text-[color:#22d3ee]">Réponse modèle</div><div class="text-[color:var(--soft)]">${it.ideal}</div>`;
-    });
-    $("#lNext", box).addEventListener("click", ()=>{ pos = Math.min(pos+1, COURSE.libre.length-1); renderQ(); });
-    $("#lPrev", box).addEventListener("click", ()=>{ pos = Math.max(0, pos-1); renderQ(); });
-  }
-
-  $("#lReset", el).addEventListener("click", ()=>{ S.libre={done:[],scores:{}}; pos=0; save(); renderQ(); });
-  renderQ();
-  return el;
-}
-
-/* ===================== VIEW: MIND MAP ===================== */
-function viewMind(){
-  S.progress.mind = true; save();
-  const el = html(`<section class="space-y-4"></section>`);
-  el.appendChild(html(`<div><h2 class="text-2xl font-extrabold">Carte mentale</h2><p class="text-[color:var(--muted)] text-sm">Clique sur un nœud pour en lire le détail.</p></div>`));
-
-  const box = html(`<div class="panel p-3"></div>`);
-  el.appendChild(box);
-
-  const W = 720, H = 520, cx=W/2, cy=H/2;
-  const nodes = COURSE.mindmap.nodes;
-  const N = nodes.length;
-  const R = 200;
-  const pts = nodes.map((n,i)=>{
-    const a = (i/N) * Math.PI*2 - Math.PI/2;
-    return { ...n, x: cx + Math.cos(a)*R, y: cy + Math.sin(a)*R };
-  });
-
-  const svgNS = "http://www.w3.org/2000/svg";
-  const svg = document.createElementNS(svgNS, "svg");
-  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
-  svg.setAttribute("class", "mm-svg w-full h-auto");
-  svg.setAttribute("role","img");
-  svg.setAttribute("aria-label","Carte mentale Séquence 23");
-
-  svg.innerHTML = `
-    <defs>
-      <linearGradient id="mmgrad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#7c5cff"/>
-        <stop offset="50%" stop-color="#22d3ee"/>
-        <stop offset="100%" stop-color="#34d399"/>
-      </linearGradient>
-      <radialGradient id="mmcenter" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#22d3ee"/>
-        <stop offset="100%" stop-color="#7c5cff"/>
-      </radialGradient>
-    </defs>
-  `;
-
-  pts.forEach(p=>{
-    const line = document.createElementNS(svgNS,"path");
-    line.setAttribute("class","edge");
-    line.setAttribute("d", `M ${cx} ${cy} Q ${(cx+p.x)/2} ${(cy+p.y)/2 - 40} ${p.x} ${p.y}`);
-    line.setAttribute("fill","none");
-    svg.appendChild(line);
-  });
-
-  // Center
-  const cg = document.createElementNS(svgNS, "g");
-  cg.setAttribute("class","node");
-  cg.dataset.id = "c";
-  const ccir = document.createElementNS(svgNS, "circle");
-  ccir.setAttribute("cx", cx); ccir.setAttribute("cy", cy);
-  ccir.setAttribute("r", 56);
-  ccir.setAttribute("fill", "url(#mmcenter)");
-  ccir.setAttribute("class","node-circle");
-  cg.appendChild(ccir);
-  const ctext = document.createElementNS(svgNS, "text");
-  ctext.setAttribute("x", cx); ctext.setAttribute("y", cy+4);
-  ctext.setAttribute("text-anchor","middle");
-  ctext.setAttribute("font-size","16");
-  ctext.setAttribute("fill","#0b0f1a");
-  ctext.setAttribute("font-weight","800");
-  ctext.textContent = "Séq. 23";
-  cg.appendChild(ctext);
-  svg.appendChild(cg);
-  cg.addEventListener("click", ()=> openModal(COURSE.mindmap.center.label, COURSE.mindmap.center.desc));
-
-  // External nodes
-  pts.forEach(p=>{
-    const g = document.createElementNS(svgNS, "g");
-    g.setAttribute("class","node");
-    g.dataset.id = p.id;
-    const c = document.createElementNS(svgNS, "circle");
-    c.setAttribute("cx", p.x); c.setAttribute("cy", p.y);
-    c.setAttribute("r", 46);
-    c.setAttribute("fill", p.color);
-    c.setAttribute("class","node-circle");
-    g.appendChild(c);
-    // wrap text on 2 lines
-    const t = document.createElementNS(svgNS, "text");
-    t.setAttribute("x", p.x);
-    t.setAttribute("y", p.y);
-    t.setAttribute("text-anchor","middle");
-    t.setAttribute("font-size","12");
-    t.setAttribute("fill","#0b0f1a");
-    t.setAttribute("font-weight","800");
-    const words = p.label.split(" ");
-    if(words.length>1){
-      const a = document.createElementNS(svgNS,"tspan"); a.setAttribute("x",p.x); a.setAttribute("dy","-2"); a.textContent = words.slice(0, Math.ceil(words.length/2)).join(" ");
-      const b = document.createElementNS(svgNS,"tspan"); b.setAttribute("x",p.x); b.setAttribute("dy","14"); b.textContent = words.slice(Math.ceil(words.length/2)).join(" ");
-      t.appendChild(a); t.appendChild(b);
-    } else { t.textContent = p.label; t.setAttribute("dy","4"); }
-    g.appendChild(t);
-    svg.appendChild(g);
-    g.addEventListener("click", ()=> openModal(p.label, p.desc));
-  });
-
-  box.appendChild(svg);
-
-  // Legend / quick list
-  const legend = html(`<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>`);
-  [{...COURSE.mindmap.center, color:"#22d3ee"}, ...nodes].forEach(n=>{
-    legend.appendChild(html(`
-      <button class="panel-2 p-4 text-left card-hover flex gap-3 items-start" data-mm="${n.id}">
-        <div class="w-3 h-3 rounded-full mt-1.5" style="background:${n.color||'#7c5cff'}"></div>
-        <div><div class="font-bold">${n.label}</div><div class="text-sm text-[color:var(--soft)] mt-0.5">${n.desc}</div></div>
-      </button>
-    `));
-  });
-  el.appendChild(legend);
-  legend.addEventListener("click", e=>{
-    const b = e.target.closest("[data-mm]"); if(!b) return;
-    const id = b.dataset.mm;
-    const n = id==="c" ? COURSE.mindmap.center : nodes.find(x=>x.id===id);
-    openModal(n.label, n.desc);
-  });
-
-  return el;
-}
-
-/* ===================== VIEW: MNÉMO ===================== */
-function viewMnemo(){
-  S.progress.mnemo = true; save();
-  const el = html(`<section class="space-y-5"></section>`);
-  el.appendChild(html(`<div><h2 class="text-2xl font-extrabold">Anti-pièges & Mnémotechniques</h2><p class="text-[color:var(--muted)] text-sm">Évite les confusions classiques et grave les concepts pour de bon.</p></div>`));
-
-  const grid = html(`<div class="grid md:grid-cols-2 gap-3"></div>`);
-  el.appendChild(html(`<h3 class="font-bold mt-2">⚠️ Pièges fréquents</h3>`));
-  COURSE.pieges.forEach(p=>{
-    grid.appendChild(html(`
-      <div class="panel p-5 card-hover">
-        <div class="flex items-center gap-2 mb-1.5">
-          <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(248,113,113,.15);color:#fca5a5">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>
-          </div>
-          <h4 class="font-bold">${p.t}</h4>
-        </div>
-        <p class="text-sm text-[color:var(--soft)] leading-relaxed">${p.d}</p>
-      </div>
-    `));
-  });
-  el.appendChild(grid);
-
-  el.appendChild(html(`<h3 class="font-bold mt-4">💡 Moyens mnémotechniques</h3>`));
-  const grid2 = html(`<div class="grid md:grid-cols-2 gap-3"></div>`);
-  COURSE.mnemos.forEach((m,i)=>{
-    grid2.appendChild(html(`
-      <div class="panel p-5 card-hover" style="background:linear-gradient(180deg, rgba(124,92,255,.06), rgba(34,211,238,.04));">
-        <div class="flex items-center gap-2 mb-1.5">
-          <div class="w-7 h-7 rounded-lg flex items-center justify-center grad-bg">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0b0f1a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2v.3h6V17c0-.8.4-1.5 1-2A7 7 0 0 0 12 2Z"/></svg>
-          </div>
-          <h4 class="font-bold">${m.t}</h4>
-        </div>
-        <p class="text-sm text-[color:var(--soft)] leading-relaxed">${m.d}</p>
-      </div>
-    `));
-  });
-  el.appendChild(grid2);
-
-  return el;
-}
-
-/* ===================== VIEW: EXAM ===================== */
-function viewExam(){
-  const el = html(`<section class="space-y-4"></section>`);
-  el.appendChild(html(`
-    <div class="flex items-center justify-between flex-wrap gap-3">
-      <div>
-        <h2 class="text-2xl font-extrabold">Mode examen</h2>
-        <p class="text-[color:var(--muted)] text-sm">10 questions mixées · 8 min chrono · note sur 20 avec axes d'amélioration.</p>
-      </div>
-      <div class="flex gap-2">
-        <span class="chip">Meilleur · <b>${(S.exam.best||0).toFixed(1)}/20</b></span>
-        <span class="chip">Dernier · <b>${(S.exam.last||0).toFixed(1)}/20</b></span>
-      </div>
-    </div>
-  `));
-
-  const launch = html(`
-    <div class="panel p-6 ring-grad relative">
-      <div class="flex flex-col md:flex-row md:items-center gap-4">
-        <div class="flex-1">
-          <h3 class="font-bold text-lg">Prêt(e) ?</h3>
-          <p class="text-[color:var(--soft)] text-sm">Mélange de QCM et réponses courtes. Pas de retour en arrière. À la fin : note /20 + feedback ciblé.</p>
-        </div>
-        <button class="btn btn-primary pulse" id="examStart">Démarrer l'examen ${ic("timer",16)}</button>
-      </div>
-    </div>
-  `);
-  el.appendChild(launch);
-
-  const box = html(`<div id="examBox"></div>`);
-  el.appendChild(box);
-
-  function buildExam(){
-    // 7 QCM + 3 réponses courtes
-    const qcm = [...COURSE.qcm].sort(()=>Math.random()-0.5).slice(0,7).map(q=>({type:"qcm", ...q}));
-    const libre = [...COURSE.libre].sort(()=>Math.random()-0.5).slice(0,3).map(q=>({type:"libre", ...q}));
-    return [...qcm, ...libre].sort(()=>Math.random()-0.5);
-  }
-  let questions = [];
-  let idx = 0;
-  let answers = [];
-  let timer = null;
-  let remaining = 8*60;
-
-  $("#examStart", launch).addEventListener("click", ()=>{
-    questions = buildExam();
-    idx = 0; answers = [];
-    remaining = 8*60;
-    launch.classList.add("hidden");
-    startTimer();
-    renderEx();
-  });
-
-  function startTimer(){
-    clearInterval(timer);
-    timer = setInterval(()=>{
-      remaining--;
-      const t = $("#exTime", el);
-      if(t) t.textContent = fmt(remaining);
-      if(remaining<=0){ clearInterval(timer); finish(); }
-    },1000);
-  }
-  function fmt(s){ const m=Math.floor(s/60), x=s%60; return `${m}:${String(x).padStart(2,'0')}`; }
-
-  function renderEx(){
-    const q = questions[idx];
-    const pct = Math.round(((idx)/questions.length)*100);
-    box.innerHTML = `
-      <div class="panel p-3 mb-3">
-        <div class="flex items-center justify-between text-xs text-[color:var(--muted)] mb-1.5">
-          <span>Question <b>${idx+1}</b> / ${questions.length}</span>
-          <span>Temps : <b id="exTime">${fmt(remaining)}</b></span>
-        </div>
-        <div class="h-2 progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
-      </div>
-      <div class="panel p-5 md:p-6 space-y-4">
-        <div class="flex items-center gap-2 text-xs">
-          <span class="chip">${q.type==="qcm"?"QCM":"Réponse courte"}</span>
-        </div>
-        <h3 class="font-bold text-lg md:text-xl">${q.q}</h3>
-        ${q.type==="qcm" ? `
-          <div class="grid gap-2" id="exOpts">
-            ${q.o.map((opt,k)=>`<button class="opt" data-k="${k}"><span class="dot">${String.fromCharCode(65+k)}</span><span class="flex-1">${opt}</span></button>`).join("")}
-          </div>
-        ` : `
-          <textarea id="exInput" rows="3" placeholder="Réponse courte…" class="w-full panel-2 p-4 rounded-xl outline-none focus:ring-2 ring-[color:#7c5cff] text-base"></textarea>
-        `}
-        <div class="flex justify-end gap-2">
-          <button class="btn btn-primary" id="exNext">${idx===questions.length-1?"Terminer":"Suivant"} ${ic("cards",14)}</button>
-        </div>
-      </div>
-    `;
-    if(q.type==="qcm"){
-      let chosen = null;
-      $$("#exOpts .opt", box).forEach(b=>{
-        b.addEventListener("click", ()=>{
-          $$("#exOpts .opt", box).forEach(x=>{ x.classList.remove("correct","wrong"); x.querySelector(".dot").style.background=""; });
-          chosen = +b.dataset.k;
-          b.style.borderColor = "#7c5cff";
-        });
-      });
-      $("#exNext", box).addEventListener("click", ()=>{
-        answers.push({q, type:"qcm", chosen});
-        next();
-      });
-    } else {
-      $("#exNext", box).addEventListener("click", ()=>{
-        const v = $("#exInput", box).value;
-        answers.push({q, type:"libre", val:v});
-        next();
-      });
-    }
-  }
-  function next(){
-    if(idx < questions.length-1){ idx++; renderEx(); }
-    else finish();
-  }
-  function finish(){
-    clearInterval(timer);
-    // Scoring
-    let raw = 0, max = 0, perCat = {qcm:{ok:0,n:0}, libre:{ok:0,part:0,n:0}};
-    const details = [];
-    answers.forEach(a=>{
-      if(a.type==="qcm"){
-        max += 1; perCat.qcm.n++;
-        const ok = a.chosen === a.q.c;
-        if(ok){ raw += 1; perCat.qcm.ok++; }
-        details.push({ok: ok?"ok":"wrong", q:a.q.q, expected:a.q.o[a.q.c], got: a.chosen==null?"—":a.q.o[a.chosen], explain:a.q.e});
-      } else {
-        max += 1; perCat.libre.n++;
-        const val = normalize(a.val||"");
-        const found = a.q.kw.filter(k=>val.includes(normalize(k))).length;
-        let s = 0, st="wrong";
-        if(found >= a.q.min){ s = 1; st="ok"; perCat.libre.ok++; }
-        else if(found >= Math.max(1, a.q.min-1)){ s = 0.5; st="part"; perCat.libre.part++; }
-        raw += s;
-        details.push({ok:st, q:a.q.q, expected:a.q.ideal, got:a.val||"—", explain:"Mots-clés trouvés : "+found+" / "+a.q.kw.length+" (min "+a.q.min+")"});
-      }
-    });
-    const note = (raw/max)*20;
-    S.exam.last = note;
-    if(note > (S.exam.best||0)) S.exam.best = note;
-    S.exam.history.push({date: new Date().toISOString(), note});
-    save(); bumpStreak();
-    if(note >= 16) celebrate();
-
-    // Build axes
-    const axes = [];
-    if(perCat.qcm.ok < perCat.qcm.n) axes.push("Revoir les QCM ratés (mode « erreurs uniquement »).");
-    if(perCat.libre.ok < perCat.libre.n) axes.push("Travailler la formulation libre : reformule avec les mots-clés exacts du cours.");
-    if(note < 12) axes.push("Relire la synthèse complète et refaire les flashcards en priorité.");
-    if(note >= 12 && note < 16) axes.push("Insister sur les pièges (coopératif/collaboratif, addition/enlèvement) + chaîne CAO.");
-    if(note >= 16) axes.push("Excellent — entraîne-toi avec les questions de niveau 3 et les verbes : justifier, comparer.");
-
-    box.innerHTML = `
-      <div class="panel p-6 md:p-8 text-center ring-grad">
-        <div class="text-xs uppercase tracking-widest text-[color:var(--muted)]">Résultat</div>
-        <div class="text-6xl md:text-7xl font-extrabold grad-text mt-1">${note.toFixed(1)}<span class="text-3xl text-[color:var(--muted)]">/20</span></div>
-        <div class="mt-2 text-[color:var(--soft)]">${note>=16?"🏆 Excellent !":note>=12?"👍 Bien joué — peaufine quelques points.":note>=8?"💪 Persévère, c'est presque ça.":"📚 Reprends les bases, tu peux y arriver."}</div>
-        <div class="mt-4 flex justify-center gap-2 flex-wrap">
-          <span class="chip">QCM ${perCat.qcm.ok}/${perCat.qcm.n}</span>
-          <span class="chip">Libre ${perCat.libre.ok}/${perCat.libre.n} (+${perCat.libre.part} partiels)</span>
-        </div>
-      </div>
-      <div class="panel p-5 mt-3">
-        <h4 class="font-bold mb-2">Axes d'amélioration</h4>
-        <ul class="space-y-2 text-sm text-[color:var(--soft)]">${axes.map(a=>`<li class="flex gap-2"><span class="text-[color:#facc15]">➜</span><span>${a}</span></li>`).join("")}</ul>
-      </div>
-      <div class="panel p-5 mt-3 space-y-3">
-        <h4 class="font-bold">Détail des questions</h4>
-        ${details.map(d=>`
-          <div class="panel-2 p-4">
-            <div class="text-xs ${d.ok==='ok'?'text-[#34d399]':d.ok==='part'?'text-[#facc15]':'text-[#f87171]'} font-bold uppercase mb-1">${d.ok==='ok'?'✓ Correct':d.ok==='part'?'≈ Partiel':'✗ Incorrect'}</div>
-            <div class="font-semibold mb-1">${d.q}</div>
-            <div class="text-sm text-[color:var(--soft)]"><b>Ta réponse :</b> ${d.got}</div>
-            <div class="text-sm text-[color:var(--soft)]"><b>Attendu :</b> ${d.expected}</div>
-            <div class="text-xs text-[color:var(--muted)] mt-1">${d.explain}</div>
-          </div>
-        `).join("")}
-      </div>
-      <div class="flex gap-2 mt-3"><button class="btn btn-primary" id="exRestart">Recommencer un examen ${ic("timer",16)}</button></div>
-    `;
-    $("#exRestart", box).addEventListener("click", ()=>{ S.tab="exam"; save(); renderMain(); });
-  }
-
-  return el;
-}
-
-/* =====================================================================
-   KEYWORDS POPUP
-===================================================================== */
-function attachKeywords(root){
+function attachKw(root){
   $$(".kw", root).forEach(el=>{
     el.addEventListener("click", ()=>{
-      const key = el.dataset.kw;
-      const def = findDef(key);
-      if(def) openModal(prettyKey(key), def);
+      const k = el.dataset.kw;
+      const orig = Object.keys(COURSE.keywords).find(x=>x.toLowerCase()===k.toLowerCase());
+      if(orig) openModal("Définition", orig, md(COURSE.keywords[orig]));
     });
   });
 }
-function prettyKey(k){
-  // Match original casing in COURSE.keywords
-  const orig = Object.keys(COURSE.keywords).find(x=>x.toLowerCase()===k.toLowerCase());
-  return orig || k;
-}
-function findDef(k){
-  const orig = Object.keys(COURSE.keywords).find(x=>x.toLowerCase()===k.toLowerCase());
-  return orig ? COURSE.keywords[orig] : null;
-}
-function openModal(title, body){
+function openModal(kind, title, body){
+  $("#modalKind").textContent = kind;
   $("#modalTitle").textContent = title;
   $("#modalBody").innerHTML = body;
   $("#modal").classList.add("open");
 }
-$("#modalClose")?.addEventListener("click", ()=> $("#modal").classList.remove("open"));
-$("#modal")?.addEventListener("click", (e)=>{ if(e.target.id==="modal") $("#modal").classList.remove("open"); });
+$("#modalClose").addEventListener("click", ()=> $("#modal").classList.remove("open"));
+$("#modal").addEventListener("click", e=>{ if(e.target.id==="modal") $("#modal").classList.remove("open"); });
 document.addEventListener("keydown", e=>{ if(e.key==="Escape") $("#modal").classList.remove("open"); });
 
-/* =====================================================================
-   THEME
-===================================================================== */
 function applyTheme(){
   document.documentElement.setAttribute("data-theme", S.theme);
-  $("#iconMoon").classList.toggle("hidden", S.theme==="light");
-  $("#iconSun").classList.toggle("hidden", S.theme!=="light");
+  $("#iconMoon").classList.toggle("hidden", S.theme==="dark");
+  $("#iconSun").classList.toggle("hidden", S.theme!=="dark");
 }
 $("#themeToggle").addEventListener("click", ()=>{ S.theme = S.theme==="dark"?"light":"dark"; save(); applyTheme(); });
+$("#brandLink").addEventListener("click", e=>{ e.preventDefault(); go("home"); });
 
-/* =====================================================================
-   RESET
-===================================================================== */
-$("#resetBtn").addEventListener("click", ()=>{
-  if(!confirm("Réinitialiser toute la progression ?")) return;
-  S = structuredClone(defaultState); save();
-  renderTabs(); renderMain(); applyTheme();
-});
-
-/* =====================================================================
-   CELEBRATION
-===================================================================== */
-function celebrate(){
-  const colors = ["#7c5cff","#22d3ee","#34d399","#facc15","#f472b6"];
-  for(let i=0;i<60;i++){
-    const c = document.createElement("div");
-    c.className = "confetti";
-    c.style.left = Math.random()*100 + "vw";
-    c.style.background = colors[i%colors.length];
-    c.style.animation = `fall ${1.5+Math.random()*1.5}s ${Math.random()*0.4}s linear forwards`;
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(), 3500);
-  }
+function go(view, extra){
+  S.view = view;
+  if(view==="session") S.session = extra;
+  save();
+  render();
 }
-const styleConfetti = document.createElement("style");
-styleConfetti.textContent = `@keyframes fall{ to{ transform: translateY(110vh) rotate(720deg); opacity:0; } }`;
-document.head.appendChild(styleConfetti);
+function render(){
+  const app = $("#app");
+  app.innerHTML = "";
+  const v = ({ home: viewHome, session: viewSession, tools: viewTools })[S.view] || viewHome;
+  const el = v();
+  el.classList.add("fade-in");
+  app.appendChild(el);
+  attachKw(el);
+  window.scrollTo({top:0});
+}
 
-function shake(el){ el.classList.add("shake"); setTimeout(()=>el.classList.remove("shake"),350); }
+function viewHome(){
+  const el = html(`<section class="space-y-8 pt-8"></section>`);
 
-/* =====================================================================
-   INIT
-===================================================================== */
+  el.appendChild(html(`
+    <div>
+      <div class="text-[11px] uppercase tracking-[0.22em] muted">${COURSE.meta}</div>
+      <h1 class="serif text-[40px] md:text-[56px] font-semibold leading-[1.05] mt-1">${COURSE.title}</h1>
+      <p class="serif text-xl md:text-2xl mt-1 soft">${COURSE.subtitle}.</p>
+      <p class="text-[14px] muted mt-3 max-w-xl leading-relaxed">Choisis une session selon ton temps. La méthode <b class="ink">80/20</b> est appliquée par défaut : tu révises d'abord les <b class="ink">8 concepts</b> qui rapportent l'essentiel des points.</p>
+    </div>
+  `));
+
+  const modes = [
+    { id:"flash",   tag:"⚡ 80/20",    title:"Flash",      time:"3 min", desc:"5 cartes essentielles + 3 QCM pièges. Pour grappiller des points en dernière minute.", best:S.best.flash },
+    { id:"express", tag:"Recommandé", title:"Express",   time:"8 min", desc:"Tour complet rapide : flashcards, QCM, 1 question libre.", best:S.best.express },
+    { id:"deep",    tag:"Pomodoro",   title:"Approfondie", time:"20 min", desc:"15 min focus + 2 min pause + 3 min consolidation. La séance qui ancre vraiment.", best:S.best.deep }
+  ];
+
+  const grid = html(`<div class="grid gap-3"></div>`);
+  modes.forEach((m,i)=>{
+    const recommended = i===1;
+    grid.appendChild(html(`
+      <button class="paper rounded-xl p-5 text-left card-tap focus-ring ${recommended?'ring-1 ring-[color:var(--ink)]':''}" data-mode="${m.id}">
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="chip ${recommended?'chip-accent':''}">${m.tag}</span>
+              <span class="muted text-[12px]">${m.time}</span>
+            </div>
+            <div class="serif text-2xl font-semibold leading-tight">${m.title}</div>
+            <p class="text-[14px] soft mt-1.5 leading-relaxed">${m.desc}</p>
+          </div>
+          <div class="flex flex-col items-end gap-1">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="muted"><path d="m9 6 6 6-6 6"/></svg>
+            ${m.best?`<span class="chip chip-ok text-[10px]">★ ${m.best.toFixed(0)}%</span>`:''}
+          </div>
+        </div>
+      </button>
+    `));
+  });
+  el.appendChild(grid);
+
+  el.appendChild(html(`
+    <div class="paper rounded-xl p-5 flex items-center gap-4">
+      <div class="flex-1">
+        <div class="serif text-lg font-semibold">Examen blanc</div>
+        <p class="text-[13px] soft mt-1">10 questions chrono · note /20 + axes ciblés.</p>
+        ${S.best.exam?`<div class="text-[12px] muted mt-1">Meilleur : <b class="ink">${S.best.exam.toFixed(1)}/20</b></div>`:''}
+      </div>
+      <button class="btn btn-primary" data-mode="exam">Lancer</button>
+    </div>
+  `));
+
+  el.appendChild(html(`
+    <div class="paper rounded-xl p-5">
+      <div class="flex items-center gap-2">
+        <div class="serif text-lg font-semibold">La méthode 80/20</div>
+        <span class="chip chip-accent">Pareto</span>
+      </div>
+      <p class="text-[13px] soft mt-2 leading-relaxed">Sur ce cours, 8 concepts couvrent l'essentiel des questions du contrôle. Mémorise-les <b>vraiment</b>, le reste suivra naturellement.</p>
+      <div class="mt-3 grid sm:grid-cols-2 gap-2">
+        ${COURSE.essentials.map((e,i)=>`
+          <button class="paper rounded-lg p-3 text-left card-tap focus-ring" data-essential="${e.id}">
+            <div class="flex items-center gap-2">
+              <div class="text-[11px] muted font-mono w-5">${String(i+1).padStart(2,'0')}</div>
+              <div class="flex-1">
+                <div class="font-semibold text-[14px]">${e.t}</div>
+                <div class="text-[11px] muted mt-0.5">${e.tag}</div>
+              </div>
+            </div>
+          </button>`).join("")}
+      </div>
+    </div>
+  `));
+
+  el.appendChild(html(`
+    <div class="flex items-center justify-between flex-wrap gap-3 pt-2">
+      <div class="text-[12px] muted">Tu préfères piocher librement ?</div>
+      <button class="btn btn-ghost" data-go="tools">
+        Boîte à outils complète
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      </button>
+    </div>
+  `));
+
+  el.addEventListener("click", e=>{
+    const m = e.target.closest("[data-mode]");
+    if(m){ launchSession(m.dataset.mode); return; }
+    const g = e.target.closest("[data-go]");
+    if(g){ go(g.dataset.go); return; }
+    const es = e.target.closest("[data-essential]");
+    if(es){
+      const ess = COURSE.essentials.find(x=>x.id===es.dataset.essential);
+      openModal(ess.tag, ess.t, md(ess.d));
+    }
+  });
+
+  return el;
+}
+
+function launchSession(mode){
+  let plan, durationSec, label;
+  const coreFlash = COURSE.flashcards.filter(f=>f.core);
+  const coreQcm   = COURSE.qcm.filter(q=>q.core);
+  const allFlash  = COURSE.flashcards;
+  const allQcm    = COURSE.qcm;
+
+  if(mode==="flash"){
+    label="Flash"; durationSec=180;
+    plan = [
+      { type:"intro", title:"80/20 · 3 min", body:"On ne révise QUE les 8 concepts qui rapportent le plus. Reste concentré·e, c'est très court." },
+      ...shuffle([...coreFlash]).slice(0,5).map(f=>({ type:"flash", ...f })),
+      ...shuffle([...coreQcm]).slice(0,3).map(q=>({ type:"qcm", ...q })),
+      { type:"outro" }
+    ];
+  } else if(mode==="express"){
+    label="Express"; durationSec=480;
+    plan = [
+      { type:"intro", title:"Express · 8 min", body:"Tour complet rapide. On enchaîne sans réfléchir au menu." },
+      ...shuffle([...allFlash]).slice(0,8).map(f=>({ type:"flash", ...f })),
+      ...shuffle([...allQcm]).slice(0,5).map(q=>({ type:"qcm", ...q })),
+      ...shuffle([...COURSE.libre]).slice(0,1).map(l=>({ type:"libre", ...l })),
+      { type:"outro" }
+    ];
+  } else if(mode==="deep"){
+    label="Approfondie · Pomodoro"; durationSec=20*60;
+    plan = [
+      { type:"intro", title:"Pomodoro · 20 min", body:"3 phases : <b>15 min focus</b> (essentiels + QCM), <b>2 min pause</b>, <b>3 min consolidation</b> (pièges + mnémo). Reste avec moi." },
+      { type:"phase", title:"Phase 1 · Focus", note:"Mémorisation active" },
+      { type:"read", title:"Les 8 essentiels", body: COURSE.essentials.map((e,i)=>`<div class="paper rounded-lg p-3 mb-2"><div class="text-[11px] muted">${String(i+1).padStart(2,'0')} · ${e.tag}</div><div class="font-semibold mt-0.5">${e.t}</div><div class="text-[13px] soft mt-1">${e.d}</div></div>`).join("") },
+      ...allFlash.map(f=>({ type:"flash", ...f })),
+      ...allQcm.map(q=>({ type:"qcm", ...q })),
+      { type:"pause", duration:120 },
+      { type:"phase", title:"Phase 2 · Consolidation", note:"Pièges + mnémo" },
+      { type:"read", title:"Pièges fréquents", body: COURSE.pieges.map(p=>`<div class="paper rounded-lg p-3 mb-2"><div class="font-semibold">${p.t}</div><div class="text-[13px] soft mt-1">${p.d}</div></div>`).join("") },
+      { type:"read", title:"Moyens mnémotechniques", body: COURSE.mnemos.map(m=>`<div class="paper rounded-lg p-3 mb-2"><div class="font-semibold">${m.t}</div><div class="text-[13px] soft mt-1">${m.d}</div></div>`).join("") },
+      ...shuffle([...COURSE.libre]).slice(0,2).map(l=>({ type:"libre", ...l })),
+      { type:"outro" }
+    ];
+  } else if(mode==="exam"){
+    label="Examen blanc"; durationSec=8*60;
+    const q = [...shuffle(allQcm).slice(0,7).map(q=>({ type:"qcm", ...q, examMode:true })),
+               ...shuffle(COURSE.libre).slice(0,3).map(l=>({ type:"libre", ...l, examMode:true }))];
+    plan = [
+      { type:"intro", title:"Examen · 8 min", body:"10 questions chrono, pas de retour. À la fin : note /20." },
+      ...shuffle(q),
+      { type:"outro", isExam:true }
+    ];
+  } else { return; }
+
+  go("session", { mode, label, plan, idx:0, startedAt: Date.now(), durationSec, score:{ok:0,total:0}, paused:false });
+}
+
+function viewSession(){
+  const ses = S.session;
+  const el = html(`<section class="pt-3"></section>`);
+  const stepsTotal = ses.plan.length;
+  const stepNow = Math.min(ses.idx+1, stepsTotal);
+
+  const bar = html(`
+    <div class="timer-bar -mx-5 px-5 py-3 mb-4 border-b line">
+      <div class="max-w-3xl mx-auto flex items-center gap-3">
+        <button class="btn btn-ghost !min-h-0 !p-2" id="sExit" aria-label="Quitter">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>
+        </button>
+        <div class="flex-1">
+          <div class="flex items-center justify-between text-[11px] muted mb-1.5">
+            <span>${ses.label} · ${stepNow}/${stepsTotal}</span>
+            <span class="font-mono"><span id="sTimer">${fmt(ses.durationSec)}</span></span>
+          </div>
+          <div class="progress accent"><div id="sBar" style="width:0%"></div></div>
+        </div>
+        <button class="btn btn-ghost !min-h-0 !p-2" id="sPause" aria-label="Pause">
+          <svg id="sIconPause" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
+          <svg id="sIconPlay" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+      </div>
+    </div>
+  `);
+  el.appendChild(bar);
+
+  const stage = html(`<div id="sStage" class="session-card"></div>`);
+  el.appendChild(stage);
+
+  let remaining = ses.durationSec;
+  let tickId = null;
+  function startTimer(){
+    clearInterval(tickId);
+    tickId = setInterval(()=>{
+      if(ses.paused) return;
+      remaining--;
+      $("#sTimer", el).textContent = fmt(Math.max(0, remaining));
+      if(remaining<=0){ clearInterval(tickId); endSession(); }
+    }, 1000);
+  }
+  function pause(){
+    ses.paused = !ses.paused;
+    $("#sIconPause", el).classList.toggle("hidden", ses.paused);
+    $("#sIconPlay", el).classList.toggle("hidden", !ses.paused);
+  }
+  $("#sPause", el).addEventListener("click", pause);
+  $("#sExit", el).addEventListener("click", ()=>{
+    if(confirm("Quitter la session ?")){
+      clearInterval(tickId);
+      go("home");
+    }
+  });
+
+  function updateProgress(){
+    const pos = Math.min(ses.idx, stepsTotal);
+    $("#sBar", el).style.width = Math.round((pos/stepsTotal)*100) + "%";
+  }
+  function nextStep(){
+    ses.idx++;
+    if(ses.idx >= stepsTotal){ endSession(); return; }
+    renderStep();
+  }
+  function renderStep(){
+    updateProgress();
+    const step = ses.plan[ses.idx];
+    stage.innerHTML = "";
+    const renderer = renderers[step.type];
+    if(!renderer){ nextStep(); return; }
+    stage.appendChild(renderer(step));
+    attachKw(stage);
+  }
+
+  const renderers = {
+    intro: step => {
+      const c = html(`
+        <div class="paper rounded-xl p-6 md:p-8 text-center fade-in">
+          <div class="text-[11px] uppercase tracking-[0.22em] muted">Commence ici</div>
+          <h2 class="serif text-3xl md:text-4xl font-semibold mt-2">${step.title}</h2>
+          <p class="text-[15px] soft mt-3 max-w-md mx-auto leading-relaxed">${step.body}</p>
+          <button class="btn btn-primary mt-6 pulse-soft" id="goStart">Commencer →</button>
+          <div class="text-[12px] muted mt-3">Astuce : <span class="kbd">Espace</span> = retourner · <span class="kbd">→</span> = suivant</div>
+        </div>`);
+      c.querySelector("#goStart").addEventListener("click", ()=>{ startTimer(); nextStep(); });
+      return c;
+    },
+    phase: step => {
+      const c = html(`
+        <div class="paper rounded-xl p-6 text-center fade-in">
+          <div class="text-[11px] uppercase tracking-[0.22em] muted">${step.note}</div>
+          <h3 class="serif text-2xl font-semibold mt-1">${step.title}</h3>
+          <button class="btn btn-primary mt-4" id="goNext">Continuer →</button>
+        </div>`);
+      c.querySelector("#goNext").addEventListener("click", nextStep);
+      return c;
+    },
+    read: step => {
+      const c = html(`
+        <div class="fade-in">
+          <div class="serif text-2xl font-semibold mb-3">${step.title}</div>
+          <div>${step.body}</div>
+          <div class="flex justify-end mt-4"><button class="btn btn-primary" id="goNext">Compris, suivant →</button></div>
+        </div>`);
+      c.querySelector("#goNext").addEventListener("click", nextStep);
+      return c;
+    },
+    pause: step => {
+      let left = step.duration;
+      const c = html(`
+        <div class="paper rounded-xl p-8 text-center fade-in" style="background:var(--accent-soft); border-color:transparent">
+          <div class="text-[11px] uppercase tracking-[0.22em]" style="color:var(--accent)">Pause active</div>
+          <h3 class="serif text-3xl font-semibold mt-2 ink">Respire</h3>
+          <p class="text-[14px] soft mt-2 max-w-sm mx-auto">Étire-toi, regarde au loin. Reviens dans <span id="pauseCd" class="font-mono ink">${fmt(left)}</span>.</p>
+          <button class="btn mt-5" id="skipPause">Passer la pause</button>
+        </div>`);
+      const cd = c.querySelector("#pauseCd");
+      const it = setInterval(()=>{
+        if(ses.paused) return;
+        left--; if(cd) cd.textContent = fmt(Math.max(0,left));
+        if(left<=0){ clearInterval(it); nextStep(); }
+      }, 1000);
+      c.querySelector("#skipPause").addEventListener("click", ()=>{ clearInterval(it); nextStep(); });
+      return c;
+    },
+    flash: step => {
+      const c = html(`
+        <div class="fade-in">
+          <div class="text-[11px] uppercase tracking-[0.22em] muted mb-2">Flashcard${step.core?' · essentiel':''}</div>
+          <div class="flash relative h-64 md:h-72" tabindex="0">
+            <div class="flash-inner w-full h-full">
+              <div class="flash-face paper rounded-xl w-full h-full p-6 flex flex-col items-center justify-center text-center">
+                <div class="serif text-xl md:text-2xl font-semibold leading-snug max-w-lg">${step.q}</div>
+                <div class="text-[11px] muted mt-4">Tap pour retourner</div>
+                <div class="swipe-hint chip chip-bad absolute left-3 top-3">← à revoir</div>
+                <div class="swipe-hint chip chip-ok absolute right-3 top-3">je sais →</div>
+              </div>
+              <div class="flash-face flash-back paper rounded-xl w-full h-full p-6 flex flex-col items-center justify-center text-center" style="border-color:var(--ink)">
+                <div class="text-[15px] md:text-lg leading-relaxed max-w-lg">${step.a}</div>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2 mt-3">
+            <button class="btn" id="fRev">À revoir</button>
+            <button class="btn btn-primary" id="fOk">Je sais →</button>
+          </div>
+        </div>`);
+      const f = c.querySelector(".flash");
+      f.addEventListener("click", e=>{ if(e.target.closest("button")) return; f.classList.toggle("flipped"); });
+      c.querySelector("#fOk").addEventListener("click", ()=>{ ses.score.ok++; ses.score.total++; nextStep(); });
+      c.querySelector("#fRev").addEventListener("click", ()=>{ ses.score.total++; nextStep(); });
+      let startX=0, dx=0, drag=false;
+      const down=x=>{ startX=x; dx=0; drag=true; f.classList.add("dragging"); f.style.transition="none"; };
+      const move=x=>{ if(!drag) return; dx=x-startX; f.style.transform=`translateX(${dx}px) rotate(${dx/22}deg)`; };
+      const up=()=>{ if(!drag) return; drag=false; f.classList.remove("dragging"); f.style.transition="";
+        if(Math.abs(dx)>90){ const dir=dx>0; f.style.transform=`translateX(${dir?500:-500}px)`; setTimeout(()=>{ f.style.transform=""; if(dir){ ses.score.ok++; } ses.score.total++; nextStep(); },180); }
+        else f.style.transform=""; };
+      f.addEventListener("touchstart",e=>down(e.touches[0].clientX),{passive:true});
+      f.addEventListener("touchmove", e=>move(e.touches[0].clientX),{passive:true});
+      f.addEventListener("touchend", up);
+      f.addEventListener("mousedown",e=>down(e.clientX));
+      window.addEventListener("mousemove",e=>move(e.clientX));
+      window.addEventListener("mouseup",up);
+      f.addEventListener("keydown", e=>{
+        if(e.key===" "||e.key==="Enter"){ e.preventDefault(); f.classList.toggle("flipped"); }
+        if(e.key==="ArrowRight"){ ses.score.ok++; ses.score.total++; nextStep(); }
+        if(e.key==="ArrowLeft"){ ses.score.total++; nextStep(); }
+      });
+      setTimeout(()=>f.focus(), 30);
+      return c;
+    },
+    qcm: step => {
+      const c = html(`
+        <div class="fade-in">
+          <div class="flex items-center gap-2 mb-2"><span class="chip">QCM</span><span class="chip ${step.lvl===1?'chip-ok':step.lvl===2?'chip-warn':'chip-bad'}">Niveau ${step.lvl}</span></div>
+          <h3 class="serif text-xl md:text-2xl font-semibold leading-snug">${step.q}</h3>
+          <div class="grid gap-2 mt-3" id="qOpts">
+            ${step.o.map((o,k)=>`<button class="opt" data-k="${k}"><span class="key">${"ABCD"[k]}</span><span class="flex-1">${o}</span></button>`).join("")}
+          </div>
+          <div id="qExp" class="hidden paper rounded-lg p-4 text-[14px] mt-3 leading-relaxed"></div>
+          <div class="flex justify-end mt-3 hidden" id="qNextWrap"><button class="btn btn-primary" id="qNext">Suivant →</button></div>
+        </div>`);
+      const opts = c.querySelectorAll("#qOpts .opt");
+      opts.forEach(b=>{
+        b.addEventListener("click", ()=>{
+          const k = +b.dataset.k;
+          ses.score.total++;
+          const ok = k===step.c;
+          if(ok) ses.score.ok++;
+          opts.forEach(o=>o.disabled=true);
+          opts[k].classList.add(ok?"correct":"wrong");
+          if(!ok) opts[step.c].classList.add("correct");
+          if(!step.examMode){
+            const exp = c.querySelector("#qExp");
+            exp.classList.remove("hidden");
+            exp.innerHTML = `<div class="font-semibold mb-1" style="color:${ok?'var(--ok)':'var(--bad)'}">${ok?"✓ Bonne réponse":"✗ Pas cette fois"}</div>${step.e}`;
+            c.querySelector("#qNextWrap").classList.remove("hidden");
+            c.querySelector("#qNext").addEventListener("click", nextStep);
+          } else {
+            setTimeout(nextStep, 600);
+          }
+        });
+      });
+      return c;
+    },
+    libre: step => {
+      const c = html(`
+        <div class="fade-in">
+          <div class="chip mb-2">Réponse libre</div>
+          <h3 class="serif text-xl md:text-2xl font-semibold leading-snug">${step.q}</h3>
+          <textarea id="lInput" rows="4" placeholder="Réponds avec tes mots…" class="w-full paper rounded-xl p-4 mt-3 focus-ring text-[15px]" style="outline:none"></textarea>
+          <div class="flex gap-2 mt-3">
+            <button class="btn btn-primary flex-1" id="lCheck">Vérifier</button>
+            <button class="btn" id="lSkip">Passer</button>
+          </div>
+          <div id="lFb" class="hidden paper rounded-lg p-4 text-[14px] mt-3 leading-relaxed"></div>
+          <div class="flex justify-end mt-3 hidden" id="lNextWrap"><button class="btn btn-primary" id="lNext">Suivant →</button></div>
+        </div>`);
+      c.querySelector("#lCheck").addEventListener("click", ()=>{
+        const val = normalize(c.querySelector("#lInput").value);
+        const found = step.kw.filter(k=> val.includes(normalize(k))).length;
+        ses.score.total++;
+        let lbl="✗ À retravailler", col="var(--bad)";
+        if(found >= step.min){ ses.score.ok++; lbl="✓ Validé"; col="var(--ok)"; }
+        else if(found >= Math.max(1, step.min-1)){ ses.score.ok += 0.5; lbl="≈ Partiel"; col="var(--warn)"; }
+        const fb = c.querySelector("#lFb"); fb.classList.remove("hidden");
+        fb.innerHTML = `<div class="font-semibold mb-1" style="color:${col}">${lbl} · ${found}/${step.kw.length} mots-clés</div><div class="soft"><b>Modèle :</b> ${step.ideal}</div>`;
+        c.querySelector("#lNextWrap").classList.remove("hidden");
+        c.querySelector("#lNext").addEventListener("click", nextStep);
+        c.querySelector("#lCheck").disabled = true;
+        c.querySelector("#lInput").disabled = true;
+      });
+      c.querySelector("#lSkip").addEventListener("click", ()=>{ ses.score.total++; nextStep(); });
+      return c;
+    },
+    outro: step => {
+      const pct = ses.score.total>0 ? Math.round((ses.score.ok/ses.score.total)*100) : 0;
+      const note20 = ses.score.total>0 ? (ses.score.ok/ses.score.total)*20 : 0;
+      const slot = ses.mode;
+      const value = slot==="exam" ? note20 : pct;
+      if(value > (S.best[slot]||0)) S.best[slot] = value;
+      S.history.push({ mode:ses.mode, score:pct, note:note20, date:new Date().toISOString() });
+      S.stats.runs++;
+      S.stats.totalMin += Math.round((Date.now() - ses.startedAt)/60000);
+      save(); bumpStreak();
+      let cheer = "Bien joué.";
+      if(pct>=85) cheer = "Excellent. Tu as les bases solides.";
+      else if(pct>=65) cheer = "Bon score. Encore une session et c'est dans la poche.";
+      else cheer = "Pas grave. Refais une Flash, ça va se débloquer.";
+      const isExam = step.isExam || ses.mode==="exam";
+      const c = html(`
+        <div class="paper rounded-xl p-6 md:p-8 fade-in">
+          <div class="text-[11px] uppercase tracking-[0.22em] muted">Session terminée</div>
+          ${isExam ? `
+            <h2 class="serif text-5xl md:text-6xl font-semibold mt-1">${note20.toFixed(1)}<span class="muted text-2xl">/20</span></h2>
+          ` : `
+            <h2 class="serif text-5xl md:text-6xl font-semibold mt-1">${pct}<span class="muted text-2xl">%</span></h2>
+          `}
+          <p class="soft mt-2">${cheer}</p>
+          <div class="h-divider my-5"></div>
+          <div class="grid grid-cols-3 gap-3 text-center">
+            <div><div class="muted text-[11px]">Bonnes</div><div class="serif text-2xl font-semibold">${Math.round(ses.score.ok)}</div></div>
+            <div><div class="muted text-[11px]">Total</div><div class="serif text-2xl font-semibold">${ses.score.total}</div></div>
+            <div><div class="muted text-[11px]">Streak</div><div class="serif text-2xl font-semibold">${S.streak.count} j</div></div>
+          </div>
+          <div class="flex gap-2 mt-5 flex-wrap">
+            <button class="btn btn-primary flex-1" id="oAgain">Refaire</button>
+            ${ses.mode==="flash" ? '<button class="btn flex-1" id="oExpress">Passer en Express</button>' : ''}
+            ${ses.mode==="express" ? '<button class="btn flex-1" id="oDeep">Passer en Approfondie</button>' : ''}
+            <button class="btn flex-1" id="oHome">Accueil</button>
+          </div>
+        </div>`);
+      c.querySelector("#oAgain").addEventListener("click", ()=> launchSession(ses.mode));
+      c.querySelector("#oHome").addEventListener("click", ()=> go("home"));
+      const oe = c.querySelector("#oExpress"); if(oe) oe.addEventListener("click", ()=> launchSession("express"));
+      const od = c.querySelector("#oDeep");    if(od) od.addEventListener("click", ()=> launchSession("deep"));
+      clearInterval(tickId);
+      return c;
+    }
+  };
+
+  function endSession(){
+    ses.idx = stepsTotal - 1;
+    renderStep();
+  }
+
+  renderStep();
+  return el;
+}
+
+function viewTools(){
+  const tabs = [
+    { id:"synth", label:"Synthèse" },
+    { id:"essentials", label:"8 essentiels" },
+    { id:"flash", label:"Flashcards" },
+    { id:"qcm", label:"QCM" },
+    { id:"libre", label:"Libre" },
+    { id:"mnemo", label:"Pièges & mnémo" },
+    { id:"mind", label:"Carte mentale" }
+  ];
+  if(!tabs.find(t=>t.id===S.toolsTab)) S.toolsTab = "synth";
+
+  const el = html(`<section class="space-y-5 pt-6"></section>`);
+  el.appendChild(html(`
+    <div class="flex items-center gap-3">
+      <button class="btn btn-ghost !min-h-0 !p-2" id="tBack">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>
+      </button>
+      <div>
+        <div class="text-[11px] uppercase tracking-[0.22em] muted">Boîte à outils</div>
+        <h2 class="serif text-2xl font-semibold">Pioche ce que tu veux</h2>
+      </div>
+    </div>
+  `));
+
+  const tabsBar = html(`<div class="flex gap-2 overflow-x-auto pb-1"></div>`);
+  tabs.forEach(t=>{
+    const b = html(`<button class="chip ${S.toolsTab===t.id?'chip-accent':''}" data-tab="${t.id}">${t.label}</button>`);
+    b.addEventListener("click", ()=>{ S.toolsTab=t.id; save(); render(); });
+    tabsBar.appendChild(b);
+  });
+  el.appendChild(tabsBar);
+
+  const box = html(`<div></div>`);
+  el.appendChild(box);
+  $("#tBack", el).addEventListener("click", ()=> go("home"));
+
+  const r = {
+    synth: ()=>{
+      const c = html(`<div class="space-y-3"></div>`);
+      c.appendChild(html(`
+        <div class="paper rounded-xl p-5">
+          <div class="text-[11px] uppercase tracking-[0.22em] muted">TL;DR · 30 s</div>
+          <ul class="mt-2 space-y-2 text-[15px]">
+            ${COURSE.synth.tldr.map(s=>`<li class="flex gap-2"><span style="color:var(--accent)">●</span><span>${injectKw(md(s))}</span></li>`).join("")}
+          </ul>
+        </div>`));
+      c.appendChild(html(`
+        <div class="paper rounded-xl p-5">
+          <div class="text-[11px] uppercase tracking-[0.22em] muted mb-2">Version complète · 2 min</div>
+          <div class="text-[15px] soft leading-relaxed space-y-2">${injectKw(COURSE.synth.long)}</div>
+        </div>`));
+      return c;
+    },
+    essentials: ()=>{
+      const c = html(`<div class="space-y-2"></div>`);
+      COURSE.essentials.forEach((e,i)=>{
+        c.appendChild(html(`
+          <div class="paper rounded-xl p-4">
+            <div class="flex items-center gap-2"><span class="chip chip-accent">${String(i+1).padStart(2,'0')}</span><div class="serif font-semibold text-lg">${e.t}</div></div>
+            <p class="text-[14px] soft mt-1.5 leading-relaxed">${injectKw(e.d)}</p>
+            <div class="text-[11px] muted mt-1">${e.tag}</div>
+          </div>`));
+      });
+      return c;
+    },
+    flash: ()=>{
+      let i = 0;
+      const c = html(`
+        <div>
+          <div class="flex items-center justify-between text-[12px] muted mb-2"><span><b id="fI" class="ink">1</b>/${COURSE.flashcards.length}</span><span>Tap pour retourner</span></div>
+          <div class="flash relative h-64 md:h-72" tabindex="0">
+            <div class="flash-inner w-full h-full">
+              <div class="flash-face paper rounded-xl w-full h-full p-6 flex items-center justify-center text-center">
+                <div class="serif text-xl font-semibold leading-snug" id="fQ"></div>
+              </div>
+              <div class="flash-face flash-back paper rounded-xl w-full h-full p-6 flex items-center justify-center text-center" style="border-color:var(--ink)">
+                <div class="text-[15px] leading-relaxed" id="fA"></div>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2 mt-3">
+            <button class="btn" id="fPrev">← Précédent</button>
+            <button class="btn btn-primary" id="fNext">Suivant →</button>
+          </div>
+        </div>`);
+      function r2(){
+        const card = COURSE.flashcards[i];
+        c.querySelector("#fI").textContent = i+1;
+        c.querySelector("#fQ").textContent = card.q;
+        c.querySelector("#fA").innerHTML = card.a;
+        c.querySelector(".flash").classList.remove("flipped");
+      }
+      r2();
+      c.querySelector(".flash").addEventListener("click", ()=> c.querySelector(".flash").classList.toggle("flipped"));
+      c.querySelector("#fNext").addEventListener("click", ()=>{ i=(i+1)%COURSE.flashcards.length; r2(); });
+      c.querySelector("#fPrev").addEventListener("click", ()=>{ i=(i-1+COURSE.flashcards.length)%COURSE.flashcards.length; r2(); });
+      return c;
+    },
+    qcm: ()=>{
+      let i = 0;
+      const c = html(`<div id="qWrap"></div>`);
+      function r2(){
+        const q = COURSE.qcm[i];
+        c.innerHTML = `
+          <div class="flex items-center justify-between text-[12px] muted mb-2"><span><b class="ink">${i+1}</b>/${COURSE.qcm.length}</span><span>Niveau ${q.lvl}</span></div>
+          <h3 class="serif text-xl font-semibold leading-snug">${q.q}</h3>
+          <div class="grid gap-2 mt-3" id="o">
+            ${q.o.map((o,k)=>`<button class="opt" data-k="${k}"><span class="key">${"ABCD"[k]}</span><span class="flex-1">${o}</span></button>`).join("")}
+          </div>
+          <div id="exp" class="hidden paper rounded-lg p-4 mt-3 text-[14px]"></div>
+          <div class="flex gap-2 mt-3"><button class="btn" id="prev">← Préc.</button><button class="btn btn-primary flex-1" id="next">Suivant →</button></div>`;
+        const opts = c.querySelectorAll("#o .opt");
+        opts.forEach(b=>{
+          b.addEventListener("click", ()=>{
+            const k = +b.dataset.k;
+            opts.forEach(o=>o.disabled=true);
+            opts[k].classList.add(k===q.c?"correct":"wrong");
+            if(k!==q.c) opts[q.c].classList.add("correct");
+            const exp = c.querySelector("#exp"); exp.classList.remove("hidden");
+            exp.innerHTML = `<div class="font-semibold mb-1" style="color:${k===q.c?'var(--ok)':'var(--bad)'}">${k===q.c?"✓ Correct":"✗ Faux"}</div>${q.e}`;
+          });
+        });
+        c.querySelector("#next").addEventListener("click", ()=>{ i=(i+1)%COURSE.qcm.length; r2(); });
+        c.querySelector("#prev").addEventListener("click", ()=>{ i=(i-1+COURSE.qcm.length)%COURSE.qcm.length; r2(); });
+      }
+      r2();
+      return c;
+    },
+    libre: ()=>{
+      let i = 0;
+      const c = html(`<div></div>`);
+      function r2(){
+        const it = COURSE.libre[i];
+        c.innerHTML = `
+          <div class="flex items-center justify-between text-[12px] muted mb-2"><span><b class="ink">${i+1}</b>/${COURSE.libre.length}</span></div>
+          <h3 class="serif text-xl font-semibold leading-snug">${it.q}</h3>
+          <textarea id="ti" rows="4" class="w-full paper rounded-xl p-4 mt-3 focus-ring text-[15px]" placeholder="Réponds avec tes mots…" style="outline:none"></textarea>
+          <div class="flex gap-2 mt-3"><button class="btn btn-primary" id="chk">Vérifier</button><button class="btn" id="see">Voir réponse</button><button class="btn ml-auto" id="next">Suivant →</button></div>
+          <div id="fb" class="hidden paper rounded-lg p-4 mt-3 text-[14px]"></div>`;
+        c.querySelector("#chk").addEventListener("click", ()=>{
+          const v = normalize(c.querySelector("#ti").value);
+          const found = it.kw.filter(k=> v.includes(normalize(k))).length;
+          let lbl="✗ À retravailler", col="var(--bad)";
+          if(found>=it.min){ lbl="✓ Validé"; col="var(--ok)"; }
+          else if(found>=Math.max(1,it.min-1)){ lbl="≈ Partiel"; col="var(--warn)"; }
+          const fb = c.querySelector("#fb"); fb.classList.remove("hidden");
+          fb.innerHTML = `<div class="font-semibold mb-1" style="color:${col}">${lbl} · ${found}/${it.kw.length} mots-clés</div><div class="soft"><b>Modèle :</b> ${it.ideal}</div>`;
+        });
+        c.querySelector("#see").addEventListener("click", ()=>{
+          const fb = c.querySelector("#fb"); fb.classList.remove("hidden");
+          fb.innerHTML = `<div class="font-semibold mb-1" style="color:var(--accent)">Réponse modèle</div>${it.ideal}`;
+        });
+        c.querySelector("#next").addEventListener("click", ()=>{ i=(i+1)%COURSE.libre.length; r2(); });
+      }
+      r2();
+      return c;
+    },
+    mnemo: ()=>{
+      const c = html(`<div class="space-y-4"></div>`);
+      c.appendChild(html(`<div><div class="text-[11px] uppercase tracking-[0.22em] muted mb-2">Pièges fréquents</div>
+        <div class="space-y-2">${COURSE.pieges.map(p=>`<div class="paper rounded-xl p-4"><div class="font-semibold">⚠ ${p.t}</div><div class="text-[14px] soft mt-1 leading-relaxed">${p.d}</div></div>`).join("")}</div></div>`));
+      c.appendChild(html(`<div><div class="text-[11px] uppercase tracking-[0.22em] muted mb-2">Mnémo</div>
+        <div class="space-y-2">${COURSE.mnemos.map(m=>`<div class="paper rounded-xl p-4" style="background:var(--accent-soft); border-color:transparent"><div class="font-semibold">${m.t}</div><div class="text-[14px] soft mt-1 leading-relaxed">${m.d}</div></div>`).join("")}</div></div>`));
+      return c;
+    },
+    mind: ()=>{
+      const c = html(`<div></div>`);
+      const W=540, H=440, cx=W/2, cy=H/2, R=160;
+      const nodes = COURSE.essentials.slice(0,6);
+      const pts = nodes.map((n,i)=>{
+        const a = (i/nodes.length)*Math.PI*2 - Math.PI/2;
+        return { ...n, x: cx+Math.cos(a)*R, y: cy+Math.sin(a)*R };
+      });
+      const svgNS = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(svgNS,"svg");
+      svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+      svg.setAttribute("class","w-full h-auto");
+      pts.forEach(p=>{
+        const ln = document.createElementNS(svgNS,"line");
+        ln.setAttribute("x1",cx); ln.setAttribute("y1",cy);
+        ln.setAttribute("x2",p.x); ln.setAttribute("y2",p.y);
+        ln.setAttribute("stroke","currentColor"); ln.setAttribute("stroke-width","1"); ln.setAttribute("opacity",".25");
+        svg.appendChild(ln);
+      });
+      const cc = document.createElementNS(svgNS,"circle");
+      cc.setAttribute("cx",cx); cc.setAttribute("cy",cy); cc.setAttribute("r",50);
+      cc.setAttribute("fill","var(--ink)");
+      svg.appendChild(cc);
+      const ct = document.createElementNS(svgNS,"text");
+      ct.setAttribute("x",cx); ct.setAttribute("y",cy+5); ct.setAttribute("text-anchor","middle"); ct.setAttribute("fill","var(--bg)"); ct.setAttribute("font-family","Fraunces, serif"); ct.setAttribute("font-weight","600"); ct.setAttribute("font-size","16"); ct.textContent="Séq. 23";
+      svg.appendChild(ct);
+      pts.forEach(p=>{
+        const g = document.createElementNS(svgNS,"g");
+        g.style.cursor="pointer";
+        const r2 = document.createElementNS(svgNS,"circle");
+        r2.setAttribute("cx",p.x); r2.setAttribute("cy",p.y); r2.setAttribute("r",36);
+        r2.setAttribute("fill","var(--paper)"); r2.setAttribute("stroke","var(--ink)"); r2.setAttribute("stroke-width","1.5");
+        g.appendChild(r2);
+        const t = document.createElementNS(svgNS,"text");
+        t.setAttribute("x",p.x); t.setAttribute("y",p.y+4); t.setAttribute("text-anchor","middle"); t.setAttribute("fill","var(--ink)"); t.setAttribute("font-family","Inter, sans-serif"); t.setAttribute("font-weight","600"); t.setAttribute("font-size","11");
+        const words = p.t.split(" ");
+        if(words.length>1){
+          const a = document.createElementNS(svgNS,"tspan"); a.setAttribute("x",p.x); a.setAttribute("dy","-3"); a.textContent=words.slice(0,Math.ceil(words.length/2)).join(" ");
+          const b = document.createElementNS(svgNS,"tspan"); b.setAttribute("x",p.x); b.setAttribute("dy","12"); b.textContent=words.slice(Math.ceil(words.length/2)).join(" ");
+          t.appendChild(a); t.appendChild(b);
+        } else t.textContent = p.t;
+        g.appendChild(t);
+        g.addEventListener("click", ()=> openModal(p.tag, p.t, md(p.d)));
+        svg.appendChild(g);
+      });
+      const wrap = html(`<div class="paper rounded-xl p-3"></div>`);
+      wrap.appendChild(svg);
+      c.appendChild(wrap);
+      c.appendChild(html(`<p class="text-[12px] muted mt-2">Clique un nœud pour le détail.</p>`));
+      return c;
+    }
+  };
+
+  box.appendChild(r[S.toolsTab]());
+  return el;
+}
+
 applyTheme();
-renderTabs();
-renderMain();
 $("#streakNum").textContent = S.streak.count;
-updateGlobalProgress();
+render();
 </script>
 </body>
 </html>
