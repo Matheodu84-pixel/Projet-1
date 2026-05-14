@@ -11,82 +11,114 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --bg:#faf7f2; --paper:#ffffff; --ink:#1a1a1a; --muted:#7a7670; --soft:#3a3633;
-    --line:#e9e3d8; --line-2:#d9d2c4;
-    --accent:#d6492f; --accent-soft:#fbe9e2; --accent-ink:#fff;
-    --ok:#2d6a4f; --ok-soft:#dff1e6;
-    --warn:#a3621a; --warn-soft:#fbeed1;
-    --bad:#a02929; --bad-soft:#f7d9d6;
+    --bg:#f7f4ee; --paper:#ffffff; --ink:#15140f; --muted:#8b857a; --soft:#3d3a33;
+    --line:#ece5d6; --line-2:#dcd3bf;
+    --accent:#c54221; --accent-soft:#fbe9e2; --accent-ink:#fff;
+    --ok:#2d6a4f; --ok-soft:#e1f1e7;
+    --warn:#9c5a13; --warn-soft:#fbedd0;
+    --bad:#9a2424; --bad-soft:#f5d6d2;
+    --shadow: 0 1px 2px rgba(20,18,12,.04), 0 8px 32px -16px rgba(20,18,12,.08);
+    --shadow-lift: 0 1px 2px rgba(20,18,12,.05), 0 18px 48px -22px rgba(20,18,12,.18);
   }
   [data-theme="dark"]{
-    --bg:#111110; --paper:#1a1917; --ink:#ededed; --muted:#8c877f; --soft:#cfc9be;
-    --line:#2a2824; --line-2:#3a3732;
-    --accent:#ff7a4d; --accent-soft:#3a201a; --accent-ink:#111;
-    --ok:#5cc28e; --ok-soft:#1f2e26;
-    --warn:#e3b04a; --warn-soft:#2e2719;
-    --bad:#e57368; --bad-soft:#2e1d1c;
+    --bg:#0f0e0c; --paper:#17161300; --paper:#1a1814; --ink:#f0ece3; --muted:#8c877a; --soft:#d3cebf;
+    --line:#27241e; --line-2:#3a3530;
+    --accent:#ff7a4d; --accent-soft:#3a201a; --accent-ink:#0f0e0c;
+    --ok:#65c894; --ok-soft:#1d2c25;
+    --warn:#e6b558; --warn-soft:#2e2719;
+    --bad:#e6766b; --bad-soft:#2e1d1c;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 32px -16px rgba(0,0,0,.4);
+    --shadow-lift: 0 1px 2px rgba(0,0,0,.5), 0 18px 48px -22px rgba(0,0,0,.6);
   }
-  *{ -webkit-tap-highlight-color: transparent; }
+  *{ -webkit-tap-highlight-color: transparent; box-sizing:border-box; }
   html,body{ background:var(--bg); color:var(--ink); font-family:"Inter", ui-sans-serif, system-ui, -apple-system, sans-serif; font-feature-settings: "ss01","cv11"; }
-  body{ min-height:100vh; }
-  .serif{ font-family:"Fraunces", ui-serif, Georgia, serif; font-feature-settings: "ss01"; letter-spacing:-.01em; }
+  html{ scroll-behavior:smooth; }
+  body{ min-height:100vh; -webkit-font-smoothing:antialiased; }
+  .serif{ font-family:"Fraunces", ui-serif, Georgia, serif; font-feature-settings: "ss01"; letter-spacing:-.015em; font-variation-settings: "opsz" 144; }
   .ink{ color:var(--ink); }
   .muted{ color:var(--muted); }
   .soft{ color:var(--soft); }
   .paper{ background:var(--paper); border:1px solid var(--line); }
+  .paper-lift{ background:var(--paper); border:1px solid var(--line); box-shadow:var(--shadow); }
   .line{ border-color:var(--line); }
-  .btn{ min-height:44px; padding:10px 18px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; gap:8px; font-weight:600; border:1px solid var(--line-2); background:var(--paper); color:var(--ink); transition: border-color .15s, transform .1s; cursor:pointer; font-size:14px; }
-  .btn:hover{ border-color:var(--ink); }
-  .btn:active{ transform: scale(.985); }
+  .btn{ min-height:48px; padding:12px 22px; border-radius:12px; display:inline-flex; align-items:center; justify-content:center; gap:8px; font-weight:600; border:1px solid var(--line-2); background:var(--paper); color:var(--ink); transition: all .18s cubic-bezier(.2,.7,.2,1); cursor:pointer; font-size:14.5px; letter-spacing:-.005em; }
+  .btn:hover{ border-color:var(--ink); transform: translateY(-1px); }
+  .btn:active{ transform: translateY(0) scale(.985); }
   .btn-primary{ background:var(--ink); color:var(--bg); border-color:var(--ink); }
-  .btn-primary:hover{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+  .btn-primary:hover{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); box-shadow: 0 8px 24px -10px var(--accent); }
   .btn-accent{ background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
-  .btn-ghost{ background:transparent; }
-  .chip{ display:inline-flex; align-items:center; gap:6px; padding:5px 10px; border-radius:999px; font-size:12px; border:1px solid var(--line-2); background:var(--paper); color:var(--soft); font-weight:500; }
-  .chip-accent{ background:var(--accent-soft); border-color:var(--accent-soft); color:var(--accent); }
-  .chip-ok{ background:var(--ok-soft); border-color:var(--ok-soft); color:var(--ok); }
-  .chip-warn{ background:var(--warn-soft); border-color:var(--warn-soft); color:var(--warn); }
-  .chip-bad{ background:var(--bad-soft); border-color:var(--bad-soft); color:var(--bad); }
-  .kbd{ font-family: ui-monospace, monospace; font-size:11px; padding:2px 6px; border:1px solid var(--line-2); border-bottom-width:2px; border-radius:5px; color:var(--soft); background:var(--paper); }
+  .btn-ghost{ background:transparent; border-color:transparent; }
+  .btn-ghost:hover{ background: color-mix(in oklab, var(--ink) 6%, transparent); border-color:transparent; transform:none; }
+  .chip{ display:inline-flex; align-items:center; gap:6px; padding:6px 11px; border-radius:999px; font-size:11.5px; border:1px solid var(--line-2); background:var(--paper); color:var(--soft); font-weight:500; letter-spacing:.01em; }
+  .chip-accent{ background:var(--accent-soft); border-color:transparent; color:var(--accent); }
+  .chip-ok{ background:var(--ok-soft); border-color:transparent; color:var(--ok); }
+  .chip-warn{ background:var(--warn-soft); border-color:transparent; color:var(--warn); }
+  .chip-bad{ background:var(--bad-soft); border-color:transparent; color:var(--bad); }
+  .kbd{ font-family: ui-monospace, monospace; font-size:11px; padding:2px 7px; border:1px solid var(--line-2); border-bottom-width:2px; border-radius:5px; color:var(--soft); background:var(--paper); }
   .h-divider{ height:1px; background:var(--line); }
-  .focus-ring:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
-  .progress{ height:6px; background:var(--line); border-radius:999px; overflow:hidden; }
-  .progress > div{ height:100%; background:var(--ink); transition: width .35s cubic-bezier(.2,.7,.2,1); }
+  .focus-ring:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:8px; }
+  .progress{ height:5px; background:var(--line); border-radius:999px; overflow:hidden; }
+  .progress > div{ height:100%; background:var(--ink); transition: width .45s cubic-bezier(.2,.8,.2,1); }
   .progress.accent > div{ background:var(--accent); }
-  .card-tap{ cursor:pointer; transition: transform .12s ease, border-color .15s ease; }
-  .card-tap:hover{ border-color:var(--ink); }
-  .card-tap:active{ transform: scale(.99); }
-  .flash{ perspective:1200px; }
-  .flash-inner{ transition: transform .55s cubic-bezier(.2,.8,.2,1); transform-style:preserve-3d; position:relative; height:100%; }
+  .card-tap{ cursor:pointer; transition: transform .18s cubic-bezier(.2,.7,.2,1), border-color .15s ease, box-shadow .2s ease; }
+  .card-tap:hover{ border-color: color-mix(in oklab, var(--ink) 70%, transparent); transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+  .card-tap:active{ transform: translateY(0) scale(.995); }
+  .flash{ perspective:1400px; }
+  .flash-inner{ transition: transform .6s cubic-bezier(.2,.8,.2,1); transform-style:preserve-3d; position:relative; height:100%; }
   .flash.flipped .flash-inner{ transform: rotateY(180deg); }
   .flash-face{ backface-visibility:hidden; -webkit-backface-visibility:hidden; }
   .flash-back{ transform: rotateY(180deg); position:absolute; inset:0; }
   details>summary{ list-style:none; cursor:pointer; }
   details>summary::-webkit-details-marker{ display:none; }
-  .kw{ border-bottom:1px dashed var(--accent); cursor:help; font-weight:500; }
+  .kw{ border-bottom:1.5px dashed var(--accent); cursor:help; font-weight:500; transition: background .15s; }
   .kw:hover{ background:var(--accent-soft); }
-  .modal-bg{ position:fixed; inset:0; background: color-mix(in oklab, var(--ink) 35%, transparent); z-index:60; display:none; align-items:center; justify-content:center; padding:16px; backdrop-filter: blur(4px); }
+  .modal-bg{ position:fixed; inset:0; background: color-mix(in oklab, var(--ink) 40%, transparent); z-index:60; display:none; align-items:center; justify-content:center; padding:16px; backdrop-filter: blur(6px); animation: fadeBg .25s ease; }
+  @keyframes fadeBg{ from{opacity:0} to{opacity:1} }
   .modal-bg.open{ display:flex; }
-  .fade-in{ animation: fadeIn .35s ease; }
-  @keyframes fadeIn{ from{ opacity:0; transform: translateY(6px);} to{ opacity:1; transform:none;}}
-  .pulse-soft{ animation: ps 2.2s ease-in-out infinite; }
-  @keyframes ps{ 0%,100%{ box-shadow: 0 0 0 0 var(--accent-soft);} 50%{ box-shadow: 0 0 0 8px transparent;}}
-  .opt{ width:100%; text-align:left; padding:14px 16px; border-radius:10px; border:1px solid var(--line); background:var(--paper); display:flex; align-items:center; gap:12px; min-height:56px; transition: border-color .15s; font-size:15px; color:var(--ink); }
-  .opt:hover:not(:disabled){ border-color:var(--ink); }
-  .opt .key{ font-family: ui-monospace, monospace; font-size:12px; padding:3px 8px; border:1px solid var(--line-2); border-radius:5px; color:var(--muted); }
+  .fade-in{ animation: fadeIn .42s cubic-bezier(.2,.8,.2,1) backwards; }
+  .stagger > *{ animation: fadeIn .55s cubic-bezier(.2,.8,.2,1) backwards; }
+  .stagger > *:nth-child(1){ animation-delay: .02s; }
+  .stagger > *:nth-child(2){ animation-delay: .08s; }
+  .stagger > *:nth-child(3){ animation-delay: .14s; }
+  .stagger > *:nth-child(4){ animation-delay: .2s; }
+  .stagger > *:nth-child(5){ animation-delay: .26s; }
+  .stagger > *:nth-child(6){ animation-delay: .32s; }
+  @keyframes fadeIn{ from{ opacity:0; transform: translateY(10px);} to{ opacity:1; transform:none;}}
+  .pulse-soft{ animation: ps 2.6s ease-in-out infinite; }
+  @keyframes ps{ 0%,100%{ box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent) 35%, transparent);} 70%{ box-shadow: 0 0 0 14px transparent;}}
+  .opt{ width:100%; text-align:left; padding:16px 18px; border-radius:12px; border:1px solid var(--line); background:var(--paper); display:flex; align-items:center; gap:12px; min-height:60px; transition: all .18s cubic-bezier(.2,.7,.2,1); font-size:15px; color:var(--ink); cursor:pointer; }
+  .opt:hover:not(:disabled){ border-color:var(--ink); transform: translateX(2px); }
+  .opt .key{ font-family: ui-monospace, monospace; font-size:12px; padding:4px 9px; border:1px solid var(--line-2); border-radius:6px; color:var(--muted); flex-shrink:0; font-weight:600; }
   .opt.correct{ border-color: var(--ok); background: var(--ok-soft); }
   .opt.correct .key{ background: var(--ok); color:#fff; border-color: var(--ok); }
   .opt.wrong{ border-color: var(--bad); background: var(--bad-soft); }
   .opt.wrong .key{ background: var(--bad); color:#fff; border-color: var(--bad); }
-  .timer-bar{ position:sticky; top:0; z-index:30; background:var(--bg); }
-  .session-card{ min-height: 60vh; }
+  .timer-bar{ position:sticky; top:0; z-index:30; background: color-mix(in oklab, var(--bg) 92%, transparent); backdrop-filter: blur(12px); }
+  .session-card{ min-height: 62vh; }
   ::-webkit-scrollbar{ width:8px; height:8px; }
   ::-webkit-scrollbar-thumb{ background: var(--line-2); border-radius:999px; }
   ::-webkit-scrollbar-track{ background: transparent; }
-  @media (min-width: 768px){ .session-card{ min-height: 55vh; } }
+  @media (min-width: 768px){ .session-card{ min-height: 58vh; } }
   .swipe-hint{ opacity:0; transition: opacity .15s; }
   .flash.dragging .swipe-hint{ opacity:1; }
-  .topbar{ position:sticky; top:0; z-index:40; backdrop-filter: blur(10px); background: color-mix(in oklab, var(--bg) 80%, transparent); border-bottom:1px solid var(--line); }
+  .topbar{ position:sticky; top:0; z-index:40; backdrop-filter: blur(16px); background: color-mix(in oklab, var(--bg) 78%, transparent); border-bottom:1px solid color-mix(in oklab, var(--line) 70%, transparent); }
+  .ring-progress{ transform: rotate(-90deg); }
+  .num-mark{ font-family:"Fraunces", serif; font-feature-settings: "ss01","tnum"; font-variation-settings: "opsz" 144; }
+  /* Mode card decorative number */
+  .mode-num{ font-family:"Fraunces", serif; font-weight:600; font-variation-settings: "opsz" 144; line-height:1; letter-spacing:-.03em; color: color-mix(in oklab, var(--ink) 12%, transparent); position:absolute; right:18px; top:14px; font-size:64px; pointer-events:none; user-select:none; transition: color .2s; }
+  .card-tap:hover .mode-num{ color: color-mix(in oklab, var(--accent) 35%, transparent); }
+  .mode-card{ position:relative; overflow:hidden; }
+  /* Smooth theme transition */
+  html, body, .paper, .btn, .opt, .chip{ transition: background-color .25s ease, color .25s ease, border-color .25s ease; }
+  /* Range / completion ring */
+  .stat-ring{ width:48px; height:48px; }
+  .stat-ring circle{ fill:none; stroke-width:4; }
+  .stat-ring .bg{ stroke: var(--line); }
+  .stat-ring .fg{ stroke: var(--accent); stroke-linecap: round; transition: stroke-dashoffset .6s cubic-bezier(.2,.8,.2,1); }
+  /* hairline divider */
+  .hr{ display:block; height:1px; background:var(--line); margin: 12px 0; }
+  /* Quote-style intro */
+  .lede{ font-family:"Fraunces", serif; font-weight:400; letter-spacing:-.01em; font-style:italic; color:var(--soft); }
 </style>
 </head>
 <body>
@@ -379,87 +411,125 @@ function render(){
 }
 
 function viewHome(){
-  const el = html(`<section class="space-y-8 pt-8"></section>`);
+  const el = html(`<section class="space-y-12 md:space-y-16 pt-10 md:pt-16 pb-8"></section>`);
 
+  // Determine the "next suggested" session based on history
+  const hasHistory = (S.history || []).length > 0;
+  const lastMode = hasHistory ? S.history[S.history.length-1].mode : null;
+  const suggestion = !hasHistory ? "flash" :
+                     lastMode==="flash" ? "express" :
+                     lastMode==="express" ? "deep" :
+                     "exam";
+
+  // Total progress (% of best scores across modes)
+  const bestSum = (S.best.flash||0) + (S.best.express||0) + (S.best.deep||0) + ((S.best.exam||0)*5);
+  const maxSum  = 100 + 100 + 100 + 100;
+  const overallPct = Math.round(Math.max(0, Math.min(100, (bestSum/maxSum)*100)));
+
+  // --- HERO ----------------------------------------------------------------
   el.appendChild(html(`
-    <div>
-      <div class="text-[11px] uppercase tracking-[0.22em] muted">${COURSE.meta}</div>
-      <h1 class="serif text-[40px] md:text-[56px] font-semibold leading-[1.05] mt-1">${COURSE.title}</h1>
-      <p class="serif text-xl md:text-2xl mt-1 soft">${COURSE.subtitle}.</p>
-      <p class="text-[14px] muted mt-3 max-w-xl leading-relaxed">Choisis une session selon ton temps. La méthode <b class="ink">80/20</b> est appliquée par défaut : tu révises d'abord les <b class="ink">11 concepts</b> qui rapportent l'essentiel des points — tous calés sur ton <b class="ink">évaluation</b> (croquis/schéma, méthodes de travail, maquette, étapes de création, cahier des charges).</p>
+    <div class="fade-in">
+      <div class="text-[10px] uppercase tracking-[0.28em] muted font-medium">${COURSE.meta}</div>
+      <h1 class="serif text-[44px] sm:text-[56px] md:text-[72px] font-semibold leading-[1.02] mt-3 max-w-2xl" style="font-variation-settings:'opsz' 144">${COURSE.title}</h1>
+      <p class="lede text-2xl md:text-[28px] mt-3 max-w-xl leading-[1.3]">${COURSE.subtitle}.</p>
     </div>
   `));
 
+  // --- 3 MODES (the centerpiece) -------------------------------------------
   const modes = [
-    { id:"flash",   tag:"⚡ 80/20",    title:"Flash",      time:"3 min", desc:"5 cartes essentielles + 3 QCM pièges. Pour grappiller des points en dernière minute.", best:S.best.flash },
-    { id:"express", tag:"Recommandé", title:"Express",   time:"8 min", desc:"Tour complet rapide : flashcards, QCM, 1 question libre.", best:S.best.express },
-    { id:"deep",    tag:"Pomodoro",   title:"Approfondie", time:"20 min", desc:"15 min focus + 2 min pause + 3 min consolidation. La séance qui ancre vraiment.", best:S.best.deep }
+    { id:"flash",   num:"01", title:"Flash",       time:"3 min",  desc:"L'essentiel en moins de 5 minutes." },
+    { id:"express", num:"02", title:"Express",     time:"8 min",  desc:"Un tour complet du cours." },
+    { id:"deep",    num:"03", title:"Approfondie", time:"20 min", desc:"Pomodoro : focus, pause, consolidation." }
   ];
 
-  const grid = html(`<div class="grid gap-3"></div>`);
+  const modesWrap = html(`<div class="space-y-3 stagger"></div>`);
   modes.forEach((m,i)=>{
-    const recommended = i===1;
-    grid.appendChild(html(`
-      <button class="paper rounded-xl p-5 text-left card-tap focus-ring ${recommended?'ring-1 ring-[color:var(--ink)]':''}" data-mode="${m.id}">
-        <div class="flex items-start justify-between gap-3">
-          <div class="flex-1">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="chip ${recommended?'chip-accent':''}">${m.tag}</span>
-              <span class="muted text-[12px]">${m.time}</span>
+    const recommended = m.id===suggestion;
+    const score = S.best[m.id]||0;
+    modesWrap.appendChild(html(`
+      <button class="mode-card paper rounded-2xl p-6 md:p-7 text-left card-tap focus-ring w-full" data-mode="${m.id}">
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-3">
+              ${recommended ? '<span class="chip chip-accent">↳ Suggéré</span>' : ''}
+              <span class="text-[12px] muted">${m.time}</span>
+              ${score>0 ? `<span class="chip">Meilleur · <b class="ink ml-0.5">${Math.round(score)}%</b></span>` : ''}
             </div>
-            <div class="serif text-2xl font-semibold leading-tight">${m.title}</div>
-            <p class="text-[14px] soft mt-1.5 leading-relaxed">${m.desc}</p>
+            <div class="serif text-[26px] md:text-[32px] font-semibold leading-tight">${m.title}</div>
+            <p class="text-[14.5px] soft mt-2 leading-relaxed max-w-md">${m.desc}</p>
           </div>
-          <div class="flex flex-col items-end gap-1">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="muted"><path d="m9 6 6 6-6 6"/></svg>
-            ${m.best?`<span class="chip chip-ok text-[10px]">★ ${m.best.toFixed(0)}%</span>`:''}
-          </div>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="muted flex-shrink-0 mt-2"><path d="m9 6 6 6-6 6"/></svg>
         </div>
+        <div class="mode-num">${m.num}</div>
       </button>
     `));
   });
-  el.appendChild(grid);
+  el.appendChild(modesWrap);
 
-  el.appendChild(html(`
-    <div class="paper rounded-xl p-5 flex items-center gap-4">
-      <div class="flex-1">
-        <div class="serif text-lg font-semibold">Examen blanc</div>
-        <p class="text-[13px] soft mt-1">10 questions chrono · note /20 + axes ciblés.</p>
-        ${S.best.exam?`<div class="text-[12px] muted mt-1">Meilleur : <b class="ink">${S.best.exam.toFixed(1)}/20</b></div>`:''}
+  // --- SECONDARY ACTIONS --------------------------------------------------
+  el.appendChild(html(`<div class="hr"></div>`));
+
+  const secondary = html(`<div class="grid sm:grid-cols-2 gap-3 stagger"></div>`);
+  secondary.appendChild(html(`
+    <button class="paper rounded-xl p-5 text-left card-tap focus-ring" data-mode="exam">
+      <div class="flex items-center justify-between gap-2 mb-2">
+        <span class="chip chip-bad">Évaluation</span>
+        ${S.best.exam?`<span class="text-[12px] muted">★ <b class="ink">${S.best.exam.toFixed(1)}</b>/20</span>`:''}
       </div>
-      <button class="btn btn-primary" data-mode="exam">Lancer</button>
-    </div>
+      <div class="serif text-[22px] font-semibold leading-tight">Examen blanc</div>
+      <p class="text-[13.5px] soft mt-1.5 leading-relaxed">10 questions chrono · note /20 + axes ciblés.</p>
+    </button>
   `));
-
-  el.appendChild(html(`
-    <div class="paper rounded-xl p-5">
-      <div class="flex items-center gap-2">
-        <div class="serif text-lg font-semibold">La méthode 80/20</div>
-        <span class="chip chip-accent">Pareto</span>
+  secondary.appendChild(html(`
+    <button class="paper rounded-xl p-5 text-left card-tap focus-ring" data-go="tools">
+      <div class="flex items-center justify-between gap-2 mb-2">
+        <span class="chip">Libre</span>
+        <span class="text-[12px] muted">7 outils</span>
       </div>
-      <p class="text-[13px] soft mt-2 leading-relaxed">Sur ce cours, <b>11 concepts</b> couvrent l'essentiel des questions du contrôle (tous calés sur ton évaluation). Mémorise-les <b>vraiment</b>, le reste suivra naturellement.</p>
-      <div class="mt-3 grid sm:grid-cols-2 gap-2">
-        ${COURSE.essentials.map((e,i)=>`
-          <button class="paper rounded-lg p-3 text-left card-tap focus-ring" data-essential="${e.id}">
-            <div class="flex items-center gap-2">
-              <div class="text-[11px] muted font-mono w-5">${String(i+1).padStart(2,'0')}</div>
-              <div class="flex-1">
-                <div class="font-semibold text-[14px]">${e.t}</div>
-                <div class="text-[11px] muted mt-0.5">${e.tag}</div>
-              </div>
-            </div>
-          </button>`).join("")}
-      </div>
-    </div>
+      <div class="serif text-[22px] font-semibold leading-tight">Boîte à outils</div>
+      <p class="text-[13.5px] soft mt-1.5 leading-relaxed">Synthèse, flashcards, QCM, mind map, mnémo, libre, essentiels.</p>
+    </button>
   `));
+  el.appendChild(secondary);
 
+  // --- STATS (only if anything) -------------------------------------------
+  if(hasHistory || S.streak.count>0){
+    const stats = html(`<div class="flex items-center justify-between gap-4 flex-wrap pt-2"></div>`);
+    const circ = 2*Math.PI*22;
+    const off = circ - (overallPct/100)*circ;
+    stats.appendChild(html(`
+      <div class="flex items-center gap-3">
+        <svg class="stat-ring" viewBox="0 0 50 50" aria-hidden="true">
+          <circle class="bg" cx="25" cy="25" r="22"/>
+          <circle class="fg ring-progress" cx="25" cy="25" r="22" stroke-dasharray="${circ}" stroke-dashoffset="${off}"/>
+        </svg>
+        <div>
+          <div class="text-[11px] uppercase tracking-[0.18em] muted">Progression</div>
+          <div class="serif text-[22px] font-semibold leading-tight">${overallPct}<span class="muted text-sm">%</span></div>
+        </div>
+      </div>
+      <div class="flex items-center gap-6 text-right">
+        <div>
+          <div class="text-[11px] uppercase tracking-[0.18em] muted">Série</div>
+          <div class="serif text-[22px] font-semibold leading-tight">${S.streak.count} <span class="muted text-sm">jours</span></div>
+        </div>
+        <div>
+          <div class="text-[11px] uppercase tracking-[0.18em] muted">Sessions</div>
+          <div class="serif text-[22px] font-semibold leading-tight">${S.stats?.runs||0}</div>
+        </div>
+      </div>
+    `));
+    el.appendChild(stats);
+  }
+
+  // --- 80/20 PROMISE (small + clickable for full panel) -------------------
   el.appendChild(html(`
-    <div class="flex items-center justify-between flex-wrap gap-3 pt-2">
-      <div class="text-[12px] muted">Tu préfères piocher librement ?</div>
-      <button class="btn btn-ghost" data-go="tools">
-        Boîte à outils complète
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
-      </button>
+    <div class="pt-2">
+      <p class="text-[13.5px] muted leading-relaxed max-w-xl">
+        Toutes les sessions appliquent <b class="ink">Pareto 80/20</b> : tu révises en priorité les
+        <b class="ink">11 concepts</b> qui rapportent le plus de points, calés sur ton évaluation.
+        <button class="ink underline-offset-2 hover:underline" data-go="tools" data-tab="essentials" style="text-underline-offset:3px">Voir les 11 →</button>
+      </p>
     </div>
   `));
 
@@ -467,11 +537,9 @@ function viewHome(){
     const m = e.target.closest("[data-mode]");
     if(m){ launchSession(m.dataset.mode); return; }
     const g = e.target.closest("[data-go]");
-    if(g){ go(g.dataset.go); return; }
-    const es = e.target.closest("[data-essential]");
-    if(es){
-      const ess = COURSE.essentials.find(x=>x.id===es.dataset.essential);
-      openModal(ess.tag, ess.t, md(ess.d));
+    if(g){
+      if(g.dataset.tab){ S.toolsTab = g.dataset.tab; save(); }
+      go(g.dataset.go); return;
     }
   });
 
@@ -608,12 +676,15 @@ function viewSession(){
   const renderers = {
     intro: step => {
       const c = html(`
-        <div class="paper rounded-xl p-6 md:p-8 text-center fade-in">
-          <div class="text-[11px] uppercase tracking-[0.22em] muted">Commence ici</div>
-          <h2 class="serif text-3xl md:text-4xl font-semibold mt-2">${step.title}</h2>
-          <p class="text-[15px] soft mt-3 max-w-md mx-auto leading-relaxed">${step.body}</p>
-          <button class="btn btn-primary mt-6 pulse-soft" id="goStart">Commencer →</button>
-          <div class="text-[12px] muted mt-3">Astuce : <span class="kbd">Espace</span> = retourner · <span class="kbd">→</span> = suivant</div>
+        <div class="paper rounded-2xl p-8 md:p-12 text-center fade-in flex flex-col items-center justify-center min-h-[55vh]">
+          <div class="text-[10px] uppercase tracking-[0.3em] muted">Commence ici</div>
+          <h2 class="serif text-[40px] md:text-[56px] font-semibold mt-3 leading-tight">${step.title}</h2>
+          <p class="text-[15.5px] soft mt-4 max-w-md mx-auto leading-relaxed">${step.body}</p>
+          <button class="btn btn-primary mt-8 pulse-soft text-base px-7" id="goStart">Commencer →</button>
+          <div class="text-[12px] muted mt-5 flex flex-wrap gap-x-3 gap-y-2 justify-center">
+            <span><span class="kbd">Espace</span> retourner</span>
+            <span><span class="kbd">→</span> suivant</span>
+          </div>
         </div>`);
       c.querySelector("#goStart").addEventListener("click", ()=>{ startTimer(); nextStep(); });
       return c;
@@ -641,11 +712,12 @@ function viewSession(){
     pause: step => {
       let left = step.duration;
       const c = html(`
-        <div class="paper rounded-xl p-8 text-center fade-in" style="background:var(--accent-soft); border-color:transparent">
-          <div class="text-[11px] uppercase tracking-[0.22em]" style="color:var(--accent)">Pause active</div>
-          <h3 class="serif text-3xl font-semibold mt-2 ink">Respire</h3>
-          <p class="text-[14px] soft mt-2 max-w-sm mx-auto">Étire-toi, regarde au loin. Reviens dans <span id="pauseCd" class="font-mono ink">${fmt(left)}</span>.</p>
-          <button class="btn mt-5" id="skipPause">Passer la pause</button>
+        <div class="paper rounded-2xl p-10 md:p-16 text-center fade-in flex flex-col items-center justify-center min-h-[55vh]" style="background:var(--accent-soft); border-color:transparent">
+          <div class="text-[10px] uppercase tracking-[0.3em]" style="color:var(--accent)">Pause active</div>
+          <h3 class="serif text-[44px] md:text-[64px] font-semibold mt-3 ink leading-tight">Respire.</h3>
+          <p class="text-[15.5px] soft mt-4 max-w-sm leading-relaxed">Étire-toi, regarde au loin. Tu reviens dans</p>
+          <div class="serif text-[56px] md:text-[80px] font-semibold ink mt-2 leading-none tabular-nums" id="pauseCd">${fmt(left)}</div>
+          <button class="btn mt-7" id="skipPause">Passer la pause</button>
         </div>`);
       const cd = c.querySelector("#pauseCd");
       const it = setInterval(()=>{
@@ -659,21 +731,25 @@ function viewSession(){
     flash: step => {
       const c = html(`
         <div class="fade-in">
-          <div class="text-[11px] uppercase tracking-[0.22em] muted mb-2">Flashcard${step.core?' · essentiel':''}</div>
-          <div class="flash relative h-64 md:h-72" tabindex="0">
+          <div class="flex items-center justify-between mb-3">
+            <div class="text-[10px] uppercase tracking-[0.28em] muted">Flashcard${step.core?' · essentielle':''}</div>
+            <div class="text-[11px] muted hidden md:block"><span class="kbd">Espace</span> retourner</div>
+          </div>
+          <div class="flash relative h-72 md:h-[22rem]" tabindex="0">
             <div class="flash-inner w-full h-full">
-              <div class="flash-face paper rounded-xl w-full h-full p-6 flex flex-col items-center justify-center text-center">
-                <div class="serif text-xl md:text-2xl font-semibold leading-snug max-w-lg">${step.q}</div>
-                <div class="text-[11px] muted mt-4">Tap pour retourner</div>
-                <div class="swipe-hint chip chip-bad absolute left-3 top-3">← à revoir</div>
-                <div class="swipe-hint chip chip-ok absolute right-3 top-3">je sais →</div>
+              <div class="flash-face paper-lift rounded-2xl w-full h-full p-8 md:p-10 flex flex-col items-center justify-center text-center">
+                <div class="serif text-[24px] md:text-[32px] font-semibold leading-[1.2] max-w-xl">${step.q}</div>
+                <div class="text-[11px] muted mt-6">Touche / clic pour retourner</div>
+                <div class="swipe-hint chip chip-bad absolute left-4 top-4">← à revoir</div>
+                <div class="swipe-hint chip chip-ok absolute right-4 top-4">je sais →</div>
               </div>
-              <div class="flash-face flash-back paper rounded-xl w-full h-full p-6 flex flex-col items-center justify-center text-center" style="border-color:var(--ink)">
-                <div class="text-[15px] md:text-lg leading-relaxed max-w-lg">${step.a}</div>
+              <div class="flash-face flash-back paper-lift rounded-2xl w-full h-full p-8 md:p-10 flex flex-col items-center justify-center text-center" style="border-color:var(--ink)">
+                <div class="text-[10px] uppercase tracking-[0.28em] muted mb-3">Réponse</div>
+                <div class="text-[16px] md:text-[19px] leading-[1.55] max-w-xl">${step.a}</div>
               </div>
             </div>
           </div>
-          <div class="grid grid-cols-2 gap-2 mt-3">
+          <div class="grid grid-cols-2 gap-2 mt-4">
             <button class="btn" id="fRev">À revoir</button>
             <button class="btn btn-primary" id="fOk">Je sais →</button>
           </div>
@@ -705,13 +781,16 @@ function viewSession(){
     qcm: step => {
       const c = html(`
         <div class="fade-in">
-          <div class="flex items-center gap-2 mb-2"><span class="chip">QCM</span><span class="chip ${step.lvl===1?'chip-ok':step.lvl===2?'chip-warn':'chip-bad'}">Niveau ${step.lvl}</span></div>
-          <h3 class="serif text-xl md:text-2xl font-semibold leading-snug">${step.q}</h3>
-          <div class="grid gap-2 mt-3" id="qOpts">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="chip">QCM</span>
+            <span class="chip ${step.lvl===1?'chip-ok':step.lvl===2?'chip-warn':'chip-bad'}">Niveau ${step.lvl}</span>
+          </div>
+          <h3 class="serif text-[22px] md:text-[28px] font-semibold leading-tight">${step.q}</h3>
+          <div class="grid gap-2.5 mt-5 stagger" id="qOpts">
             ${step.o.map((o,k)=>`<button class="opt" data-k="${k}"><span class="key">${"ABCD"[k]}</span><span class="flex-1">${o}</span></button>`).join("")}
           </div>
-          <div id="qExp" class="hidden paper rounded-lg p-4 text-[14px] mt-3 leading-relaxed"></div>
-          <div class="flex justify-end mt-3 hidden" id="qNextWrap"><button class="btn btn-primary" id="qNext">Suivant →</button></div>
+          <div id="qExp" class="hidden paper rounded-xl p-4 text-[14.5px] mt-4 leading-relaxed"></div>
+          <div class="flex justify-end mt-4 hidden" id="qNextWrap"><button class="btn btn-primary" id="qNext">Suivant →</button></div>
         </div>`);
       const opts = c.querySelectorAll("#qOpts .opt");
       opts.forEach(b=>{
@@ -739,14 +818,14 @@ function viewSession(){
     libre: step => {
       const c = html(`
         <div class="fade-in">
-          <div class="chip mb-2">Réponse libre</div>
-          <h3 class="serif text-xl md:text-2xl font-semibold leading-snug">${step.q}</h3>
-          <textarea id="lInput" rows="4" placeholder="Réponds avec tes mots…" class="w-full paper rounded-xl p-4 mt-3 focus-ring text-[15px]" style="outline:none"></textarea>
+          <div class="chip mb-3">Réponse libre</div>
+          <h3 class="serif text-[22px] md:text-[28px] font-semibold leading-tight">${step.q}</h3>
+          <textarea id="lInput" rows="4" placeholder="Réponds avec tes mots…" class="w-full paper rounded-xl p-4 mt-4 focus-ring text-[15.5px] leading-relaxed" style="outline:none; resize:vertical"></textarea>
           <div class="flex gap-2 mt-3">
             <button class="btn btn-primary flex-1" id="lCheck">Vérifier</button>
             <button class="btn" id="lSkip">Passer</button>
           </div>
-          <div id="lFb" class="hidden paper rounded-lg p-4 text-[14px] mt-3 leading-relaxed"></div>
+          <div id="lFb" class="hidden paper rounded-xl p-4 text-[14.5px] mt-4 leading-relaxed"></div>
           <div class="flex justify-end mt-3 hidden" id="lNextWrap"><button class="btn btn-primary" id="lNext">Suivant →</button></div>
         </div>`);
       c.querySelector("#lCheck").addEventListener("click", ()=>{
@@ -782,21 +861,21 @@ function viewSession(){
       else cheer = "Pas grave. Refais une Flash, ça va se débloquer.";
       const isExam = step.isExam || ses.mode==="exam";
       const c = html(`
-        <div class="paper rounded-xl p-6 md:p-8 fade-in">
-          <div class="text-[11px] uppercase tracking-[0.22em] muted">Session terminée</div>
+        <div class="paper-lift rounded-2xl p-8 md:p-12 fade-in">
+          <div class="text-[10px] uppercase tracking-[0.3em] muted">Session terminée</div>
           ${isExam ? `
-            <h2 class="serif text-5xl md:text-6xl font-semibold mt-1">${note20.toFixed(1)}<span class="muted text-2xl">/20</span></h2>
+            <h2 class="serif text-[64px] md:text-[88px] font-semibold mt-2 leading-none">${note20.toFixed(1)}<span class="muted text-3xl ml-1">/20</span></h2>
           ` : `
-            <h2 class="serif text-5xl md:text-6xl font-semibold mt-1">${pct}<span class="muted text-2xl">%</span></h2>
+            <h2 class="serif text-[64px] md:text-[88px] font-semibold mt-2 leading-none">${pct}<span class="muted text-3xl ml-0.5">%</span></h2>
           `}
-          <p class="soft mt-2">${cheer}</p>
-          <div class="h-divider my-5"></div>
+          <p class="lede text-lg md:text-xl mt-3 max-w-md">${cheer}</p>
+          <div class="h-divider my-7"></div>
           <div class="grid grid-cols-3 gap-3 text-center">
-            <div><div class="muted text-[11px]">Bonnes</div><div class="serif text-2xl font-semibold">${Math.round(ses.score.ok)}</div></div>
-            <div><div class="muted text-[11px]">Total</div><div class="serif text-2xl font-semibold">${ses.score.total}</div></div>
-            <div><div class="muted text-[11px]">Streak</div><div class="serif text-2xl font-semibold">${S.streak.count} j</div></div>
+            <div><div class="muted text-[10px] uppercase tracking-wider">Bonnes</div><div class="serif text-[28px] font-semibold mt-1">${Math.round(ses.score.ok)}</div></div>
+            <div><div class="muted text-[10px] uppercase tracking-wider">Total</div><div class="serif text-[28px] font-semibold mt-1">${ses.score.total}</div></div>
+            <div><div class="muted text-[10px] uppercase tracking-wider">Série</div><div class="serif text-[28px] font-semibold mt-1">${S.streak.count}<span class="muted text-sm ml-1">j</span></div></div>
           </div>
-          <div class="flex gap-2 mt-5 flex-wrap">
+          <div class="flex gap-2 mt-7 flex-wrap">
             <button class="btn btn-primary flex-1" id="oAgain">Refaire</button>
             ${ses.mode==="flash" ? '<button class="btn flex-1" id="oExpress">Passer en Express</button>' : ''}
             ${ses.mode==="express" ? '<button class="btn flex-1" id="oDeep">Passer en Approfondie</button>' : ''}
@@ -833,22 +912,22 @@ function viewTools(){
   ];
   if(!tabs.find(t=>t.id===S.toolsTab)) S.toolsTab = "synth";
 
-  const el = html(`<section class="space-y-5 pt-6"></section>`);
+  const el = html(`<section class="space-y-6 pt-8 fade-in"></section>`);
   el.appendChild(html(`
     <div class="flex items-center gap-3">
-      <button class="btn btn-ghost !min-h-0 !p-2" id="tBack">
+      <button class="btn btn-ghost !min-h-0 !p-2.5" id="tBack" aria-label="Retour">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>
       </button>
       <div>
-        <div class="text-[11px] uppercase tracking-[0.22em] muted">Boîte à outils</div>
-        <h2 class="serif text-2xl font-semibold">Pioche ce que tu veux</h2>
+        <div class="text-[10px] uppercase tracking-[0.28em] muted">Boîte à outils</div>
+        <h2 class="serif text-[28px] md:text-[36px] font-semibold leading-tight">Pioche librement</h2>
       </div>
     </div>
   `));
 
-  const tabsBar = html(`<div class="flex gap-2 overflow-x-auto pb-1"></div>`);
+  const tabsBar = html(`<div class="flex gap-1.5 overflow-x-auto pb-2 -mx-1 px-1"></div>`);
   tabs.forEach(t=>{
-    const b = html(`<button class="chip ${S.toolsTab===t.id?'chip-accent':''}" data-tab="${t.id}">${t.label}</button>`);
+    const b = html(`<button class="chip whitespace-nowrap ${S.toolsTab===t.id?'chip-accent':''}" data-tab="${t.id}">${t.label}</button>`);
     b.addEventListener("click", ()=>{ S.toolsTab=t.id; save(); render(); });
     tabsBar.appendChild(b);
   });
