@@ -439,7 +439,7 @@ const COURSE = {
   }
 };
 
-const KEY = "seq23-v2";
+const KEY = "seq23-v3";
 const EVAL_DATE = "2026-05-18"; // mardi 18 mai 2026
 const def = ()=>({
   theme:"light",
@@ -447,11 +447,13 @@ const def = ()=>({
   toolsTab:"synth",
   session:null,
   streak:{ count:0, lastDay:null },
-  best:{ flash:0, express:0, deep:0, exam:0, dictee:0 },
+  best:{ flash:0, express:0, deep:0, exam:0, dictee:0, clutch:0 },
   history:[],
   stats:{ totalMin:0, runs:0 },
   sound: true,
-  installPromptDismissed: false
+  srs:{},                // {cardIdx: {ease, reps, due}}
+  weak:{ qcm:{}, libre:{}, dictee:{} },  // {idx: fail_count}
+  planDone:{}            // {"YYYY-MM-DD:taskId": true}
 });
 let S = load();
 function load(){ try{ const r=localStorage.getItem(KEY); if(!r) return def(); return Object.assign(def(), JSON.parse(r)); }catch{ return def(); } }
@@ -622,6 +624,93 @@ const schemas = {
     </svg>`
 };
 
+/* ---------- SPACED REPETITION (SM-2 lite) ---------- */
+const SR = {
+  state(i){
+    if(!S.srs[i]) S.srs[i] = { ease: 2.5, reps: 0, due: 0, lastSeen: 0 };
+    return S.srs[i];
+  },
+  grade(i, known){
+    const s = SR.state(i);
+    s.lastSeen = Date.now();
+    if(known){
+      s.reps++;
+      s.ease = Math.min(2.7, s.ease + 0.1);
+      // intervals: 10min, 1d, 3d, 7d, 14d…
+      const intervals = [10*60e3, 24*3600e3, 3*24*3600e3, 7*24*3600e3, 14*24*3600e3, 30*24*3600e3];
+      s.due = Date.now() + (intervals[Math.min(s.reps-1, intervals.length-1)] || 30*24*3600e3) * (s.ease / 2.5);
+    } else {
+      s.reps = 0;
+      s.ease = Math.max(1.3, s.ease - 0.2);
+      s.due = Date.now() + 10*60e3;
+    }
+    save();
+  },
+  dueNow(){
+    return COURSE.flashcards.map((c,i)=>({c,i,s:SR.state(i)}))
+      .filter(x => x.s.due <= Date.now())
+      .sort((a,b)=> (a.s.reps - b.s.reps) || (a.s.due - b.s.due));
+  },
+  dueCount(){ return SR.dueNow().length; }
+};
+
+/* ---------- WEAK POINTS ---------- */
+const Weak = {
+  hit(kind, idx){ S.weak[kind][idx] = (S.weak[kind][idx]||0) + 1; save(); },
+  hitsSorted(kind){
+    return Object.entries(S.weak[kind]).map(([k,v])=>({idx:+k, n:v}))
+      .filter(x=>x.n>0).sort((a,b)=>b.n-a.n);
+  }
+};
+
+/* ---------- PLAN J-4 → J-0 ---------- */
+function planForToday(){
+  const d = daysUntilEval();
+  // by days remaining
+  const map = {
+    4: { label:"4 jours avant", tasks:[
+      {id:"flash",   t:"Lance un Flash 3 min (mesure de départ)"},
+      {id:"dictee",  t:"Fais les 10 dictées (8 min)"},
+      {id:"essentials", t:"Relis les 14 essentiels (5 min)"}
+    ]},
+    3: { label:"3 jours avant", tasks:[
+      {id:"express", t:"Express 8 min"},
+      {id:"mnemo",   t:"Pièges & mnémo : lecture posée"},
+      {id:"libre",   t:"5 questions libres au choix"}
+    ]},
+    2: { label:"2 jours avant", tasks:[
+      {id:"deep",    t:"Approfondie 20 min (Pomodoro)"},
+      {id:"exam",    t:"1er Examen blanc"},
+      {id:"weak",    t:"Revoir tes points faibles"}
+    ]},
+    1: { label:"Demain l'éval !", tasks:[
+      {id:"flash",   t:"Flash 3 min"},
+      {id:"dictee",  t:"Dictées (8 min)"},
+      {id:"exam",    t:"2e Examen blanc"},
+      {id:"clutch",  t:"Mode panique 2 min (récap final)"}
+    ]},
+    0: { label:"C'est aujourd'hui — vise le 20", tasks:[
+      {id:"breathe", t:"Respire 4-7-8 (1 min)"},
+      {id:"clutch",  t:"Mode panique 2 min"},
+      {id:"recap",   t:"Récap audio dans les écouteurs"}
+    ]}
+  };
+  if(d > 4) return { label:`Plus de 4 jours · pas de pression`, tasks:[
+    {id:"flash", t:"Découvre l'app avec un Flash 3 min"},
+    {id:"essentials", t:"Lis les 14 essentiels"}
+  ]};
+  if(d < 0) return { label:"Éval passée — bravo !", tasks:[
+    {id:"flash", t:"Tu peux continuer à entretenir, ou archiver"}
+  ]};
+  return map[d];
+}
+function planKey(taskId){
+  const today = new Date().toISOString().slice(0,10);
+  return today + ":" + taskId;
+}
+function planDone(taskId){ return !!S.planDone[planKey(taskId)]; }
+function planCheck(taskId, val){ S.planDone[planKey(taskId)] = val; save(); }
+
 /* ---------- SERVICE WORKER ---------- */
 if("serviceWorker" in navigator){
   window.addEventListener("load", ()=>{
@@ -697,6 +786,47 @@ function viewHome(){
     </div>
   `));
 
+  // --- PLAN J-X (auto study plan) ------------------------------------------
+  const plan = planForToday();
+  const planChips = plan.tasks.map(t => {
+    const done = planDone(t.id);
+    return `<label class="flex items-start gap-3 py-2.5 cursor-pointer" data-plan="${t.id}">
+      <span class="mt-0.5 w-5 h-5 rounded-md border ${done?'':''} flex-shrink-0 flex items-center justify-center transition-all" style="background:${done?'var(--ink)':'transparent'}; border-color:${done?'var(--ink)':'var(--line-2)'}">
+        ${done ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--bg)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+      </span>
+      <span class="text-[14.5px] ${done?'muted line-through':'ink'} leading-snug">${t.t}</span>
+    </label>`;
+  }).join("");
+  el.appendChild(html(`
+    <div class="paper rounded-2xl p-5 md:p-6">
+      <div class="flex items-center justify-between mb-2">
+        <div>
+          <div class="text-[10px] uppercase tracking-[0.22em] muted">Plan du jour</div>
+          <h3 class="serif text-xl font-semibold mt-0.5">${plan.label}</h3>
+        </div>
+        <span class="chip">${plan.tasks.filter(t=>planDone(t.id)).length}/${plan.tasks.length}</span>
+      </div>
+      <div class="-mb-1">${planChips}</div>
+    </div>
+  `));
+
+  // --- SPACED REPETITION BANNER -------------------------------------------
+  const due = SR.dueCount();
+  if(due > 0){
+    el.appendChild(html(`
+      <button class="paper rounded-xl p-4 w-full text-left card-tap focus-ring flex items-center gap-3" data-mode="review">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--accent-soft);color:var(--accent)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+        </div>
+        <div class="flex-1">
+          <div class="font-semibold">Répétition espacée</div>
+          <div class="text-[13px] muted">${due} carte${due>1?'s':''} à consolider maintenant.</div>
+        </div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="muted"><path d="m9 6 6 6-6 6"/></svg>
+      </button>
+    `));
+  }
+
   // --- 3 MODES (the centerpiece) -------------------------------------------
   const modes = [
     { id:"flash",   num:"01", title:"Flash",       time:"3 min",  desc:"L'essentiel en moins de 5 minutes." },
@@ -740,6 +870,16 @@ function viewHome(){
       </div>
       <div class="serif text-[22px] font-semibold leading-tight">Examen blanc</div>
       <p class="text-[13.5px] soft mt-1.5 leading-relaxed">10 questions chrono · note /20 + axes ciblés.</p>
+    </button>
+  `));
+  secondary.appendChild(html(`
+    <button class="paper rounded-xl p-5 text-left card-tap focus-ring" data-mode="clutch">
+      <div class="flex items-center justify-between gap-2 mb-2">
+        <span class="chip chip-warn">Panique</span>
+        <span class="text-[12px] muted">2 min</span>
+      </div>
+      <div class="serif text-[22px] font-semibold leading-tight">5 min avant le contrôle</div>
+      <p class="text-[13.5px] soft mt-1.5 leading-relaxed">Les 5 trucs critiques + les pièges + mnémo. Mode sauvetage.</p>
     </button>
   `));
   secondary.appendChild(html(`
@@ -796,6 +936,15 @@ function viewHome(){
   `));
 
   el.addEventListener("click", e=>{
+    const p = e.target.closest("[data-plan]");
+    if(p){
+      e.preventDefault();
+      const id = p.dataset.plan;
+      planCheck(id, !planDone(id));
+      sfx.tap();
+      render();
+      return;
+    }
     const m = e.target.closest("[data-mode]");
     if(m){ launchSession(m.dataset.mode); return; }
     const g = e.target.closest("[data-go]");
@@ -855,6 +1004,39 @@ function launchSession(mode){
       { type:"intro", title:"Examen · 8 min", body:"10 questions chrono, pas de retour. À la fin : note /20." },
       ...shuffle(q),
       { type:"outro", isExam:true }
+    ];
+  } else if(mode==="clutch"){
+    label="Mode panique · 2 min"; durationSec=120;
+    plan = [
+      { type:"intro", title:"5 min avant le contrôle", body:"On ne révise QUE les 5 trucs critiques. Lis lentement, c'est ce qui te rapportera le plus de points." },
+      ...coreFlash.slice(0,5).map(f=>({ type:"flash", ...f })),
+      { type:"read", title:"Les 4 pièges à éviter", body: COURSE.pieges.map(p=>`<div class="paper rounded-lg p-3 mb-2"><div class="font-semibold">⚠ ${p.t}</div><div class="text-[13px] soft mt-1">${p.d}</div></div>`).join("") },
+      { type:"read", title:"Mnémo de secours", body: COURSE.mnemos.map(m=>`<div class="paper rounded-lg p-3 mb-2"><div class="font-semibold">${m.t}</div><div class="text-[13px] soft mt-1">${m.d}</div></div>`).join("") },
+      { type:"outro" }
+    ];
+  } else if(mode==="weak"){
+    // Build a session from the user's weak points
+    const wq = Weak.hitsSorted("qcm").slice(0,5).map(x=>({type:"qcm", ...allQcm[x.idx]}));
+    const wl = Weak.hitsSorted("libre").slice(0,2).map(x=>({type:"libre", ...COURSE.libre[x.idx]}));
+    if(wq.length+wl.length === 0){
+      // Nothing weak yet, fallback to flash
+      return launchSession("flash");
+    }
+    label="Mes faiblesses"; durationSec = 240;
+    plan = [
+      { type:"intro", title:"Tes faiblesses · 4 min", body:"Les questions où tu as le plus chuté. On les retravaille." },
+      ...wq, ...wl,
+      { type:"outro" }
+    ];
+  } else if(mode==="review"){
+    // Spaced-repetition due flashcards
+    const due = SR.dueNow();
+    if(due.length === 0) return launchSession("flash");
+    label=`Révision espacée · ${due.length}`; durationSec = Math.min(600, due.length*30);
+    plan = [
+      { type:"intro", title:"À revoir maintenant", body:`${due.length} carte${due.length>1?'s':''} à consolider d'après ta progression personnelle.` },
+      ...due.map(x=>({ type:"flash", ...x.c, _srIdx: x.i })),
+      { type:"outro" }
     ];
   } else { return; }
 
@@ -1020,8 +1202,17 @@ function viewSession(){
         </div>`);
       const f = c.querySelector(".flash");
       f.addEventListener("click", e=>{ if(e.target.closest("button")) return; f.classList.toggle("flipped"); sfx.flip(); });
-      c.querySelector("#fOk").addEventListener("click", ()=>{ ses.score.ok++; ses.score.total++; sfx.right(); nextStep(); });
-      c.querySelector("#fRev").addEventListener("click", ()=>{ ses.score.total++; sfx.tap(); nextStep(); });
+      const srIdx = step._srIdx !== undefined ? step._srIdx : COURSE.flashcards.findIndex(card => card.q === step.q);
+      c.querySelector("#fOk").addEventListener("click", ()=>{
+        ses.score.ok++; ses.score.total++; sfx.right();
+        if(srIdx>=0) SR.grade(srIdx, true);
+        nextStep();
+      });
+      c.querySelector("#fRev").addEventListener("click", ()=>{
+        ses.score.total++; sfx.tap();
+        if(srIdx>=0) SR.grade(srIdx, false);
+        nextStep();
+      });
       c.querySelector("#ttsBtn").addEventListener("click", e=>{
         e.stopPropagation();
         const txt = f.classList.contains("flipped") ? step.a : step.q;
@@ -1067,7 +1258,11 @@ function viewSession(){
           const k = +b.dataset.k;
           ses.score.total++;
           const ok = k===step.c;
-          if(ok){ ses.score.ok++; sfx.right(); } else { sfx.wrong(); }
+          if(ok){ ses.score.ok++; sfx.right(); } else {
+            sfx.wrong();
+            const qIdx = COURSE.qcm.findIndex(x => x.q === step.q);
+            if(qIdx>=0) Weak.hit("qcm", qIdx);
+          }
           opts.forEach(o=>o.disabled=true);
           opts[k].classList.add(ok?"correct":"wrong");
           if(!ok) opts[step.c].classList.add("correct");
@@ -1180,6 +1375,10 @@ function viewTools(){
     { id:"libre", label:"Libre" },
     { id:"mnemo", label:"Pièges & mnémo" },
     { id:"mind", label:"Carte mentale" },
+    { id:"glossaire", label:"Glossaire A-Z" },
+    { id:"stats", label:"Stats" },
+    { id:"recap", label:"Récap audio" },
+    { id:"breathe", label:"Respire 4-7-8" },
     { id:"fiche", label:"Fiche à imprimer" }
   ];
   if(!tabs.find(t=>t.id===S.toolsTab)) S.toolsTab = "synth";
@@ -1354,6 +1553,170 @@ function viewTools(){
         </article>
       `;
       c.querySelector("#doPrint").addEventListener("click", ()=> window.print());
+      return c;
+    },
+    glossaire: ()=>{
+      const c = html(`<div></div>`);
+      // Build all terms: keywords + essentials titles + dictées hints
+      const all = [];
+      Object.entries(COURSE.keywords).forEach(([k,v])=> all.push({ t:k, d:v, kind:"définition" }));
+      COURSE.essentials.forEach(e => all.push({ t:e.t, d: e.d.replace(/<[^>]+>/g,""), kind:e.tag }));
+      // Dedupe by lowercase title
+      const seen = new Set();
+      const uniq = all.filter(x => { const k = x.t.toLowerCase(); if(seen.has(k)) return false; seen.add(k); return true; });
+      uniq.sort((a,b)=> a.t.localeCompare(b.t, 'fr', { sensitivity:'base' }));
+      c.innerHTML = `
+        <div class="paper rounded-xl p-3 mb-3 flex items-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="muted"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="gs" type="text" placeholder="Cherche un terme…" class="flex-1 bg-transparent outline-none text-[15px]" autocomplete="off" autocorrect="off" />
+          <span class="text-[12px] muted" id="gcount">${uniq.length}</span>
+        </div>
+        <div id="glist" class="space-y-2"></div>`;
+      const list = c.querySelector("#glist");
+      function render(q=""){
+        const nq = normalize(q);
+        const filtered = nq ? uniq.filter(x => normalize(x.t).includes(nq) || normalize(x.d).includes(nq)) : uniq;
+        c.querySelector("#gcount").textContent = filtered.length;
+        list.innerHTML = filtered.map(x=>`
+          <div class="paper rounded-lg p-3">
+            <div class="flex items-center gap-2"><span class="serif font-semibold">${x.t}</span><span class="chip">${x.kind}</span></div>
+            <p class="text-[14px] soft mt-1 leading-relaxed">${md(x.d)}</p>
+          </div>`).join("") || `<p class="muted text-sm text-center py-6">Aucun résultat</p>`;
+      }
+      render();
+      c.querySelector("#gs").addEventListener("input", e => render(e.target.value));
+      return c;
+    },
+    stats: ()=>{
+      const c = html(`<div></div>`);
+      const hist = (S.history || []).slice(-10);
+      const totalMin = S.stats?.totalMin || 0;
+      const runs = S.stats?.runs || 0;
+      const weakQ = Weak.hitsSorted("qcm").slice(0,3);
+      const weakL = Weak.hitsSorted("libre").slice(0,3);
+      const due = SR.dueCount();
+      // Sparkline SVG
+      let chart = "";
+      if(hist.length >= 2){
+        const W = 320, H = 90, pad = 8;
+        const xs = hist.map((_,i)=> pad + i * ((W - pad*2) / (hist.length-1)));
+        const ys = hist.map(h => pad + (H - pad*2) * (1 - (h.score||0)/100));
+        const path = xs.map((x,i)=> `${i===0?'M':'L'} ${x.toFixed(1)} ${ys[i].toFixed(1)}`).join(" ");
+        const dots = xs.map((x,i)=> `<circle cx="${x.toFixed(1)}" cy="${ys[i].toFixed(1)}" r="3" fill="var(--accent)"/>`).join("");
+        chart = `<svg viewBox="0 0 ${W} ${H}" class="w-full h-auto"><path d="${path}" fill="none" stroke="var(--accent)" stroke-width="2"/>${dots}</svg>`;
+      } else {
+        chart = `<p class="muted text-sm">Lance 2 sessions pour voir la courbe.</p>`;
+      }
+      c.innerHTML = `
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div class="paper rounded-xl p-4"><div class="muted text-[11px] uppercase tracking-wider">Sessions</div><div class="serif text-3xl font-semibold mt-1">${runs}</div></div>
+          <div class="paper rounded-xl p-4"><div class="muted text-[11px] uppercase tracking-wider">Temps total</div><div class="serif text-3xl font-semibold mt-1">${totalMin}<span class="muted text-sm ml-1">min</span></div></div>
+          <div class="paper rounded-xl p-4"><div class="muted text-[11px] uppercase tracking-wider">Série</div><div class="serif text-3xl font-semibold mt-1">${S.streak.count}<span class="muted text-sm ml-1">j</span></div></div>
+          <div class="paper rounded-xl p-4"><div class="muted text-[11px] uppercase tracking-wider">À réviser</div><div class="serif text-3xl font-semibold mt-1">${due}</div></div>
+        </div>
+        <div class="paper rounded-xl p-4 mb-3">
+          <div class="text-[11px] uppercase tracking-wider muted mb-2">Évolution (10 dernières sessions)</div>
+          ${chart}
+        </div>
+        <div class="paper rounded-xl p-4 mb-3">
+          <div class="text-[11px] uppercase tracking-wider muted mb-2">Meilleurs scores</div>
+          <div class="grid grid-cols-2 gap-2 text-[14px]">
+            <div>Flash · <b>${Math.round(S.best.flash||0)}%</b></div>
+            <div>Express · <b>${Math.round(S.best.express||0)}%</b></div>
+            <div>Approfondie · <b>${Math.round(S.best.deep||0)}%</b></div>
+            <div>Dictée · <b>${Math.round(S.best.dictee||0)}%</b></div>
+            <div>Examen · <b>${(S.best.exam||0).toFixed(1)}/20</b></div>
+            <div>Panique · <b>${Math.round(S.best.clutch||0)}%</b></div>
+          </div>
+        </div>
+        ${(weakQ.length || weakL.length) ? `
+        <div class="paper rounded-xl p-4">
+          <div class="text-[11px] uppercase tracking-wider muted mb-2">Tes points faibles</div>
+          ${weakQ.map(w=>`<div class="text-[14px] py-1.5"><span class="chip chip-bad mr-1">×${w.n}</span>${COURSE.qcm[w.idx].q}</div>`).join("")}
+          ${weakL.map(w=>`<div class="text-[14px] py-1.5"><span class="chip chip-bad mr-1">×${w.n}</span>${COURSE.libre[w.idx].q}</div>`).join("")}
+          <button class="btn btn-primary mt-3 w-full" id="wkBtn">Session « Mes faiblesses »</button>
+        </div>` : ''}`;
+      const wk = c.querySelector("#wkBtn");
+      if(wk) wk.addEventListener("click", ()=> launchSession("weak"));
+      return c;
+    },
+    recap: ()=>{
+      const c = html(`<div></div>`);
+      // Build a long text to read out
+      const tldr = COURSE.synth.tldr.map(s=>s.replace(/\*\*/g,"")).join(". ");
+      const ess = COURSE.essentials.map(e=>`${e.t}. ${e.d.replace(/<[^>]+>/g,"")}`).join(". Ensuite, ");
+      const traps = COURSE.pieges.map(p=>`Attention : ${p.t}. ${p.d.replace(/<[^>]+>/g,"")}`).join(". ");
+      const recap = `Récapitulatif Séquence 23. ${tldr}. Maintenant les 14 essentiels. ${ess}. Pour finir, les pièges à éviter. ${traps}. Tu connais maintenant tout le cours. À toi de jouer.`;
+      c.innerHTML = `
+        <div class="paper rounded-xl p-5 mb-3">
+          <div class="text-[11px] uppercase tracking-wider muted">Podcast · ~5 min</div>
+          <h3 class="serif text-xl font-semibold mt-1">Tout le cours dans tes écouteurs</h3>
+          <p class="text-[14px] soft mt-2 leading-relaxed">L'app te lit tout le cours à voix haute. Mets tes écouteurs, marche, écoute. Sans regarder l'écran.</p>
+          <div class="flex gap-2 mt-4">
+            <button class="btn btn-primary flex-1" id="playRecap">▶ Lecture</button>
+            <button class="btn" id="stopRecap">■ Stop</button>
+          </div>
+          <p id="recapStatus" class="text-[12px] muted mt-3"></p>
+        </div>`;
+      const status = c.querySelector("#recapStatus");
+      c.querySelector("#playRecap").addEventListener("click", ()=>{
+        if(!tts.supported){ status.textContent = "Ton navigateur ne supporte pas la lecture vocale."; return; }
+        tts.speak(recap);
+        status.textContent = "En cours de lecture… touche Stop pour arrêter.";
+      });
+      c.querySelector("#stopRecap").addEventListener("click", ()=>{ tts.stop(); status.textContent = "Arrêté."; });
+      return c;
+    },
+    breathe: ()=>{
+      const c = html(`<div></div>`);
+      c.innerHTML = `
+        <div class="paper rounded-xl p-5 mb-3 text-center">
+          <div class="text-[11px] uppercase tracking-wider muted">Anti-stress · 1 min</div>
+          <h3 class="serif text-xl font-semibold mt-1">Respire 4-7-8</h3>
+          <p class="text-[13.5px] soft mt-2 leading-relaxed max-w-md mx-auto">Méthode du Dr Andrew Weil. Avant un contrôle, ça calme le cœur en 4 cycles. Inspire 4 s, retiens 7 s, expire 8 s.</p>
+        </div>
+        <div class="paper-lift rounded-2xl p-6 md:p-10 flex flex-col items-center justify-center text-center" style="background:var(--accent-soft); border-color:transparent">
+          <svg viewBox="0 0 200 200" width="200" height="200" id="brSvg">
+            <circle cx="100" cy="100" r="40" fill="var(--accent)" opacity="0.85" id="brCircle" style="transition: r 1s ease-in-out, opacity 1s ease-in-out"/>
+          </svg>
+          <div id="brLabel" class="serif text-2xl font-semibold mt-3 ink">Prêt ?</div>
+          <div id="brCount" class="serif text-5xl font-semibold ink mt-1 tabular-nums">·</div>
+          <button class="btn btn-primary mt-5" id="brStart">Démarrer</button>
+        </div>`;
+      const circle = c.querySelector("#brCircle");
+      const label = c.querySelector("#brLabel");
+      const count = c.querySelector("#brCount");
+      const btn = c.querySelector("#brStart");
+      let running = false, timer = null;
+      async function phase(name, secs, radius){
+        label.textContent = name;
+        circle.setAttribute("r", radius);
+        if(name === "Inspire") sfx.pause();
+        for(let s=secs; s>0; s--){
+          if(!running) return;
+          count.textContent = s;
+          await new Promise(r=> timer = setTimeout(r, 1000));
+        }
+      }
+      async function run(){
+        running = true;
+        btn.textContent = "Arrêter";
+        for(let i=0; i<4 && running; i++){
+          await phase("Inspire", 4, 85);
+          if(!running) break;
+          await phase("Retiens", 7, 85);
+          if(!running) break;
+          await phase("Expire", 8, 40);
+        }
+        if(running){ label.textContent = "Terminé"; count.textContent = "✓"; sfx.done(); }
+        running = false;
+        btn.textContent = "Recommencer";
+        circle.setAttribute("r", 40);
+      }
+      btn.addEventListener("click", ()=>{
+        if(running){ running = false; clearTimeout(timer); btn.textContent = "Démarrer"; label.textContent = "Arrêté"; count.textContent = "·"; circle.setAttribute("r", 40); return; }
+        run();
+      });
       return c;
     },
     flash: ()=>{
