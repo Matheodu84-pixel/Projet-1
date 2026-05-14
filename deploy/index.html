@@ -151,7 +151,15 @@ const COURSE = {
     "enlèvement de matière":"On **retire** la matière d'un bloc brut (fraisage).",
     "Fablab":"« Fabrication laboratory » — lieu **ouvert au public** avec machines à commande numérique.",
     "garde-fou":"Rôle de la maquette : détecter à temps une erreur entre théorie et réalité.",
-    "fichier de fabrication":"Fichier final lu par la machine ; vient après le paramétrage."
+    "fichier de fabrication":"Fichier final lu par la machine ; vient après le paramétrage.",
+    "problématique":"Question concrète à résoudre, à l'origine du projet (ex. : « comment ranger ses affaires en classe ? »).",
+    "besoin":"Ce que l'utilisateur attend de l'objet — formulé simplement, sans solution technique.",
+    "cahier des charges":"Document qui formalise le **besoin** + les **fonctions** + les **contraintes** auxquelles la solution doit répondre.",
+    "fonction de service":"Action que l'objet doit rendre à l'utilisateur (« à quoi sert-il ? »).",
+    "fonction contrainte":"Limite imposée à l'objet : sécurité, coût, taille, environnement, matière…",
+    "croquis":"Dessin rapide à **main levée** d'une idée — pour réfléchir et communiquer une intention.",
+    "schéma":"Représentation simplifiée et **normée** (symboles standards) — explique un fonctionnement.",
+    "solution":"Proposition technique qui répond au cahier des charges (souvent dessinée en croquis/schéma)."
   },
 
   essentials: [
@@ -162,7 +170,10 @@ const COURSE = {
     { id:"e5", t:"Fraiseuse = enlèvement", d:"Machine-outil à commande numérique. L'usinage taille dans la masse selon un fichier. On retire de la matière.", tag:"principe" },
     { id:"e6", t:"Chaîne CAO", d:"Modèle CAO → exportation → paramétrage → fichier de fabrication → fabrication. Mémo : « CEPaF ».", tag:"ordre exact" },
     { id:"e7", t:"C.A.O.", d:"Conception Assistée par Ordinateur. C'est un logiciel, jamais une machine.", tag:"définition" },
-    { id:"e8", t:"Fablab", d:"« Fabrication laboratory » : lieu ouvert au public avec machines à commande numérique, outils, électronique. Pour concevoir et fabriquer.", tag:"définition" }
+    { id:"e8", t:"Fablab", d:"« Fabrication laboratory » : lieu ouvert au public avec machines à commande numérique, outils, électronique. Pour concevoir et fabriquer.", tag:"définition" },
+    { id:"e9", t:"Démarche de projet", d:"<b>Problématique</b> → <b>Besoin</b> → <b>Cahier des charges</b> → <b>Solutions</b> proposées (croquis/schémas) → choix → CAO → maquette/prototype → tests. Mémo : « PBCS ».", tag:"évaluation · à savoir refaire" },
+    { id:"e10", t:"Cahier des charges", d:"Document qui formalise <b>le besoin</b>, <b>les fonctions de service</b> (à quoi ça sert) et <b>les fonctions contraintes</b> (sécurité, coût, taille, environnement…). C'est la base de toutes les décisions techniques.", tag:"évaluation · définition" },
+    { id:"e11", t:"Croquis vs Schéma", d:"<b>Croquis</b> = dessin à <b>main levée</b>, rapide, pour explorer une idée. <b>Schéma</b> = représentation <b>simplifiée</b> et <b>normée</b> (symboles standards) pour expliquer un fonctionnement.", tag:"évaluation · ne pas confondre" }
   ],
 
   flashcards: [
@@ -182,7 +193,15 @@ const COURSE = {
     { q:"Rôle du rapporteur ?", a:"Présente <b>à l'oral</b> le travail (synthèse classe), interlocuteur du prof.", core:false },
     { q:"Rôle du gestionnaire ?", a:"Gère le <b>matériel</b>, les <b>ordinateurs</b> et le <b>temps</b>.", core:false },
     { q:"Conditions de réussite d'un projet ?", a:"<b>Objectif commun</b>, <b>implication</b> de tous, bonne <b>organisation</b>, bonne <b>communication</b>.", core:false },
-    { q:"Croquis vs schéma ?", a:"<b>Croquis</b> : à main levée, rapide. <b>Schéma</b> : simplifié et <b>normé</b>.", core:false }
+    { q:"Croquis vs schéma ?", a:"<b>Croquis</b> : à main levée, rapide. <b>Schéma</b> : simplifié et <b>normé</b> (symboles standards).", core:true },
+    { q:"Définition d'un croquis ?", a:"Dessin <b>à main levée</b>, rapide, pour <b>explorer une idée</b> ou communiquer une intention.", core:true },
+    { q:"Définition d'un schéma ?", a:"Représentation <b>simplifiée</b> et <b>normée</b> (symboles standards) qui <b>explique un fonctionnement</b>.", core:true },
+    { q:"Qu'est-ce qu'une problématique ?", a:"La <b>question concrète</b> à résoudre, à l'origine du projet (ex. : « comment ranger ses affaires en classe ? »).", core:true },
+    { q:"Qu'est-ce que le besoin ?", a:"Ce que l'utilisateur <b>attend</b> de l'objet, formulé simplement, <b>sans donner la solution technique</b>.", core:true },
+    { q:"Qu'est-ce que le cahier des charges ?", a:"Document qui formalise le <b>besoin</b>, les <b>fonctions de service</b> et les <b>fonctions contraintes</b>.", core:true },
+    { q:"Différence besoin / solution ?", a:"<b>Besoin</b> = ce que l'utilisateur veut. <b>Solution</b> = comment on y répond techniquement. Le besoin n'impose pas la solution.", core:true },
+    { q:"Fonction de service vs fonction contrainte ?", a:"<b>Service</b> : ce que l'objet <b>doit faire</b> (à quoi sert-il). <b>Contrainte</b> : <b>limite</b> imposée (sécurité, coût, taille, env.).", core:false },
+    { q:"Ordre des étapes de création d'un objet ?", a:"<b>Problématique → Besoin → Cahier des charges → Solutions (croquis/schémas) → Choix → CAO → Maquette/Prototype → Tests/Validation</b>.", core:true }
   ],
 
   qcm: [
@@ -200,7 +219,14 @@ const COURSE = {
     { q:"Une maquette numérique permet de simuler…", o:["Le prix","Les forces, séismes, usure, aérodynamisme","La météo","Uniquement la couleur"], c:1, e:"Simulations physiques via la C.A.O.", lvl:2, core:false },
     { q:"Quelle proposition est <b>fausse</b> ?", o:["L'imprimante 3D construit de bas en haut","La fraiseuse est pilotée par ordinateur","Le prototypage rapide réduit les étapes","La fraiseuse ajoute de la matière couche par couche"], c:3, e:"La fraiseuse <b>enlève</b> la matière.", lvl:3, core:true },
     { q:"Avant la fabrication par MOCN, on doit d'abord…", o:["Acheter la matière","Créer un modèle CAO","Tester la pièce","Faire un croquis"], c:1, e:"La chaîne part toujours du <b>modèle CAO</b>.", lvl:2, core:true },
-    { q:"En quoi un Fablab diffère-t-il d'un atelier classique ?", o:["Il est réservé aux pros","Ouvert au public + machines numériques + partage","Pas d'ordinateurs","Que du bois"], c:1, e:"Fablab = public + numérique + partage.", lvl:3, core:false }
+    { q:"En quoi un Fablab diffère-t-il d'un atelier classique ?", o:["Il est réservé aux pros","Ouvert au public + machines numériques + partage","Pas d'ordinateurs","Que du bois"], c:1, e:"Fablab = public + numérique + partage.", lvl:3, core:false },
+    { q:"Qu'est-ce qu'un croquis ?", o:["Plan technique normé","Dessin rapide à main levée","Photo de l'objet","Document écrit"], c:1, e:"Croquis = dessin à <b>main levée</b>, rapide.", lvl:1, core:true },
+    { q:"Qu'est-ce qu'un schéma ?", o:["Dessin à main levée","Représentation simplifiée et normée","Maquette en 3D","Texte descriptif"], c:1, e:"Schéma = représentation <b>simplifiée + normée</b> (symboles).", lvl:1, core:true },
+    { q:"Le cahier des charges contient…", o:["Le prix de vente uniquement","Le besoin + les fonctions de service + les fonctions contraintes","Les notes du contrôle","Le planning de cours"], c:1, e:"Besoin + fonctions de service + fonctions contraintes.", lvl:2, core:true },
+    { q:"Ordre correct des étapes ?", o:["CAO → besoin → cahier des charges → solutions","Problématique → besoin → cahier des charges → solutions → CAO → prototype","Prototype → CAO → besoin","Besoin → prototype → CAO → cahier"], c:1, e:"<b>Problématique → Besoin → CdC → Solutions → CAO → Prototype</b>.", lvl:2, core:true },
+    { q:"Que vient <b>avant</b> le cahier des charges ?", o:["Le prototype","La problématique et le besoin","La CAO","Le fichier de fabrication"], c:1, e:"On part toujours de la <b>problématique</b> puis du <b>besoin</b> ; le CdC les formalise.", lvl:2, core:true },
+    { q:"Une « fonction contrainte » est…", o:["Ce que l'objet doit faire","Une limite imposée (coût, taille, sécurité…)","Le mode d'emploi","Une étape de fabrication"], c:1, e:"Contrainte = <b>limite</b> (sécurité, coût, environnement…).", lvl:3, core:false },
+    { q:"Différence besoin / solution ?", o:["Aucune","Le besoin dit POURQUOI, la solution dit COMMENT","Le besoin se dessine, la solution s'écrit","La solution précède le besoin"], c:1, e:"Besoin = <b>pourquoi</b>. Solution = <b>comment</b>.", lvl:3, core:true }
   ],
 
   libre: [
@@ -210,33 +236,48 @@ const COURSE = {
     { q:"Explique le principe de l'imprimante 3D.", kw:["addition","buse","filament","fondu","couche","bas","haut","plateau"], min:3, ideal:"Addition de matière : une buse dépose un filament fondu sur un plateau, couche par couche, de bas en haut." },
     { q:"Explique le principe de la fraiseuse numérique.", kw:["enlèvement","tailler","masse","commande","numérique","ordinateur","fichier"], min:3, ideal:"Enlèvement de matière : on taille dans la masse selon un fichier, machine pilotée par ordinateur." },
     { q:"Donne l'ordre des étapes entre l'idée et la pièce finie (MOCN).", kw:["cao","export","exportation","paramétrage","fichier","fabrication"], min:3, ideal:"Modèle CAO → Exportation → Paramétrage → Fichier de fabrication → Fabrication." },
-    { q:"Qu'est-ce qu'un Fablab ?", kw:["fabrication","laboratory","public","ouvert","machines","commande","numérique","outils"], min:3, ideal:"Fabrication laboratory : lieu ouvert au public, machines à commande numérique, outils, pour concevoir et fabriquer." }
+    { q:"Qu'est-ce qu'un Fablab ?", kw:["fabrication","laboratory","public","ouvert","machines","commande","numérique","outils"], min:3, ideal:"Fabrication laboratory : lieu ouvert au public, machines à commande numérique, outils, pour concevoir et fabriquer." },
+    { q:"Définis le croquis et le schéma.", kw:["main levée","rapide","idée","simplifiée","normée","symboles","fonctionnement"], min:3, ideal:"Croquis : dessin à main levée, rapide, pour exprimer une idée. Schéma : représentation simplifiée et normée (symboles) pour expliquer un fonctionnement." },
+    { q:"Donne l'ordre des étapes de création d'un objet.", kw:["problématique","besoin","cahier","charges","solution","croquis","cao","maquette","prototype","test"], min:5, ideal:"Problématique → Besoin → Cahier des charges → Solutions (croquis/schémas) → Choix → CAO → Maquette/Prototype → Tests et validation." },
+    { q:"Qu'est-ce que le cahier des charges ?", kw:["document","besoin","fonction","service","contrainte","limite"], min:3, ideal:"Document qui formalise le besoin et liste les fonctions de service (ce que l'objet doit faire) et les fonctions contraintes (limites imposées : coût, sécurité, taille, environnement…)." },
+    { q:"Différence entre problématique, besoin et solution ?", kw:["problématique","question","besoin","utilisateur","attend","solution","technique","comment","pourquoi"], min:3, ideal:"La problématique est la question à résoudre. Le besoin est ce que l'utilisateur attend (pourquoi). La solution est la réponse technique (comment)." }
   ],
 
   pieges: [
     { t:"Coopératif ≠ Collaboratif", d:"Le piège #1. <b>Coop</b> = tâches séparées. <b>Collab</b> = même tâche, ensemble." },
     { t:"Addition ≠ Enlèvement", d:"<b>Imprimante 3D</b> ajoute (filament). <b>Fraiseuse</b> retire (usinage)." },
     { t:"Maquette ≠ Prototype", d:"<b>Maquette</b> = représentation 3D fidèle. <b>Prototype</b> = premier exemplaire à tester." },
-    { t:"C.A.O. n'est pas une machine", d:"C.A.O. = logiciel. La machine, c'est la 3D ou la fraiseuse." }
+    { t:"C.A.O. n'est pas une machine", d:"C.A.O. = logiciel. La machine, c'est la 3D ou la fraiseuse." },
+    { t:"Besoin ≠ Solution", d:"Le <b>besoin</b> dit <b>pourquoi</b> (ce que veut l'utilisateur). La <b>solution</b> dit <b>comment</b> (la réponse technique). Ne mets jamais de techno dans l'énoncé du besoin." },
+    { t:"Croquis ≠ Schéma", d:"<b>Croquis</b> = à main levée, libre. <b>Schéma</b> = simplifié et <b>normé</b> (symboles)." },
+    { t:"Le cahier des charges ne dit pas la solution", d:"Il liste le <b>besoin</b>, les <b>fonctions de service</b> et les <b>fonctions contraintes</b>. Il ne dit pas comment fabriquer." }
   ],
   mnemos: [
     { t:"CO·SE·RA·GE — les 4 rôles", d:"<b>CO</b>ordonnateur · <b>SE</b>crétaire · <b>RA</b>pporteur · <b>GE</b>stionnaire. Récite-le comme un grade." },
     { t:"CEPaF — la chaîne CAO", d:"<b>C</b>AO → <b>E</b>xport → <b>P</b>aramétrage → <b>F</b>ichier. Image : un « café » avant d'imprimer." },
-    { t:"3D = aDDition", d:"Les deux <b>D</b> de 3<b>D</b> rappellent l'a<b>D</b><b>D</b>ition. Fraiseuse = retire (« RE-tire »)." }
+    { t:"3D = aDDition", d:"Les deux <b>D</b> de 3<b>D</b> rappellent l'a<b>D</b><b>D</b>ition. Fraiseuse = retire (« RE-tire »)." },
+    { t:"PBCS — la démarche projet", d:"<b>P</b>roblématique → <b>B</b>esoin → <b>C</b>ahier des charges → <b>S</b>olutions. Image : « <b>P</b>etit <b>B</b>ateau <b>C</b>herche <b>S</b>olution »." },
+    { t:"FS / FC — le cahier des charges", d:"<b>FS</b> = Fonctions de <b>S</b>ervice (à quoi ça <b>Sert</b>). <b>FC</b> = Fonctions <b>C</b>ontraintes (les <b>C</b>ontraintes : coût, sécurité…)." }
   ],
 
   synth: {
     tldr: [
+      "**Démarche projet** : Problématique → Besoin → **Cahier des charges** → Solutions (« PBCS »).",
       "Un projet réussit avec un **objectif commun**, une bonne **organisation** et une **communication** entre tous.",
       "**Coopération** = tâches séparées · **Collaboration** = même tâche, ensemble.",
       "4 rôles : **CO·SE·RA·GE** — coordonnateur, secrétaire, rapporteur, gestionnaire.",
+      "**Croquis** = à main levée · **Schéma** = simplifié et **normé**.",
       "**Maquette** = 3D, échelle réduite, fidèle. Réelle ou numérique (**C.A.O.**).",
       "**Imprimante 3D** = **addition** · **Fraiseuse** = **enlèvement**.",
-      "Chaîne : **CAO → Export → Paramétrage → Fichier de fabrication** (« CEPaF »).",
+      "Chaîne CAO : **CAO → Export → Paramétrage → Fichier de fabrication** (« CEPaF »).",
       "**Fablab** = lieu public + machines numériques + partage."
     ],
     long: `
-      <h4 class="serif text-lg font-semibold mt-2">Groupe de projet</h4>
+      <h4 class="serif text-lg font-semibold mt-2">Démarche de projet (le cœur de l'évaluation)</h4>
+      <p>Tout projet suit le même fil : on part d'une <b>problématique</b> (la question à résoudre), on énonce le <b>besoin</b> (ce que veut l'utilisateur, <i>sans</i> dire comment), on rédige un <b>cahier des charges</b> (besoin + fonctions de service + fonctions contraintes), puis on propose des <b>solutions</b> sous forme de <b>croquis</b> et <b>schémas</b>. On en choisit une, on la modélise en <b>CAO</b>, on en fait une <b>maquette</b> ou un <b>prototype</b>, on <b>teste</b> et on <b>valide</b>. Mémo : <b>« PBCS »</b>.</p>
+      <p><b>Cahier des charges</b> : document de référence du projet. Il contient le besoin, les <b>fonctions de service</b> (ce que l'objet doit faire) et les <b>fonctions contraintes</b> (limites : sécurité, coût, taille, environnement, matière…). Il ne dit <b>jamais</b> comment fabriquer.</p>
+      <p><b>Croquis vs schéma</b> : un <b>croquis</b> est un dessin <b>à main levée</b>, rapide, libre, pour explorer une idée. Un <b>schéma</b> est <b>simplifié</b> et <b>normé</b> (symboles standards) ; il explique un fonctionnement.</p>
+      <h4 class="serif text-lg font-semibold mt-3">Groupe de projet</h4>
       <p>Pour réussir, il faut un <b>objectif commun</b>, l'<b>implication</b> de tous, une bonne <b>organisation</b> et une bonne <b>communication</b>. Deux modes : <b>coopératif</b> (tâches indépendantes) et <b>collaboratif</b> (même tâche, en même temps).</p>
       <p>4 rôles types : <b>coordonnateur</b> (anime), <b>secrétaire</b> (écrit), <b>rapporteur</b> (oral), <b>gestionnaire</b> (matériel + temps).</p>
       <h4 class="serif text-lg font-semibold mt-3">Maquette</h4>
@@ -345,7 +386,7 @@ function viewHome(){
       <div class="text-[11px] uppercase tracking-[0.22em] muted">${COURSE.meta}</div>
       <h1 class="serif text-[40px] md:text-[56px] font-semibold leading-[1.05] mt-1">${COURSE.title}</h1>
       <p class="serif text-xl md:text-2xl mt-1 soft">${COURSE.subtitle}.</p>
-      <p class="text-[14px] muted mt-3 max-w-xl leading-relaxed">Choisis une session selon ton temps. La méthode <b class="ink">80/20</b> est appliquée par défaut : tu révises d'abord les <b class="ink">8 concepts</b> qui rapportent l'essentiel des points.</p>
+      <p class="text-[14px] muted mt-3 max-w-xl leading-relaxed">Choisis une session selon ton temps. La méthode <b class="ink">80/20</b> est appliquée par défaut : tu révises d'abord les <b class="ink">11 concepts</b> qui rapportent l'essentiel des points — tous calés sur ton <b class="ink">évaluation</b> (croquis/schéma, méthodes de travail, maquette, étapes de création, cahier des charges).</p>
     </div>
   `));
 
@@ -396,7 +437,7 @@ function viewHome(){
         <div class="serif text-lg font-semibold">La méthode 80/20</div>
         <span class="chip chip-accent">Pareto</span>
       </div>
-      <p class="text-[13px] soft mt-2 leading-relaxed">Sur ce cours, 8 concepts couvrent l'essentiel des questions du contrôle. Mémorise-les <b>vraiment</b>, le reste suivra naturellement.</p>
+      <p class="text-[13px] soft mt-2 leading-relaxed">Sur ce cours, <b>11 concepts</b> couvrent l'essentiel des questions du contrôle (tous calés sur ton évaluation). Mémorise-les <b>vraiment</b>, le reste suivra naturellement.</p>
       <div class="mt-3 grid sm:grid-cols-2 gap-2">
         ${COURSE.essentials.map((e,i)=>`
           <button class="paper rounded-lg p-3 text-left card-tap focus-ring" data-essential="${e.id}">
