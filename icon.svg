@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="42" fill="#15140f"/>
+  <g transform="translate(96 110)">
+    <text text-anchor="middle" font-family="Georgia, 'Fraunces', serif" font-weight="700" font-size="112" fill="#f7f4ee" letter-spacing="-0.04em">S</text>
+  </g>
+  <circle cx="142" cy="50" r="10" fill="#c54221"/>
+</svg>
