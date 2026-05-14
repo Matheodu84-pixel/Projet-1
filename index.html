@@ -3,8 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<meta name="theme-color" content="#faf7f2" />
+<meta name="theme-color" content="#f7f4ee" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0f0e0c" media="(prefers-color-scheme: dark)" />
+<meta name="description" content="App de révision pour la Séquence 23 — Design, maquette, prototypage. Sessions Flash, Express, Pomodoro, examen blanc, dictée, mode hors-ligne." />
 <title>Séquence 23 · Révisions</title>
+<link rel="manifest" href="./manifest.webmanifest" />
+<link rel="icon" type="image/svg+xml" href="./icon.svg" />
+<link rel="apple-touch-icon" href="./icon.svg" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Séq 23" />
+<meta name="format-detection" content="telephone=no" />
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -119,6 +129,49 @@
   .hr{ display:block; height:1px; background:var(--line); margin: 12px 0; }
   /* Quote-style intro */
   .lede{ font-family:"Fraunces", serif; font-weight:400; letter-spacing:-.01em; font-style:italic; color:var(--soft); }
+  /* Countdown chip */
+  .countdown{ display:inline-flex; align-items:center; gap:7px; padding:6px 12px; border-radius:999px; background:var(--ink); color:var(--bg); font-weight:600; font-size:12px; letter-spacing:.02em; }
+  .countdown.urgent{ background:var(--accent); color:var(--accent-ink); }
+  /* Dictée input — input ressemble à un trait sous le mot */
+  .dictee{ font-family:"Fraunces", serif; font-size: 19px; line-height:1.85; color:var(--soft); letter-spacing:-.005em; }
+  .dictee b{ color:var(--ink); }
+  .dictee-input{ display:inline-block; min-width:90px; border:none; border-bottom:2px solid var(--line-2); padding:2px 6px; background:transparent; color:var(--ink); font:inherit; outline:none; text-align:center; transition: border-color .2s, background .2s; font-weight:600; }
+  .dictee-input:focus{ border-color:var(--ink); background: color-mix(in oklab, var(--ink) 4%, transparent); }
+  .dictee-input.ok{ border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+  .dictee-input.ko{ border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+  /* SVG schemas */
+  .schema{ width:100%; max-width: 320px; height:auto; margin: 6px auto; display:block; }
+  .schema text{ font-family:"Inter", sans-serif; font-size:10px; font-weight:600; fill: var(--ink); }
+  .schema .label{ fill: var(--muted); font-weight:500; font-size:9px; }
+  .schema .stroke{ stroke: var(--ink); stroke-width:1.5; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+  .schema .accent{ stroke: var(--accent); fill: var(--accent); }
+  .schema .filament{ stroke: var(--accent); stroke-width:2; fill:none; }
+  .schema .matter{ fill: var(--line); stroke: var(--ink); stroke-width:1.2; }
+  /* TTS button */
+  .icon-btn{ width:36px; height:36px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--line-2); background:var(--paper); color:var(--ink); cursor:pointer; transition: all .15s; }
+  .icon-btn:hover{ border-color: var(--ink); }
+  .icon-btn.on{ background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  /* Print */
+  @media print {
+    .no-print{ display:none !important; }
+    .topbar, .timer-bar{ display:none !important; }
+    body{ background:#fff !important; color:#000 !important; }
+    .paper, .paper-lift{ background:#fff !important; border:1px solid #aaa !important; box-shadow:none !important; page-break-inside: avoid; }
+    main{ max-width: none !important; padding: 0 !important; }
+    h1, h2, h3, h4{ page-break-after: avoid; }
+    .print-section{ break-after: page; }
+    .opt{ break-inside: avoid; }
+    .serif, .lede{ font-family: Georgia, serif !important; }
+    a, a:visited{ color:#000 !important; text-decoration: underline; }
+  }
+  /* Subtle hover lift on action buttons */
+  @media (hover: hover) {
+    .btn-primary:hover{ transform: translateY(-1px); }
+  }
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition: none !important; }
+  }
 </style>
 </head>
 <body>
@@ -136,6 +189,10 @@
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2s2 4 2 7-2 5-5 5-5-2-5-5c0-1 .5-2 1-3 0 2 1 3 2 3 0-3 2-5 5-7Z"/><path d="M9 14.5C7.5 16 6 17.5 6 19.5 6 21 7.5 22 9 22s3-1 3-2.5c0-1.2-.6-2.2-1.5-3Z"/></svg>
         <span><b id="streakNum">0</b> j</span>
       </div>
+      <button id="soundToggle" class="btn btn-ghost !min-h-0 !p-2 focus-ring" aria-label="Son" title="Sons">
+        <svg id="iconSoundOn" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+        <svg id="iconSoundOff" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4Z"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/></svg>
+      </button>
       <button id="themeToggle" class="btn btn-ghost !min-h-0 !p-2 focus-ring" aria-label="Thème">
         <svg id="iconSun" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
         <svg id="iconMoon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
@@ -191,7 +248,12 @@ const COURSE = {
     "fonction contrainte":"Limite imposée à l'objet : sécurité, coût, taille, environnement, matière…",
     "croquis":"Dessin rapide à **main levée** d'une idée — pour réfléchir et communiquer une intention.",
     "schéma":"Représentation simplifiée et **normée** (symboles standards) — explique un fonctionnement.",
-    "solution":"Proposition technique qui répond au cahier des charges (souvent dessinée en croquis/schéma)."
+    "solution":"Proposition technique qui répond au cahier des charges (souvent dessinée en croquis/schéma).",
+    "modélisation volumique":"Conception d'un objet en **3 dimensions** (largeur, hauteur, profondeur) à l'aide d'un logiciel de C.A.O.",
+    "eDrawings":"Logiciel de C.A.O. : permet de **visualiser en 2D ou 3D** un objet, avec coupes et vues éclatées.",
+    "SketchUp":"Logiciel de C.A.O. : permet de **créer, modifier** des structures et d'y insérer d'autres objets.",
+    "Sweet Home 3D":"Logiciel de C.A.O. : permet de **lire ou créer des plans d'architecture** et des aménagements intérieurs.",
+    "maquette virtuelle":"Modèle 3D produit avec un logiciel de CAO ; on l'obtient en ajoutant/enlevant des volumes simples."
   },
 
   essentials: [
@@ -205,7 +267,10 @@ const COURSE = {
     { id:"e8", t:"Fablab", d:"« Fabrication laboratory » : lieu ouvert au public avec machines à commande numérique, outils, électronique. Pour concevoir et fabriquer.", tag:"définition" },
     { id:"e9", t:"Démarche de projet", d:"<b>Problématique</b> → <b>Besoin</b> → <b>Cahier des charges</b> → <b>Solutions</b> proposées (croquis/schémas) → choix → CAO → maquette/prototype → tests. Mémo : « PBCS ».", tag:"évaluation · à savoir refaire" },
     { id:"e10", t:"Cahier des charges", d:"Document qui formalise <b>le besoin</b>, <b>les fonctions de service</b> (à quoi ça sert) et <b>les fonctions contraintes</b> (sécurité, coût, taille, environnement…). C'est la base de toutes les décisions techniques.", tag:"évaluation · définition" },
-    { id:"e11", t:"Croquis vs Schéma", d:"<b>Croquis</b> = dessin à <b>main levée</b>, rapide, pour explorer une idée. <b>Schéma</b> = représentation <b>simplifiée</b> et <b>normée</b> (symboles standards) pour expliquer un fonctionnement.", tag:"évaluation · ne pas confondre" }
+    { id:"e11", t:"Croquis vs Schéma", d:"<b>Croquis</b> = dessin à <b>main levée</b>, rapide, pour explorer une idée. <b>Schéma</b> = représentation <b>simplifiée</b> et <b>normée</b> (symboles standards) pour expliquer un fonctionnement.", tag:"évaluation · ne pas confondre" },
+    { id:"e12", t:"Modélisation volumique", d:"Conception d'un objet en <b>3D</b> (largeur, hauteur, profondeur) avec un logiciel de <b>C.A.O.</b> Permet de visualiser, faire tourner, isoler des pièces, créer des éclatés et des coupes.", tag:"S23-3 · définition" },
+    { id:"e13", t:"3 logiciels de C.A.O.", d:"<b>eDrawings</b> : visualisation 2D/3D, coupes, vues éclatées. <b>SketchUp</b> : création + modification + insertion d'objets. <b>Sweet Home 3D</b> : plans d'architecture + aménagements intérieurs.", tag:"S23-3 · à connaître" },
+    { id:"e14", t:"Modéliser un volume (SketchUp)", d:"Méthode : (1) on <b>positionne</b> les repères, (2) on <b>ajoute</b> des volumes élémentaires, (3) on <b>retire</b> des volumes (fenêtre, porte), (4) on <b>habille</b> avec textures et couleurs.", tag:"S23-3 · 4 étapes" }
   ],
 
   flashcards: [
@@ -233,7 +298,12 @@ const COURSE = {
     { q:"Qu'est-ce que le cahier des charges ?", a:"Document qui formalise le <b>besoin</b>, les <b>fonctions de service</b> et les <b>fonctions contraintes</b>.", core:true },
     { q:"Différence besoin / solution ?", a:"<b>Besoin</b> = ce que l'utilisateur veut. <b>Solution</b> = comment on y répond techniquement. Le besoin n'impose pas la solution.", core:true },
     { q:"Fonction de service vs fonction contrainte ?", a:"<b>Service</b> : ce que l'objet <b>doit faire</b> (à quoi sert-il). <b>Contrainte</b> : <b>limite</b> imposée (sécurité, coût, taille, env.).", core:false },
-    { q:"Ordre des étapes de création d'un objet ?", a:"<b>Problématique → Besoin → Cahier des charges → Solutions (croquis/schémas) → Choix → CAO → Maquette/Prototype → Tests/Validation</b>.", core:true }
+    { q:"Ordre des étapes de création d'un objet ?", a:"<b>Problématique → Besoin → Cahier des charges → Solutions (croquis/schémas) → Choix → CAO → Maquette/Prototype → Tests/Validation</b>.", core:true },
+    { q:"Qu'est-ce que la modélisation volumique ?", a:"Conception d'un objet en <b>3 dimensions</b> (largeur, hauteur, profondeur) à l'aide d'un <b>logiciel de C.A.O.</b>", core:true },
+    { q:"À quoi sert eDrawings ?", a:"<b>Visualiser</b> en 2D ou 3D des pièces d'un objet, avec <b>coupes</b> et <b>vues éclatées</b>.", core:false },
+    { q:"À quoi sert SketchUp ?", a:"<b>Créer, visualiser, modifier</b> des structures et <b>insérer</b> d'autres objets.", core:false },
+    { q:"À quoi sert Sweet Home 3D ?", a:"<b>Lire ou créer des plans d'architecture</b> et réaliser des <b>aménagements intérieurs</b>.", core:false },
+    { q:"4 étapes pour modéliser sur SketchUp ?", a:"(1) <b>Positionner</b> les repères, (2) <b>Ajouter</b> des volumes élémentaires, (3) <b>Retirer</b> des volumes (fenêtre, porte), (4) <b>Habiller</b> avec textures et couleurs.", core:true }
   ],
 
   qcm: [
@@ -258,7 +328,11 @@ const COURSE = {
     { q:"Ordre correct des étapes ?", o:["CAO → besoin → cahier des charges → solutions","Problématique → besoin → cahier des charges → solutions → CAO → prototype","Prototype → CAO → besoin","Besoin → prototype → CAO → cahier"], c:1, e:"<b>Problématique → Besoin → CdC → Solutions → CAO → Prototype</b>.", lvl:2, core:true },
     { q:"Que vient <b>avant</b> le cahier des charges ?", o:["Le prototype","La problématique et le besoin","La CAO","Le fichier de fabrication"], c:1, e:"On part toujours de la <b>problématique</b> puis du <b>besoin</b> ; le CdC les formalise.", lvl:2, core:true },
     { q:"Une « fonction contrainte » est…", o:["Ce que l'objet doit faire","Une limite imposée (coût, taille, sécurité…)","Le mode d'emploi","Une étape de fabrication"], c:1, e:"Contrainte = <b>limite</b> (sécurité, coût, environnement…).", lvl:3, core:false },
-    { q:"Différence besoin / solution ?", o:["Aucune","Le besoin dit POURQUOI, la solution dit COMMENT","Le besoin se dessine, la solution s'écrit","La solution précède le besoin"], c:1, e:"Besoin = <b>pourquoi</b>. Solution = <b>comment</b>.", lvl:3, core:true }
+    { q:"Différence besoin / solution ?", o:["Aucune","Le besoin dit POURQUOI, la solution dit COMMENT","Le besoin se dessine, la solution s'écrit","La solution précède le besoin"], c:1, e:"Besoin = <b>pourquoi</b>. Solution = <b>comment</b>.", lvl:3, core:true },
+    { q:"Qu'est-ce que la modélisation volumique ?", o:["Conception en 2D sur papier","Conception en 3D (l, h, p) avec un logiciel de CAO","Fabrication par addition","Une machine-outil"], c:1, e:"Conception en <b>3D</b> (largeur, hauteur, profondeur) avec un logiciel de <b>C.A.O.</b>", lvl:2, core:true },
+    { q:"Lequel est un logiciel d'architecture / aménagement intérieur ?", o:["eDrawings","SketchUp","Sweet Home 3D","Fraiseuse"], c:2, e:"<b>Sweet Home 3D</b> : plans + aménagements intérieurs.", lvl:2, core:false },
+    { q:"Quel logiciel sert à visualiser avec coupes et vues éclatées ?", o:["SketchUp","Sweet Home 3D","eDrawings","Excel"], c:2, e:"<b>eDrawings</b> : visualisation 2D/3D + coupes + éclatés.", lvl:2, core:false },
+    { q:"Sur SketchUp, ordre correct ?", o:["Textures → repères → ajouter → retirer","Repères → ajouter volumes → retirer volumes → textures","Retirer → ajouter → repères → textures","Textures uniquement"], c:1, e:"<b>Repères → Ajouter → Retirer → Habiller (textures)</b>.", lvl:2, core:true }
   ],
 
   libre: [
@@ -292,6 +366,49 @@ const COURSE = {
     { t:"FS / FC — le cahier des charges", d:"<b>FS</b> = Fonctions de <b>S</b>ervice (à quoi ça <b>Sert</b>). <b>FC</b> = Fonctions <b>C</b>ontraintes (les <b>C</b>ontraintes : coût, sécurité…)." }
   ],
 
+  dictees: [
+    { text: "Une **maquette** est une représentation en ___ dimensions, à échelle ___, ___ dans ses proportions et son aspect.",
+      answers: ["trois","réduite","fidèle"],
+      hint: "Définition pivot du cours.",
+      ideal: "trois dimensions · échelle réduite · fidèle" },
+    { text: "**C.A.O.** signifie ___ ___ par ___.",
+      answers: ["conception","assistée","ordinateur"],
+      hint: "L'acronyme à connaître par cœur.",
+      ideal: "Conception Assistée par Ordinateur" },
+    { text: "L'**imprimante 3D** fabrique par ___ de matière : une buse dépose un ___ ___, couche par couche.",
+      answers: ["addition","filament","fondu"],
+      hint: "Principe physique.",
+      ideal: "addition · filament · fondu" },
+    { text: "La **fraiseuse numérique** fabrique par ___ de matière : elle taille dans la ___ selon un fichier ___.",
+      answers: ["enlèvement","masse","numérique"],
+      hint: "Principe opposé à la 3D.",
+      ideal: "enlèvement · masse · numérique" },
+    { text: "Chaîne du prototypage : ___ → exportation → ___ → ___ de fabrication.",
+      answers: ["cao","paramétrage","fichier"],
+      hint: "« CEPaF ».",
+      ideal: "CAO · exportation · paramétrage · fichier de fabrication" },
+    { text: "Le **travail coopératif** consiste à se partager des tâches ___ . Le **travail collaboratif**, à travailler ___ ___ sur la même tâche.",
+      answers: ["indépendantes","en","même"],
+      hint: "Le piège n°1 du contrôle.",
+      ideal: "indépendantes · en même temps" },
+    { text: "Démarche projet (« PBCS ») : ___ → besoin → ___ ___ ___ → solutions.",
+      answers: ["problématique","cahier","des","charges"],
+      hint: "L'ordre exact des étapes.",
+      ideal: "problématique → besoin → cahier des charges → solutions" },
+    { text: "Le **cahier des charges** liste le besoin, les **fonctions de ___** (à quoi ça sert) et les **fonctions ___** (les limites).",
+      answers: ["service","contraintes"],
+      hint: "FS et FC.",
+      ideal: "fonctions de service · fonctions contraintes" },
+    { text: "Un **croquis** est un dessin à ___ ___, rapide. Un **schéma** est une représentation ___ et ___ (symboles standards).",
+      answers: ["main","levée","simplifiée","normée"],
+      hint: "Évite la confusion.",
+      ideal: "main levée · simplifiée · normée" },
+    { text: "Les **4 rôles** : coordonnateur, ___, rapporteur, ___.",
+      answers: ["secrétaire","gestionnaire"],
+      hint: "Mémo CO·SE·RA·GE.",
+      ideal: "secrétaire · gestionnaire" }
+  ],
+
   synth: {
     tldr: [
       "**Démarche projet** : Problématique → Besoin → **Cahier des charges** → Solutions (« PBCS »).",
@@ -323,15 +440,18 @@ const COURSE = {
 };
 
 const KEY = "seq23-v2";
+const EVAL_DATE = "2026-05-18"; // mardi 18 mai 2026
 const def = ()=>({
   theme:"light",
   view:"home",
   toolsTab:"synth",
   session:null,
   streak:{ count:0, lastDay:null },
-  best:{ flash:0, express:0, deep:0, exam:0 },
+  best:{ flash:0, express:0, deep:0, exam:0, dictee:0 },
   history:[],
-  stats:{ totalMin:0, runs:0 }
+  stats:{ totalMin:0, runs:0 },
+  sound: true,
+  installPromptDismissed: false
 });
 let S = load();
 function load(){ try{ const r=localStorage.getItem(KEY); if(!r) return def(); return Object.assign(def(), JSON.parse(r)); }catch{ return def(); } }
@@ -385,12 +505,141 @@ $("#modalClose").addEventListener("click", ()=> $("#modal").classList.remove("op
 $("#modal").addEventListener("click", e=>{ if(e.target.id==="modal") $("#modal").classList.remove("open"); });
 document.addEventListener("keydown", e=>{ if(e.key==="Escape") $("#modal").classList.remove("open"); });
 
+/* ---------- COUNTDOWN ---------- */
+function daysUntilEval(){
+  const today = new Date(); today.setHours(0,0,0,0);
+  const target = new Date(EVAL_DATE+"T00:00:00");
+  return Math.round((target - today) / 86400000);
+}
+
+/* ---------- SOUND (Web Audio synth) ---------- */
+let audioCtx = null;
+function audio(){
+  if(!S.sound) return null;
+  if(!audioCtx){
+    try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }
+    catch(e){ return null; }
+  }
+  if(audioCtx.state === "suspended") audioCtx.resume();
+  return audioCtx;
+}
+function tone(freq, dur=0.08, type="sine", vol=0.06, attack=0.004){
+  const ctx = audio(); if(!ctx) return;
+  const t = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const g = ctx.createGain();
+  osc.type = type; osc.frequency.value = freq;
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(vol, t + attack);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  osc.connect(g).connect(ctx.destination);
+  osc.start(t); osc.stop(t + dur + 0.02);
+}
+const sfx = {
+  tap:    ()=> tone(720, 0.04, "sine", 0.035),
+  flip:   ()=> { tone(520, 0.05, "sine", 0.04); setTimeout(()=>tone(720, 0.06, "sine", 0.04), 40); },
+  right:  ()=> { tone(880, 0.07, "sine", 0.06); setTimeout(()=>tone(1318, 0.09, "sine", 0.05), 70); },
+  wrong:  ()=> { tone(220, 0.10, "triangle", 0.05); setTimeout(()=>tone(165, 0.16, "triangle", 0.05), 90); },
+  done:   ()=> {
+    [0,90,180,280].forEach((d,i)=> setTimeout(()=>tone([523,659,784,1047][i], 0.18, "sine", 0.055), d));
+  },
+  pause:  ()=> tone(440, 0.25, "sine", 0.04)
+};
+
+/* ---------- TTS ---------- */
+const tts = {
+  supported: typeof window !== "undefined" && "speechSynthesis" in window,
+  voice: null,
+  pick(){
+    if(!this.supported) return null;
+    if(this.voice) return this.voice;
+    const voices = speechSynthesis.getVoices();
+    this.voice = voices.find(v=>v.lang.startsWith("fr") && /fem|female|amélie|julie|virginie|audrey/i.test(v.name))
+              || voices.find(v=>v.lang.startsWith("fr"))
+              || voices[0];
+    return this.voice;
+  },
+  speak(text){
+    if(!this.supported) return;
+    speechSynthesis.cancel();
+    const tmp = document.createElement("div");
+    tmp.innerHTML = text;
+    const u = new SpeechSynthesisUtterance(tmp.textContent || tmp.innerText || "");
+    const v = this.pick();
+    if(v) u.voice = v;
+    u.rate = 1; u.pitch = 1; u.lang = "fr-FR";
+    speechSynthesis.speak(u);
+  },
+  stop(){ if(this.supported) speechSynthesis.cancel(); }
+};
+if(typeof speechSynthesis !== "undefined"){
+  speechSynthesis.addEventListener?.("voiceschanged", ()=>{ tts.voice = null; });
+}
+
+/* ---------- SCHEMAS (inline SVG) ---------- */
+const schemas = {
+  printer: () => `
+    <svg class="schema" viewBox="0 0 300 180" role="img" aria-label="Schéma imprimante 3D">
+      <rect x="60" y="20" width="180" height="22" rx="3" class="stroke" fill="var(--paper)"/>
+      <text x="150" y="36" text-anchor="middle">tête d'impression</text>
+      <line x1="150" y1="42" x2="150" y2="62" class="filament"/>
+      <polygon points="142,62 158,62 150,76" class="accent" stroke="none"/>
+      <text x="195" y="70" class="label">buse</text>
+      <line x1="200" y1="68" x2="170" y2="72" class="stroke" style="opacity:.5"/>
+      <line x1="150" y1="78" x2="150" y2="100" class="filament" stroke-dasharray="3 2"/>
+      <g>
+        <rect x="120" y="100" width="60" height="14" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1"/>
+        <rect x="118" y="114" width="64" height="14" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1"/>
+        <rect x="116" y="128" width="68" height="14" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1"/>
+      </g>
+      <line x1="40" y1="148" x2="260" y2="148" class="stroke" stroke-width="2.5"/>
+      <text x="150" y="166" text-anchor="middle" class="label">plateau · couches successives (bas → haut)</text>
+    </svg>`,
+  miller: () => `
+    <svg class="schema" viewBox="0 0 300 180" role="img" aria-label="Schéma fraiseuse numérique">
+      <rect x="130" y="14" width="40" height="40" rx="3" class="stroke" fill="var(--paper)"/>
+      <text x="150" y="38" text-anchor="middle" font-size="9">moteur</text>
+      <line x1="150" y1="54" x2="150" y2="78" class="stroke"/>
+      <path d="M 142 78 L 158 78 L 152 96 L 148 96 Z" class="accent" stroke="none"/>
+      <text x="190" y="86" class="label">outil de coupe</text>
+      <line x1="184" y1="86" x2="160" y2="92" class="stroke" style="opacity:.5"/>
+      <g>
+        <rect x="80" y="100" width="140" height="40" class="matter"/>
+        <path d="M 130 100 L 130 124 L 150 132 L 170 124 L 170 100" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.2"/>
+      </g>
+      <text x="150" y="158" text-anchor="middle" class="label">bloc de matière · on retire (enlèvement)</text>
+      <g class="accent">
+        <circle cx="115" cy="92" r="1.6"/><circle cx="120" cy="86" r="1.4"/><circle cx="183" cy="90" r="1.5"/><circle cx="188" cy="84" r="1.4"/>
+      </g>
+    </svg>`,
+  chain: () => `
+    <svg class="schema" viewBox="0 0 320 90" role="img" aria-label="Schéma chaîne CAO CEPaF">
+      ${["CAO","Export","Param.","Fichier"].map((lbl,i)=>{
+        const x = 12 + i*78;
+        return `<g><rect x="${x}" y="22" width="60" height="42" rx="6" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.4"/><text x="${x+30}" y="48" text-anchor="middle" font-size="11" font-weight="700">${lbl}</text></g>${i<3?`<path d="M ${x+62} 43 L ${x+74} 43" class="stroke accent" stroke-width="2"/><polygon points="${x+72},39 ${x+78},43 ${x+72},47" class="accent" stroke="none"/>`:""}`;
+      }).join("")}
+      <text x="160" y="84" text-anchor="middle" class="label">« CEPaF » — la chaîne du prototypage rapide</text>
+    </svg>`
+};
+
+/* ---------- SERVICE WORKER ---------- */
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  });
+}
+
 function applyTheme(){
   document.documentElement.setAttribute("data-theme", S.theme);
   $("#iconMoon").classList.toggle("hidden", S.theme==="dark");
   $("#iconSun").classList.toggle("hidden", S.theme!=="dark");
 }
+function applySound(){
+  $("#iconSoundOn").classList.toggle("hidden", !S.sound);
+  $("#iconSoundOff").classList.toggle("hidden", S.sound);
+}
 $("#themeToggle").addEventListener("click", ()=>{ S.theme = S.theme==="dark"?"light":"dark"; save(); applyTheme(); });
+$("#soundToggle").addEventListener("click", ()=>{ S.sound = !S.sound; save(); applySound(); if(S.sound) sfx.tap(); });
 $("#brandLink").addEventListener("click", e=>{ e.preventDefault(); go("home"); });
 
 function go(view, extra){
@@ -427,10 +676,23 @@ function viewHome(){
   const overallPct = Math.round(Math.max(0, Math.min(100, (bestSum/maxSum)*100)));
 
   // --- HERO ----------------------------------------------------------------
+  const days = daysUntilEval();
+  const cdLabel = days > 1 ? `J−${days} · Éval le 18 mai` :
+                  days === 1 ? "J−1 · C'est demain !" :
+                  days === 0 ? "C'est aujourd'hui · bonne chance" :
+                  "Éval passée — bravo";
+  const cdClass = days <= 2 && days >= 0 ? "countdown urgent" : "countdown";
+
   el.appendChild(html(`
     <div class="fade-in">
-      <div class="text-[10px] uppercase tracking-[0.28em] muted font-medium">${COURSE.meta}</div>
-      <h1 class="serif text-[44px] sm:text-[56px] md:text-[72px] font-semibold leading-[1.02] mt-3 max-w-2xl" style="font-variation-settings:'opsz' 144">${COURSE.title}</h1>
+      <div class="flex items-center gap-2 flex-wrap mb-3">
+        <span class="${cdClass}">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          ${cdLabel}
+        </span>
+        <span class="text-[10px] uppercase tracking-[0.22em] muted font-medium">${COURSE.meta}</span>
+      </div>
+      <h1 class="serif text-[44px] sm:text-[56px] md:text-[72px] font-semibold leading-[1.02] mt-1 max-w-2xl" style="font-variation-settings:'opsz' 144">${COURSE.title}</h1>
       <p class="lede text-2xl md:text-[28px] mt-3 max-w-xl leading-[1.3]">${COURSE.subtitle}.</p>
     </div>
   `));
@@ -733,7 +995,9 @@ function viewSession(){
         <div class="fade-in">
           <div class="flex items-center justify-between mb-3">
             <div class="text-[10px] uppercase tracking-[0.28em] muted">Flashcard${step.core?' · essentielle':''}</div>
-            <div class="text-[11px] muted hidden md:block"><span class="kbd">Espace</span> retourner</div>
+            <button class="icon-btn" id="ttsBtn" aria-label="Lire à voix haute" title="Lire à voix haute">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            </button>
           </div>
           <div class="flash relative h-72 md:h-[22rem]" tabindex="0">
             <div class="flash-inner w-full h-full">
@@ -755,9 +1019,14 @@ function viewSession(){
           </div>
         </div>`);
       const f = c.querySelector(".flash");
-      f.addEventListener("click", e=>{ if(e.target.closest("button")) return; f.classList.toggle("flipped"); });
-      c.querySelector("#fOk").addEventListener("click", ()=>{ ses.score.ok++; ses.score.total++; nextStep(); });
-      c.querySelector("#fRev").addEventListener("click", ()=>{ ses.score.total++; nextStep(); });
+      f.addEventListener("click", e=>{ if(e.target.closest("button")) return; f.classList.toggle("flipped"); sfx.flip(); });
+      c.querySelector("#fOk").addEventListener("click", ()=>{ ses.score.ok++; ses.score.total++; sfx.right(); nextStep(); });
+      c.querySelector("#fRev").addEventListener("click", ()=>{ ses.score.total++; sfx.tap(); nextStep(); });
+      c.querySelector("#ttsBtn").addEventListener("click", e=>{
+        e.stopPropagation();
+        const txt = f.classList.contains("flipped") ? step.a : step.q;
+        tts.speak(txt);
+      });
       let startX=0, dx=0, drag=false;
       const down=x=>{ startX=x; dx=0; drag=true; f.classList.add("dragging"); f.style.transition="none"; };
       const move=x=>{ if(!drag) return; dx=x-startX; f.style.transform=`translateX(${dx}px) rotate(${dx/22}deg)`; };
@@ -798,7 +1067,7 @@ function viewSession(){
           const k = +b.dataset.k;
           ses.score.total++;
           const ok = k===step.c;
-          if(ok) ses.score.ok++;
+          if(ok){ ses.score.ok++; sfx.right(); } else { sfx.wrong(); }
           opts.forEach(o=>o.disabled=true);
           opts[k].classList.add(ok?"correct":"wrong");
           if(!ok) opts[step.c].classList.add("correct");
@@ -855,6 +1124,7 @@ function viewSession(){
       S.stats.runs++;
       S.stats.totalMin += Math.round((Date.now() - ses.startedAt)/60000);
       save(); bumpStreak();
+      if(pct >= 50) sfx.done();
       let cheer = "Bien joué.";
       if(pct>=85) cheer = "Excellent. Tu as les bases solides.";
       else if(pct>=65) cheer = "Bon score. Encore une session et c'est dans la poche.";
@@ -903,12 +1173,14 @@ function viewSession(){
 function viewTools(){
   const tabs = [
     { id:"synth", label:"Synthèse" },
-    { id:"essentials", label:"8 essentiels" },
+    { id:"essentials", label:"14 essentiels" },
+    { id:"dictee", label:"Dictée" },
     { id:"flash", label:"Flashcards" },
     { id:"qcm", label:"QCM" },
     { id:"libre", label:"Libre" },
     { id:"mnemo", label:"Pièges & mnémo" },
-    { id:"mind", label:"Carte mentale" }
+    { id:"mind", label:"Carte mentale" },
+    { id:"fiche", label:"Fiche à imprimer" }
   ];
   if(!tabs.find(t=>t.id===S.toolsTab)) S.toolsTab = "synth";
 
@@ -956,14 +1228,132 @@ function viewTools(){
     },
     essentials: ()=>{
       const c = html(`<div class="space-y-2"></div>`);
+      // Map essentials → optional schema
+      const schemaFor = {
+        e4: schemas.printer,  // imprimante 3D
+        e5: schemas.miller,   // fraiseuse
+        e6: schemas.chain     // chaîne CAO
+      };
       COURSE.essentials.forEach((e,i)=>{
+        const schema = schemaFor[e.id] ? schemaFor[e.id]() : "";
         c.appendChild(html(`
           <div class="paper rounded-xl p-4">
             <div class="flex items-center gap-2"><span class="chip chip-accent">${String(i+1).padStart(2,'0')}</span><div class="serif font-semibold text-lg">${e.t}</div></div>
             <p class="text-[14px] soft mt-1.5 leading-relaxed">${injectKw(e.d)}</p>
+            ${schema}
             <div class="text-[11px] muted mt-1">${e.tag}</div>
           </div>`));
       });
+      return c;
+    },
+    dictee: ()=>{
+      let i = 0;
+      const c = html(`<div></div>`);
+      function render(){
+        const d = COURSE.dictees[i];
+        // Build HTML with inputs at each ___
+        let blanks = 0;
+        const body = md(d.text).replace(/___/g, () => {
+          const idx = blanks++;
+          const expected = d.answers[idx] || "";
+          return `<input class="dictee-input" data-idx="${idx}" data-expected="${expected.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')}" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />`;
+        });
+        c.innerHTML = `
+          <div class="flex items-center justify-between text-[12px] muted mb-3">
+            <span><b class="ink">${i+1}</b>/${COURSE.dictees.length} · ${d.hint}</span>
+            <button class="icon-btn !w-auto !px-3" id="dttsBtn" title="Lire à voix haute">🔊</button>
+          </div>
+          <div class="paper rounded-xl p-5 md:p-6">
+            <div class="dictee">${body}</div>
+          </div>
+          <div id="dFb" class="hidden paper rounded-lg p-4 mt-3 text-[14px]"></div>
+          <div class="flex gap-2 mt-4 flex-wrap">
+            <button class="btn btn-primary flex-1" id="dCheck">Vérifier</button>
+            <button class="btn" id="dShow">Voir réponse</button>
+            <button class="btn" id="dNext">Suivant →</button>
+          </div>
+        `;
+        const inputs = c.querySelectorAll(".dictee-input");
+        // Auto-jump to next input on space/enter
+        inputs.forEach((inp, idx) => {
+          inp.addEventListener("keydown", e => {
+            if(e.key === "Enter" || (e.key === " " && inp.value.length > 0)){
+              e.preventDefault();
+              if(inputs[idx+1]) inputs[idx+1].focus();
+              else c.querySelector("#dCheck").focus();
+            }
+          });
+        });
+        c.querySelector("#dCheck").addEventListener("click", () => {
+          let ok = 0;
+          inputs.forEach(inp => {
+            const got = (inp.value || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,'').trim();
+            const expected = inp.dataset.expected;
+            if(got === expected){ inp.classList.add("ok"); inp.classList.remove("ko"); ok++; }
+            else { inp.classList.add("ko"); inp.classList.remove("ok"); }
+          });
+          const fb = c.querySelector("#dFb");
+          fb.classList.remove("hidden");
+          const pct = Math.round((ok/inputs.length)*100);
+          const col = pct === 100 ? "var(--ok)" : pct >= 50 ? "var(--warn)" : "var(--bad)";
+          if(pct === 100){ sfx.right(); }
+          else if(pct < 50){ sfx.wrong(); }
+          fb.innerHTML = `<div class="font-semibold mb-1" style="color:${col}">${ok}/${inputs.length} mots corrects</div><div class="soft"><b>Réponse :</b> ${d.ideal}</div>`;
+          // Save best
+          if(pct > (S.best.dictee||0)) { S.best.dictee = pct; save(); }
+          bumpStreak();
+        });
+        c.querySelector("#dShow").addEventListener("click", () => {
+          inputs.forEach((inp, idx) => { inp.value = d.answers[idx]; inp.classList.add("ok"); });
+          const fb = c.querySelector("#dFb"); fb.classList.remove("hidden");
+          fb.innerHTML = `<div class="font-semibold mb-1" style="color:var(--accent)">Réponse modèle</div>${d.ideal}`;
+        });
+        c.querySelector("#dNext").addEventListener("click", () => { i = (i+1) % COURSE.dictees.length; render(); });
+        c.querySelector("#dttsBtn").addEventListener("click", () => {
+          const plain = d.text.replace(/\*\*/g, "").replace(/___/g, "...");
+          tts.speak(plain);
+        });
+      }
+      render();
+      return c;
+    },
+    fiche: ()=>{
+      const c = html(`<div></div>`);
+      c.innerHTML = `
+        <div class="paper rounded-xl p-5 mb-4 no-print">
+          <div class="flex items-center gap-3">
+            <div class="flex-1">
+              <div class="serif text-lg font-semibold">Fiche à imprimer</div>
+              <p class="text-[13.5px] soft mt-1">Une page A4 propre à coller dans le cahier ou plier dans le sac.</p>
+            </div>
+            <button class="btn btn-primary" id="doPrint">Imprimer / PDF</button>
+          </div>
+        </div>
+        <article class="print-fiche text-[13.5px] leading-relaxed">
+          <header class="mb-4">
+            <div class="text-[11px] uppercase tracking-[0.2em] muted">${COURSE.meta}</div>
+            <h1 class="serif text-3xl font-semibold mt-1">${COURSE.title}</h1>
+            <p class="lede mt-1">${COURSE.subtitle}.</p>
+          </header>
+          <section class="mb-4">
+            <h2 class="serif text-xl font-semibold mb-2">L'essentiel</h2>
+            <ul class="space-y-1">${COURSE.synth.tldr.map(s=>`<li>• ${md(s)}</li>`).join("")}</ul>
+          </section>
+          <section class="mb-4">
+            <h2 class="serif text-xl font-semibold mb-2">Les 14 concepts à savoir</h2>
+            <ol class="list-decimal pl-5 space-y-1">${COURSE.essentials.map(e=>`<li><b>${e.t}</b> — ${e.d.replace(/<[^>]+>/g,"")}</li>`).join("")}</ol>
+          </section>
+          <section class="mb-4">
+            <h2 class="serif text-xl font-semibold mb-2">Pièges à éviter</h2>
+            <ul class="space-y-1">${COURSE.pieges.map(p=>`<li><b>${p.t}</b> — ${p.d.replace(/<[^>]+>/g,"")}</li>`).join("")}</ul>
+          </section>
+          <section>
+            <h2 class="serif text-xl font-semibold mb-2">Moyens mnémotechniques</h2>
+            <ul class="space-y-1">${COURSE.mnemos.map(m=>`<li><b>${m.t}</b> — ${m.d.replace(/<[^>]+>/g,"")}</li>`).join("")}</ul>
+          </section>
+        </article>
+      `;
+      c.querySelector("#doPrint").addEventListener("click", ()=> window.print());
       return c;
     },
     flash: ()=>{
@@ -1124,7 +1514,10 @@ function viewTools(){
 }
 
 applyTheme();
+applySound();
 $("#streakNum").textContent = S.streak.count;
+// Init voices early on iOS Safari (lazy load)
+if(typeof speechSynthesis !== "undefined") setTimeout(()=>{ try{ speechSynthesis.getVoices(); }catch{} }, 200);
 render();
 </script>
 </body>
