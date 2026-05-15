@@ -1,7 +1,7 @@
-// Service worker for Séquence 23 revision app
-// Cache strategy: stale-while-revalidate for same-origin, cache-first for CDN fonts/scripts
-const VERSION = "v3-2026-05-14";
-const CACHE = `seq23-${VERSION}`;
+// Service worker for the "Aboard the Titanic" vocabulary revision app
+// Cache strategy: network-first for HTML, stale-while-revalidate for assets/CDN
+const VERSION = "v1-2026-05-15";
+const CACHE = `titanic-voc-${VERSION}`;
 const CORE = [
   "./",
   "./index.html",
