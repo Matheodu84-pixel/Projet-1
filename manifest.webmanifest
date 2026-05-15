@@ -1,13 +1,13 @@
 {
-  "name": "Séquence 23 · Révisions",
-  "short_name": "Séq 23",
-  "description": "App de révision pour la Séquence 23 — Design, maquette, prototypage rapide. Mode Flash 3 min, Express 8 min, Pomodoro 20 min, examen blanc.",
+  "name": "Aboard the Titanic · Vocabulaire Year 10",
+  "short_name": "Titanic Voc",
+  "description": "App de révision du vocabulaire anglais « Aboard the Titanic » : flashcards, QCM, quiz, carte mentale, anti-pièges, mode examen.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#f7f4ee",
-  "theme_color": "#f7f4ee",
+  "background_color": "#0b1120",
+  "theme_color": "#0b1120",
   "lang": "fr",
   "categories": ["education", "productivity"],
   "icons": [
