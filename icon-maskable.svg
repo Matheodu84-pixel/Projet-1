@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
-  <rect width="192" height="192" fill="#15140f"/>
-  <g transform="translate(96 132)">
-    <text text-anchor="middle" font-family="Georgia, 'Fraunces', serif" font-weight="700" font-size="92" fill="#f7f4ee" letter-spacing="-0.04em">S</text>
-  </g>
-  <circle cx="138" cy="58" r="8" fill="#c54221"/>
+  <rect width="192" height="192" fill="#0a0a0a"/>
+  <circle cx="96" cy="96" r="46" fill="none" stroke="#00ff88" stroke-width="9"/>
+  <circle cx="96" cy="96" r="18" fill="#00ff88"/>
+  <circle cx="88" cy="88" r="6" fill="#0a0a0a"/>
+  <line x1="128" y1="128" x2="148" y2="148" stroke="#00ff88" stroke-width="12" stroke-linecap="round"/>
 </svg>

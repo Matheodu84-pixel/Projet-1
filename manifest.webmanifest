@@ -1,15 +1,15 @@
 {
-  "name": "Aboard the Titanic · Vocabulaire Year 10",
-  "short_name": "Titanic Voc",
-  "description": "App de révision du vocabulaire anglais « Aboard the Titanic » : flashcards, QCM, quiz, carte mentale, anti-pièges, mode examen.",
+  "name": "What Is This?",
+  "short_name": "What Is This?",
+  "description": "Identifie n'importe quoi sur une photo grâce à une IA qui tourne 100% dans ton navigateur. Privé et hors ligne.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0b1120",
-  "theme_color": "#0b1120",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
   "lang": "fr",
-  "categories": ["education", "productivity"],
+  "categories": ["utilities", "education", "photo"],
   "icons": [
     {
       "src": "icon.svg",
