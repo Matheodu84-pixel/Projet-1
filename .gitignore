@@ -1,6 +1,3 @@
 node_modules/
-dist/
-.env
-data/
-briefs/
+.DS_Store
 *.log
